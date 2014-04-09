@@ -4,7 +4,7 @@
   <title><![CDATA[Category: code | The Tude Abides]]></title>
   <link href="http://stephentudor.com/blog/categories/code/atom.xml" rel="self"/>
   <link href="http://stephentudor.com/"/>
-  <updated>2014-04-08T22:49:25-04:00</updated>
+  <updated>2014-04-09T17:27:40-04:00</updated>
   <id>http://stephentudor.com/</id>
   <author>
     <name><![CDATA[Stephen Tudor]]></name>
@@ -26,6 +26,11 @@ thunder. More recently, I was inspired by <a href="http://www.100percentjs.com/j
 to look into the gulp build system and <a href="http://browserify.com">Browserify</a>.
 I&rsquo;m pretty impressed with what I&rsquo;ve seen of gulp thus far, but I feel the
 bigger story by far is Browserify.</p>
+
+<p><strong>Update (2014-04-09):</strong>
+<a href="http://viget.com/about/team/dtello">Dan Tello</a> has posted a
+<a href="http://viget.com/extend/gulp-browserify-starter-faq">far superior contribution</a>
+on this topic. The examples he gives are really compelling.</p>
 
 <h2>gulp</h2>
 
