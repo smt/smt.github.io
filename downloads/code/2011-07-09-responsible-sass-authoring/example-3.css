@@ -1,0 +1,52 @@
+.clearfix,
+.thing-1, .thing-2, .thing-3, .thing-4, .thing-5,
+.thing-6, .thing-7, .thing-8, .thing-9, .thing-10,
+.thing-11, .thing-12, .thing-13, .thing-14, .thing-15,
+.thing-16, .thing-17, .thing-18, .thing-19, .thing-20,
+.thing-21, .thing-22, .thing-23, .thing-24, .thing-25,
+.thing-26, .thing-27, .thing-28, .thing-29, .thing-30,
+.thing-31, .thing-32, .thing-33, .thing-34, .thing-35,
+.thing-36, .thing-37, .thing-38, .thing-39, .thing-40,
+.thing-41, .thing-42, .thing-43, .thing-44, .thing-45,
+.thing-46, .thing-47, .thing-48, .thing-49, .thing-50,
+.thing-51, .thing-52, .thing-53, .thing-54, .thing-55,
+.thing-56, .thing-57, .thing-58, .thing-59, .thing-60,
+.thing-61, .thing-62, .thing-63, .thing-64, .thing-65,
+.thing-66, .thing-67, .thing-68, .thing-69, .thing-70,
+.thing-71, .thing-72, .thing-73, .thing-74, .thing-75,
+.thing-76, .thing-77, .thing-78, .thing-79, .thing-80,
+.thing-81, .thing-82, .thing-83, .thing-84, .thing-85,
+.thing-86, .thing-87, .thing-88, .thing-89, .thing-90,
+.thing-91, .thing-92, .thing-93, .thing-94, .thing-95,
+.thing-96, .thing-97, .thing-98, .thing-99, .thing-100 {}
+
+.clearfix:after,
+.thing-1:after, .thing-2:after, .thing-3:after, .thing-4:after, .thing-5:after,
+.thing-6:after, .thing-7:after, .thing-8:after, .thing-9:after, .thing-10:after,
+.thing-11:after, .thing-12:after, .thing-13:after, .thing-14:after, .thing-15:after,
+.thing-16:after, .thing-17:after, .thing-18:after, .thing-19:after, .thing-20:after,
+.thing-21:after, .thing-22:after, .thing-23:after, .thing-24:after, .thing-25:after,
+.thing-26:after, .thing-27:after, .thing-28:after, .thing-29:after, .thing-30:after,
+.thing-31:after, .thing-32:after, .thing-33:after, .thing-34:after, .thing-35:after,
+.thing-36:after, .thing-37:after, .thing-38:after, .thing-39:after, .thing-40:after,
+.thing-41:after, .thing-42:after, .thing-43:after, .thing-44:after, .thing-45:after,
+.thing-46:after, .thing-47:after, .thing-48:after, .thing-49:after, .thing-50:after,
+.thing-51:after, .thing-52:after, .thing-53:after, .thing-54:after, .thing-55:after,
+.thing-56:after, .thing-57:after, .thing-58:after, .thing-59:after, .thing-60:after,
+.thing-61:after, .thing-62:after, .thing-63:after, .thing-64:after, .thing-65:after,
+.thing-66:after, .thing-67:after, .thing-68:after, .thing-69:after, .thing-70:after,
+.thing-71:after, .thing-72:after, .thing-73:after, .thing-74:after, .thing-75:after,
+.thing-76:after, .thing-77:after, .thing-78:after, .thing-79:after, .thing-80:after,
+.thing-81:after, .thing-82:after, .thing-83:after, .thing-84:after, .thing-85:after,
+.thing-86:after, .thing-87:after, .thing-88:after, .thing-89:after, .thing-90:after,
+.thing-91:after, .thing-92:after, .thing-93:after, .thing-94:after, .thing-95:after,
+.thing-96:after, .thing-97:after, .thing-98:after, .thing-99:after, .thing-100:after {
+    clear: both;
+    content: '.';
+    display: block;
+    height: 0;
+    line-height: 0;
+    overflow: hidden;
+    width: 0;
+}
+

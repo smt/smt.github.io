@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Broken Image Test</title>
+<style type="text/css" media="screen">
+html,body { height: 100%; }
+body {
+    background-color: #543;
+    color: #fff;
+    font-family: Impact, sans-serif;
+    text-align: center;
+    -webkit-persective: 800px;
+    -webkit-transform-style: preserve-3d;
+    -webkit-persective-origin: 50% 50%;
+}
+h1 {
+    font-size: 2em;
+    -webkit-text-stroke: 2px #000;
+}
+#root:before, #root:after {
+    font-size: 3em;
+    -webkit-text-stroke: 3px #000;
+}
+#root:before, #root:after, h1 {
+    display: block;
+    font-weight: bold;
+    margin: 1.5em 0;
+    text-transform: uppercase;
+}
+#root:before { content: '1. rendered w/ broken url'; }
+#root:after { content: 'ok...'; }
+.valid #root:before { content: '2. set src -> valid image'; }
+.valid #root:after { content: 'ok...'; }
+.broken #root:before { content: '3. set src -> broken url'; }
+.broken #root:after { content: 'wat'; }
+.broken { background-color: #933; }
+#image {
+    display: block;
+    margin: 0 auto;
+    /* comment out the below line for expected behavior */
+    -webkit-transform: translate3d(0, 0, 0);
+}
+</style>
+</head>
+<body>
+
+<h1>3D-transformed img element</h1>
+<div id="root">
+    <img id="image" src="broken.png" alt="" />
+</div>
+
+<script>
+(function (window, document) {
+    var timeoutMS = 3000;
+
+    function valid() {
+        var img = document.getElementById('image');
+        img.src = 'data:image/png;base64,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';
+        document.body.className = 'valid';
+        window.setTimeout(broken, timeoutMS);
+    }
+
+    function broken() {
+        var img = document.getElementById('image');
+        img.src = 'broken.png';
+        document.body.className = 'broken';
+    }
+
+    document.body.onload = function () {
+        window.setTimeout(valid, timeoutMS);
+    };
+}(this, this.document));
+</script>
+</body>
+</html>

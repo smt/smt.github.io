@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>10 Vim Techniques for Novices - The Tude Abides</title>
+  <meta name="author" content="Stephen Tudor">
+
+  
+  <meta name="description" content="Since I switched to Vim as my primary editor back in March of this year,
+I have discovered a wealth of useful tricks that help me get things
+done. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stephentudor.com/blog/2011/08/04/10-vim-techniques-for-novices.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="The Tude Abides" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-545908-14']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Tude Abides</a></h1>
+  
+    <h2>A personal log of front-end developer Stephen Tudor</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stephentudor.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives/index.html">Archives</a></li>
+  <li><a href="/colophon.html">Colophon</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">10 Vim Techniques for Novices</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-04T08:37:00-04:00" pubdate data-updated="true">Aug 4<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Since I switched to Vim as my primary editor back in March of this year,
+I have discovered a wealth of useful tricks that help me get things
+done. Most of these techniques are truly indispensible, and should find
+a place in any Vim user&rsquo;s quiver.</p>
+
+<p>I should also note that at this time, I&rsquo;m nowhere near expert-level in
+my Vim abilities, so this post is intended to share some commands,
+patterns, and configurations with other Vim users who are still getting
+their feet wet with the editor. Experienced Vimmers will already know
+all this stuff, and more power to them. This is for the Vim n00bs out
+there.</p>
+
+<!-- more -->
+
+
+<h3>1. Open with Cursor at Last Edit Position</h3>
+
+<p>This one isn&rsquo;t so much a technique as it is a preference. If you make a
+change to a file, and then re-open it later, the following snippet in
+your .vimrc will position the cursor at the last spot you made an edit
+prior to closing the buffer or Vim itself:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'>autocmd <span class="nb">BufReadPost</span> *
+</span><span class='line'>\ <span class="k">if</span> line<span class="p">(</span><span class="s2">&quot;&#39;\&quot;&quot;</span><span class="p">)</span> <span class="p">&gt;</span> <span class="m">0</span> &amp;&amp; line<span class="p">(</span><span class="s2">&quot;&#39;\&quot;&quot;</span><span class="p">)</span> <span class="p">&lt;=</span> line<span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">)</span> <span class="p">|</span>
+</span><span class='line'>\   exe <span class="c">&quot;normal! g`\&quot;&quot; |</span>
+</span><span class='line'>\ <span class="k">endif</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- " -->
+
+
+<h3>2. Visual Block Mode</h3>
+
+<p>You might know about Visual mode <code>v</code>, and even Visual Line mode <code>V</code>,
+but do you know about Visual Block mode? You can enter it with <code>^v</code>
+(that&rsquo;s <code>CTRL-v</code>), and then use Vim movement commands to select text
+in a box of columns and rows, rather than by lines. This can allow you
+to make some really powerful edits.</p>
+
+<p>Other editors, such as TextMate, can perform a similar blockwise
+selection using the Alt/Option key. Well, MacVim can do the same thing.
+Hold down Alt or Option, and click/drag with the mouse. I want to
+caution you against relying on this too much, though. Vim is designed to
+reward you for keeping your fingers <em>on the keys</em> as much as possible.</p>
+
+<h3>3. Quick Letter Swap</h3>
+
+<p>If I accidentally type &ldquo;teh&rdquo; instead of &ldquo;the&rdquo;, the natural reaction
+would be to go back, select those two letters, and retype them, but
+there&rsquo;s a simple way to swap any two adjacent letters:</p>
+
+<p>Move the cursor to the first letter of the swapped pair (in this
+example, the &ldquo;e&rdquo; of &ldquo;teh&rdquo;) and type <code>xp</code>. This cuts the character the
+cursor is on, and immediately pastes it after the next.</p>
+
+<h3>4. Repeat Last Edit (the magic dot)</h3>
+
+<p>The glorious <code>.</code> is a very powerful command, and probably my
+most-often used in this list. Typing <code>.</code> in normal mode repeats your
+most recent edit. It&rsquo;s dead simple to use, and just plain awesome in so
+many contexts.</p>
+
+<h3>5. Move and Edit by Text Object</h3>
+
+<p>At the root of Vim&rsquo;s idiosyncratic design is a variety of ways to easily
+move around a text file and edit it effortlessly:</p>
+
+<p><code>w</code> and <code>b</code> move the cursor forward and backward by <em>word</em>.  <br/>
+<code>(</code> and <code>)</code> move the cursor forward and backward by <em>sentence</em>.  <br/>
+<code>{</code> and <code>}</code> move the cursor forward and backward by <em>paragraph</em>.</p>
+
+<p>You can combine text objects with counts and actions to perform very
+powerful, concise edits.</p>
+
+<p>One of my favorite commands is <code>ciw</code>, and the pnemonic for it is Change
+Inside Word. If I can get my cursor <em>anywhere</em> in a word, it doesn&rsquo;t
+matter which character it&rsquo;s on, a quick <code>ciw</code> will cut the whole word
+and change to insert mode so I can enter new text in its place. No
+awkward text selection or repetitive deletion keying. Just <code>ciw</code> and
+type the new word.</p>
+
+<h3>6. Delete, Yank, and Paste a Line</h3>
+
+<p><code>dd</code> will &ldquo;delete&rdquo; a line, which is the same as <em>cut</em>.  <br/>
+<code>yy</code> will &ldquo;yank&rdquo; a line, which is the same as <em>copy</em>.  <br/>
+<code>p</code> will paste at the line <em>below</em> the cursor.  <br/>
+<code>P</code> or <code>SHIFT-p</code> will paste at the line <em>above</em> the cursor.</p>
+
+<p>Any of these commands can be preceded by a numeric count: <code>10p</code> will
+paste 10 times.</p>
+
+<h3>7. Easy Repeated Characters</h3>
+
+<p>Say I am working in Markdown format &mdash; which I often am; these blog posts
+are is written that way &mdash; and I want to use an underline-style H2:</p>
+
+<pre><code>This is my heading
+==================
+</code></pre>
+
+<p>I would prefer not to have to type who-knows-how-many equals signs in a
+row. How annoying. Luckily, something like this is dead simple in Vim.</p>
+
+<p>After typing your header, exit to normal mode and, with your cursor
+still on the line, type <code>yyp</code> to duplicate the line. The text now looks
+like this:</p>
+
+<pre><code>This is my heading
+This is my heading
+</code></pre>
+
+<p>At this point, your cursor should on the first character of the second
+line. Type <code>v$r=</code> to visually select the text to the end of the line,
+and replace all the characters with equals signs. That&rsquo;s it: the full
+command is <code>yypv$r=</code></p>
+
+<hr />
+
+<p><strong>Update:</strong> Honza Pokorny pointed out a shorter alternative to this command: <code>YpVr=</code></p>
+
+<hr />
+
+<p><strong>Update 2:</strong> Santosh Kumar observed that <code>V</code> may not be able to replace
+<code>v$</code> in every situation, particularly if there is whitespace at the
+beginning of the line.</p>
+
+<p>If you ever just want 80 stars in a row, say, to section off a part of
+source code, you could just type <code>80i*&lt;Esc&gt;</code> &mdash; easy.</p>
+
+<h3>8. Quick Find</h3>
+
+<p><code>/</code> will switch to a mode that allows you to enter a search string
+for the current buffer. If you have the proper settings in your .vimrc,</p>
+
+<p>Vim will even do an incremental search. When you have the search term
+you want, hit <code>&lt;Enter&gt;</code> and cycle forward through the search results <em>in
+the buffer</em> with <code>n</code>, and backwards with <code>N</code>.</p>
+
+<p><code>?</code> does the same thing as <code>/</code>, only in the reverse direction.
+You can also use <code>*</code> to quick-search the word your cursor is
+currently on.</p>
+
+<p>For some sane defaults, here are some of my .vimrc search settings:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="k">set</span> <span class="nb">hlsearch</span>   <span class="c">&quot; Highlight search matches</span>
+</span><span class='line'><span class="k">set</span> <span class="nb">incsearch</span>  <span class="c">&quot; Highlight matches as you type</span>
+</span><span class='line'><span class="k">set</span> <span class="nb">ignorecase</span> <span class="c">&quot; Case-insensitive searching</span>
+</span><span class='line'><span class="k">set</span> <span class="nb">smartcase</span>  <span class="c">&quot; ...but case-sensitive if expression has caps</span>
+</span><span class='line'><span class="k">set</span> <span class="nb">wrapscan</span>   <span class="c">&quot; Set the search scan to wrap around the file</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&quot; Press space bar to turn off search highlighting</span>
+</span><span class='line'><span class="c">&quot; and clear any message displayed</span>
+</span><span class='line'>nnoremap <span class="p">&lt;</span><span class="k">silent</span><span class="p">&gt;</span> <span class="p">&lt;</span>Space<span class="p">&gt;</span> :<span class="k">nohl</span><span class="p">&lt;</span>Bar<span class="p">&gt;</span>:echo<span class="p">&lt;</span>CR<span class="p">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>9. Search &amp; Replace in a Buffer</h3>
+
+<p>Few of us can really consider ourselves experts with regular
+expressions, but if you have ever used them for any kind of text
+processing task, you realize how incredibly powerful (and yes, sometimes
+befuddling) they can be. Regexes are used in Vim&rsquo;s native search and
+replace.</p>
+
+<p>It is necessary to specify a range when doing a search and replace, and
+generally, you will want the action to be global, so you would type
+<code>:%s/pattern/replacement/g</code> and hit <code>&lt;Enter&gt;</code>. Done. The <code>%</code>
+represents the entire buffer, while the <code>s///g</code> structure is the
+standard search and replace command syntax.</p>
+
+<p>To search/replace within a given selection, first select your desired
+range in visual mode, then hit <code>:</code>. Vim will pre-fill your range as
+<code>'&lt;,'&gt;</code>, which means the current selection. Use the same <code>s///g</code>
+syntax as before to restrict the action to the selection you specified.</p>
+
+<p>The trailing <code>/g</code>? That&rsquo;s an option that I usually like to pass, as it
+tells Vim to replace all matches, not just the first one.</p>
+
+<h3>10. Project Search &amp; Replace</h3>
+
+<p>It&rsquo;s a common complaint: project search &amp; replace &mdash; an operation
+that spans one or more files &mdash; is one of the few glaring weaknesses of
+Vim. Until there is better support for this feature in Vim itself, it is
+possible to pull off in an unorthodox way: don&rsquo;t use Vim! Try this on
+for size (from the command line):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sed -i <span class="s1">&#39;s/pattern/replacement/&#39;</span> &lt;files&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From within Vim, while in <code>:</code> command mode, you can use the same
+command, only beginning with a <code>!</code>. This pipes the command directly
+to a shell session and does the business. Note the relative consistency
+of sed&rsquo;s search &amp; replace syntax with Vim&rsquo;s native one.</p>
+
+<p>Passing commands from Vim to external programs is common, and often
+encouraged. Select some text and run the <code>:sort</code> command on it sometime
+&mdash; it actually calls the external <code>sort</code> program, which passes the
+sorted lines back to Vim.</p>
+
+<h2>My dotvim</h2>
+
+<p>I wouldn&rsquo;t consider <a href="http://github.com/smt/dotfiles">my Vim configuration</a>
+to be anything special, but it&rsquo;s mine, and I am always tweaking it (you
+Vim people know what I&rsquo;m talking about). If you are curious about what I
+might have in there, you can feel free have a look at it &mdash; it&rsquo;s on
+GitHub, of course, and all the plugins are set up as Git submodules with
+Pathogen.</p>
+
+<h2>Dive into Vim!</h2>
+
+<p>The nuts and bolts of how to use Vim are, of course, outside the scope
+of this article. <a href="http://vimcasts.org">VimCasts</a>, <a href="http://peepcode.com/products/smash-into-vim-i">PeepCode</a>,
+and Vim&rsquo;s built-in tutorial are at your disposal. That being said, I&rsquo;m
+willing to attempt to answer most questions you might have about Vim,
+either on <a href="http://twitter.com/tudorstudio">Twitter</a> or via the comments.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stephen Tudor</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-04T08:37:00-04:00" pubdate data-updated="true">Aug 4<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/vim/'>vim</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://stephentudor.com/blog/2011/08/04/10-vim-techniques-for-novices.html" data-via="tagsoup" data-counturl="http://stephentudor.com/blog/2011/08/04/10-vim-techniques-for-novices.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/07/17/oocss-for-great-justice.html" title="Previous Post: OOCSS, For Great Justice">&laquo; OOCSS, For Great Justice</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/01/10/kss-and-middleman.html" title="Next Post: KSS and Middleman">KSS and Middleman &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>I&rsquo;m Stephen Tudor.</h1>
+  <p>
+    <img class="left" src="http://www.gravatar.com/avatar/5de6eade9b61a1ea85aa936c4b703672?s=64" title="Stephen&rsquo;s avatar" >
+
+    I work as a UX Dev at <a href="http://ebayenterprise.com">eBay Enterprise</a>, and live in the
+    greater Philadelphia area.
+  </p>
+  <p>
+    My opinions are my own, and not necessarily those of my&nbsp;employer.
+  </p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/11/gulp-and-browserify.html">Gulp and Browserify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/19/emergent-task-planner.html">Emergent Task Planner</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/17/year-in-review.html">Year in Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/07/developers-are-artists.html">Developers Are Artists</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/10/kss-and-middleman.html">KSS and Middleman</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("tagsoup", , );
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <p>Follow <a href="http://twitter.com/tagsoup">@tagsoup</a></p>
+  
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Stephen Tudor -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

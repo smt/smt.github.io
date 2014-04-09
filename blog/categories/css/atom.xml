@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: css | The Tude Abides]]></title>
+  <link href="http://stephentudor.com/blog/categories/css/atom.xml" rel="self"/>
+  <link href="http://stephentudor.com/"/>
+  <updated>2014-04-08T22:09:34-04:00</updated>
+  <id>http://stephentudor.com/</id>
+  <author>
+    <name><![CDATA[Stephen Tudor]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[KSS and Middleman]]></title>
+    <link href="http://stephentudor.com/blog/2012/01/10/kss-and-middleman.html"/>
+    <updated>2012-01-10T15:11:00-05:00</updated>
+    <id>http://stephentudor.com/blog/2012/01/10/kss-and-middleman</id>
+    <content type="html"><![CDATA[<p>I love the idea of building an &ldquo;interactive style guide&rdquo; for a website
+design.  I really do. However, working in Agencyland, it can be
+extremely difficult to budget enough time for this kind of tool when
+seemingly higher-priority tasks pile up. Right or wrong, the utopian
+vision of a living style guide often becomes a foregone luxury in the
+throes of looming deadlines.</p>
+
+<p><em>Assumes the reader understands the basics of Ruby and CSS.</em></p>
+
+<!-- more -->
+
+
+<h2>Middleman</h2>
+
+<p>For an upcoming project at <a href="http://empathylab.com">work</a>, I&rsquo;ll be
+leading the effort to author static HTML templates for a different group
+of software integrators to wire up to a complex back-end architecture
+(rhymes with Shmeb-shmere).</p>
+
+<p>We are also going to be building a whole front-end stack with CSS and
+JavaScript to boot, so it makes sense to use a solid static framework to
+take the pain away from developing a massive amount of templates without
+any server-side help. The bottom line is that we need to be able to
+export flat HTML files that work the same as the development templates.</p>
+
+<p>Enter <a href="http://middlemanapp.com">Middleman</a>, a loosely-coupled, yet
+carefully curated collection of Ruby libraries that all contribute to a
+framework that is much greater than the sum of its parts. I won&rsquo;t go
+into all of its features here&thinsp;&mdash;&thinsp;you can visit the
+Middleman <a href="http://middlemanapp.com">site</a> for everything you need to
+know.</p>
+
+<p>For our purposes, Middleman looks to be a robust platform on which to
+build our static site.</p>
+
+<h2>KSS</h2>
+
+<p>I am a closet fan of documentation specs like RubyDoc and JSDoc, but
+they often introduce a lot of heavy baggage for developers.
+<a href="http://tomdoc.org">TomDoc</a> came on the scene not too long ago as a
+really simple doc spec that Githubbers use in their in-house Ruby code,
+and I was ecstatic when another Github guy, <a href="http://warpspire.com">Kyle Neath</a>,
+released his own <a href="http://github.com/kneath/kss">KSS</a> project in late
+2011. I think I&rsquo;ve subconsciously been yearning for this kind of CSS
+documentation support for some time.</p>
+
+<p>KSS is a documentation spec for CSS (one of the first of its kind that
+I&rsquo;ve heard of) that can be parsed by Ruby. This helps us do things
+like&hellip; generating an interactive style guide. It&rsquo;s certainly not a
+silver bullet, but KSS will lower some of the administrative barriers to
+putting together helpful CSS documentation.</p>
+
+<h2>KSS-ing Middleman</h2>
+
+<p>I thought it would be a good idea to try to port some of the
+<a href="https://github.com/kneath/kss/tree/master/example">KSS example app</a>
+code over to my basic Middleman app. The example shows several
+variations of form submit button styles, including states such as hover
+and disabled, which makes for an excellent use case.</p>
+
+<h3>The Styles</h3>
+
+<p>I&rsquo;m using <a href="http://sass-lang.com">Sass</a> and
+<a href="http://compass-style.org">Compass</a>, with Middleman, so I did a quick
+port of Kyle&rsquo;s example button CSS to Sass with some appropriate Compass
+mixins. I found that KSS broke when used with the original terse Sass
+format, but it did work fine with the newer SCSS format. I&rsquo;m not
+certain, but it&rsquo;s possible that this issue may be resolved in KSS in the
+future.</p>
+
+<p>Below is the result of porting the button CSS to <code>_button.scss</code>. The
+comment block at the top is where the documentation magic happens. You
+just describe what something is, specify a list of different states, and
+then reference a numbered section of the style guide. That&rsquo;s it.</p>
+
+<p>``` sass</p>
+
+<pre><code>// Your standard form button.
+//
+// :hover    - Highlights when hovering.
+// :disabled - Dims the button when disabled.
+// .primary  - Indicates button is the primary action.
+// .smaller  - A smaller button
+//
+// Styleguide 5.1.1
+button {
+  background-color: #f5f5f5;
+  @include background-image(linear-gradient(#f5f5f5, #e5e5e5));
+  border: 1px solid #ddd;
+  border-bottom-color: #bbb;
+  @include border-radius(3px);
+  @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.15));
+  color: #666;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: normal;
+  padding: 5px 15px;
+  @include text-shadow(0 1px rgba(255, 255, 255, 0.9));
+
+  &amp;.primary, &amp;.primary:hover {
+    color: #fff;
+    background-color: #8add6d;
+    @include background-image(linear-gradient(#8add6d, #60b044));
+    border-color: #74bb5a;
+    border-bottom-color: #509338;
+    @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    @include text-shadow(0 -1px 0 rgba(0, 0, 0, 0.4));
+  }
+  &amp;.smaller {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  &amp;:hover {
+    color: #337797;
+    background-color: #f0f7fa;
+    @include background-image(linear-gradient(#f0f7fa, #d8eaf2));
+    border-color: #cbe3ee;
+    border-bottom-color: #97c7dd;
+  }
+  &amp;:disabled {
+    opacity: 0.5;
+  }
+}
+</code></pre>
+
+<p>```</p>
+
+<p>You actually <em>do</em> need to manage the numeric structure of the style guide
+yourself. However, I appreciate that KSS makes you maintain control over
+the meaningful aspects of organizing a style guide, while making it
+possible to automate the tedious parts.</p>
+
+<h3>The Config</h3>
+
+<p>For the style guide to look nice on the front end, there is also a small
+amount of boilerplate CSS and JavaScript code to make some of the magic
+happen, so I pulled those files in and called them from a separate
+layout, <code>layouts/styleguide.erb</code>.</p>
+
+<p>The KSS example app runs on Sinatra, and Middleman also basically runs
+on Sinatra with some abstractions on top, so setting up the
+configuration wasn&rsquo;t too tough. After adding <code>gem "kss", "~&gt; 0.1.1"</code> to
+the Gemfile and running <code>bundle install</code>, I added the following to
+Middleman&rsquo;s <code>config.rb</code> file:</p>
+
+<p>``` ruby</p>
+
+<pre><code>require "kss"
+page "/styleguide/*", :layout =&gt; :styleguide do
+  @styleguide = Kss::Parser.new('source/css')
+end
+
+helpers do
+  # Generates a styleguide block.
+  def styleguide_block(section, &amp;block)
+    @section = @styleguide.section(section)
+    @example_html = kss_capture{ block.call }
+    @_out_buf &lt;&lt; partial('styleguide/block')
+  end
+
+  # Captures the result of a block within an erb template without spitting it
+  # to the output buffer.
+  def kss_capture(&amp;block)
+    out, @_out_buf = @_out_buf, ""
+    yield
+    @_out_buf
+  ensure
+    @_out_buf = out
+  end
+end
+</code></pre>
+
+<p>```</p>
+
+<p>For all style guide templates, the above configuration exposes a
+variable containing a Ruby representation of all KSS-documented CSS in
+the site (because KSS parses all documentation blocks in the CSS). A
+couple of helpers are defined that the templates will have access to, in
+order to handle the generated style guide block.</p>
+
+<p><em>Due to a bug in Middleman 3.0 beta, wildcard file paths did not set
+local variables correctly. This bug should be resolved in 3.0 final.
+Additionally, I suspect that the </em><code>kss_capture</code><em> helper is not exactly
+optimal for use with Middleman, but I haven&rsquo;t taken the time to refactor
+the example code beyond simply getting it working. It was originally
+named </em><code>capture</code><em> in the example, but I renamed it to prevent conflicts
+with the existing Middleman </em><code>capture</code><em> helper, which I would have
+probably tried to use if it was available inside the config file.</em></p>
+
+<h3>The Templates</h3>
+
+<p>A partial template needs to be defined for rendering every style guide
+section. The template will be used by the <code>styleguide_block</code> helper
+defined in the config above: <code>styleguide/_block.erb</code>.</p>
+
+<p>``` erb</p>
+
+<pre><code>&lt;div class="styleguide-example"&gt;
+
+  &lt;h3&gt;&lt;%= @section.section %&gt; &lt;em&gt;&lt;%= @section.filename %&gt;&lt;/em&gt;&lt;/h3&gt;
+  &lt;div class="styleguide-description"&gt;
+    &lt;p&gt;&lt;%= @section.description %&gt;&lt;/p&gt;
+    &lt;% if @section.modifiers.any? %&gt;
+      &lt;ul class="styleguide-modifier"&gt;
+        &lt;% @section.modifiers.each do |modifier| %&gt;
+          &lt;li&gt;&lt;strong&gt;&lt;%= modifier.name %&gt;&lt;/strong&gt; - &lt;%= modifier.description %&gt;&lt;/li&gt;
+        &lt;% end %&gt;
+      &lt;/ul&gt;
+    &lt;% end %&gt;
+  &lt;/div&gt;
+  &lt;div class="styleguide-element"&gt;
+    &lt;%= @example_html %&gt;
+  &lt;/div&gt;
+  &lt;% @section.modifiers.each do |modifier| %&gt;
+    &lt;div class="styleguide-element styleguide-modifier"&gt;
+      &lt;span class="styleguide-modifier-name"&gt;&lt;%= modifier.name %&gt;&lt;/span&gt;
+      &lt;%= @example_html.sub('$modifier_class', " #{modifier.class_name}") %&gt;
+    &lt;/div&gt;
+  &lt;% end %&gt;
+
+&lt;/div&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>In <code>styleguide/buttons.html.erb</code>, I added the following template call:</p>
+
+<p>``` erb</p>
+
+<pre><code>&lt;% styleguide_block '5.1.1' do %&gt;
+  &lt;button class="$modifier_class"&gt;Default Button&lt;/button&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>Note that there is a single <code>button</code> element in the block. This is where
+the magic happens, because it passes the <code>button</code> to <code>styleguide_block</code>,
+which imports the <code>styleguide/block</code> partial for the style guide section.</p>
+
+<p>The partial parses the KSS representation of the documented CSS for the
+given section of the style guide (5.1.1). It prints out the section
+number and SCSS filename, adds the documentation text to the page,
+cycles through each CSS modifier of <code>button</code>, and generates a new
+<code>&lt;button&gt;</code> tag for each modifier. The resulting section of the style
+guide will look like this:</p>
+
+<p><img src="/images/2012-01-10-kss-and-middleman/styleguide.png" title="Style guide example" ></p>
+
+<p>The original basic <code>button</code> element is listed first, followed by
+accurate examples of all of its documented modifiers. The KSS JavaScript
+file fakes the pseudo-selectors <code>:hover</code> and <code>:disabled</code>.</p>
+
+<h2>Onward</h2>
+
+<p>For my project, at least, this is an encouraging proof-of-concept that I
+plan to take forward. In the meantime, it looks like there is a generous
+amount of potential in both Middleman and KSS, so be sure to check out
+each of these projects.</p>
+
+<p>If you have used either Middleman or KSS, what has your experience been
+like thus far?</p>
+
+<h2>Update 2012-02-04</h2>
+
+<p>I have pushed my working code to a <a href="http://github.com/smt/middleman-kss">Github repo</a>.
+Some of the gems are a little out of date, but I wanted to get my
+initial version up first, and then work through any issues that might
+arise from updating libraries. Please let me know what you think; I&rsquo;m
+always open to suggestions for improvement.</p>
+
+<p>After checking out the code, just run <code>middleman</code> like any other
+Middleman app, and browse to <code>http://localhost:4567</code>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OOCSS, For Great Justice]]></title>
+    <link href="http://stephentudor.com/blog/2011/07/17/oocss-for-great-justice.html"/>
+    <updated>2011-07-17T13:55:00-04:00</updated>
+    <id>http://stephentudor.com/blog/2011/07/17/oocss-for-great-justice</id>
+    <content type="html"><![CDATA[<p>In my <a href="/blog/2011/07/09/responsible-sass-authoring">previous post</a>, I
+hinted at a growing concern with CSS performance. Among those pioneering
+ways to approach the issue of maintainable-yet-efficient CSS is <a href="http://twitter.com/stubbornella">Nicole Sullivan</a>,
+who is perhaps best known for her open source <a href="http://oocss.org">Object-Oriented CSS</a>
+project.</p>
+
+<h2>Object-Oriented? CSS?</h2>
+
+<p>I have to admit that when I first checked out out OOCSS, I guffawed.
+While it&rsquo;s true that, at first blush, CSS does not have many of the
+traditional features of a genuine OO programming language, Nicole has
+been exploring ways in which CSS' inheritance/cascade can be analogous
+to OO concepts.</p>
+
+<p>It&rsquo;s taken me quite some time to come around. There are things in the
+OOCSS code base that seem to fly in the face of commonly-accepted CSS
+best practices. It is precisely this kind of resistance in the community
+that must have prompted Nicole to deliver her latest talk this year at
+Webstock, entitled <a href="http://www.webstock.org.nz/talks/speakers/nicole-sullivan/css-tools-massive-websites">Our Best Practices Are Killing Us</a> (<a href="http://www.slideshare.net/stubbornella/our-best-practices-are-killing-us">slides</a>).</p>
+
+<!-- more -->
+
+
+<h2>Semantics Pitfall</h2>
+
+<p>For the past several years, I have been painstakingly crafting HTML and
+CSS under the banner of &ldquo;best practices.&rdquo; Currently, one such practice
+has been to aggressively scope CSS by content type.</p>
+
+<p>Martin Sutherland <a href="http://sunpig.com/martin/archives/2008/10/07/maintainable-css-modular-to-the-max.html">describes this approach</a>
+better and more succinctly than I could, but just recently <a href="http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html">recanted in favor of OOCSS</a>.
+Martin had watched Nicole&rsquo;s talk, and it appears to have had the same
+effect on him as it had on me. He writes:</p>
+
+<p><blockquote><p>One of the hardest hurdles to leap in coming to like OOCSS was the<br/>somewhat heretical notion of adding &ldquo;non-semantic&rdquo; container elements<br/>and apparently &ldquo;presentational&rdquo; classnames to my HTML.</p><footer><strong>Martin Sutherland <a href="http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html">http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html</a></strong></footer></blockquote></p>
+
+<p>Martin <a href="http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html">goes on to propose</a>
+(and I think he&rsquo;s right on target here) that there are multiple layers
+of semantics that belong in HTML:</p>
+
+<ol>
+<li>Structural semantics (core HTML elements)</li>
+<li>Ontological semantics (domain-specific meaning beyond core HTML)</li>
+<li>Visual semantics (representing visual intent)</li>
+</ol>
+
+
+<p><img class="left" src="/images/2011-07-17-oocss-for-great-justice/pitfall.jpeg" title="Pitfall Harry" ></p>
+
+<p>Lest we forget, one of the core purposes of CSS <strong>is</strong> to communicate
+the <a href="http://www.stubbornella.org/content/2010/06/12/visual-semantics-in-html-and-css/">visual semantics</a>
+of an HTML document. Many developers, myself included, have written many
+projects' worth of CSS that attempts to use only core HTML (structural)
+and domain-specific (ontological) semantics, while sidestepping the role
+that visual semantics ought to play, out of fear that we&rsquo;d be
+introducing the ultimate evil into our source code, <em>presentational
+classnames</em>.</p>
+
+<p>It is becoming more clear to me that we should not avoid the question of
+visual semantics in our CSS. The result of our having done so is visual
+style that is tightly bound to the content.</p>
+
+<p>Now, hearken back to the primitive days of yore when it was commonplace
+(and accepted) to see <code>&lt;font&gt;</code>, <code>&lt;u&gt;</code>, and <code>&lt;center&gt;</code> tags in HTML
+source.  It&rsquo;s another example of presentation coupled with content,
+only in a more obviously wrong form.</p>
+
+<p><strong>Is the intertwining of visual style and content not one of the
+problems, nay, <em>the</em> problem, that CSS was intended to address in the
+first place?</strong></p>
+
+<p>It seems to me that many of us are doing it wrong when we refuse to
+implement some level of visual semantics in our CSS and HTML.  Because
+of the belief that we&rsquo;re following &ldquo;best practices,&rdquo; we are robbing
+ourselves of opportunities to abstract out common styles into reusable
+patterns, and our projects suffer for it.</p>
+
+<h2>For Great Justice</h2>
+
+<p>I&rsquo;ve watched as some developers have begun to <a href="http://lazukars.com/post/7300553347/brain-vs-object-oriented-css">wrestle with the concepts of OOCSS</a>
+vs. what we have come to know as the industry standard practice of
+writing CSS in recent years.</p>
+
+<p><img class="right" src="/images/2011-07-17-oocss-for-great-justice/ZeroWing.png" title="ZeroWing" ></p>
+
+<p>Watch Nicole&rsquo;s OOCSS talks, and allow them ample time to marinate.
+Check out the <a href="http://github.com/stubbornella/oocss">source</a> of the
+<a href="http://oocss.org">OOCSS project</a>. I&rsquo;m still in process myself, as I
+continue to look for ways to strike the delicate balance between
+<em>appropriate</em> visual semantics in CSS and blatantly presentational
+naming.</p>
+
+<p>Not everything in OOCSS is a great idea to implement verbatim.  Remember
+that it is proof of concept and a collection of patterns, not a CSS
+boilerplate. I am still mildly horrified every time I see how <code>&lt;b&gt;</code> tags
+are used for rounded corners in the <a href="http://oocss.org/module.html">module example</a>,
+but I remind myself that the concepts are what make up OOCSS, not the
+specific implementation of the examples.</p>
+
+<p>Finally, I have linked to Martin&rsquo;s <a href="http://www.stubbornella.org/content/2010/06/12/visual-semantics-in-html-and-css/">article on OOCSS</a>
+in several places throughout this post. It really is required reading if
+you author CSS as part of your day job.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Responsible Sass Authoring]]></title>
+    <link href="http://stephentudor.com/blog/2011/07/09/responsible-sass-authoring.html"/>
+    <updated>2011-07-09T13:04:00-04:00</updated>
+    <id>http://stephentudor.com/blog/2011/07/09/responsible-sass-authoring</id>
+    <content type="html"><![CDATA[<p>In capable hands, <a href="//sass-lang.org">Sass</a> can do amazing things for your
+CSS. With Sass, you can use functions and variables that later get
+compiled into valid CSS. This can greatly reduce code repetition and
+the potential for mistakes.</p>
+
+<p>For example, not that you would, but you could write some Sass like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-1.sass)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-1.sass'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="c1">// Set a couple of vars</span>
+</span><span class='line'><span class="nv">$titleColor</span><span class="o">:</span> <span class="mh">#000</span>
+</span><span class='line'><span class="nv">$titleSize</span><span class="o">:</span> <span class="mi">24</span><span class="kt">px</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.article</span>
+</span><span class='line'>  <span class="nc">.title</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nv">$titleColor</span>
+</span><span class='line'>    <span class="na">font-size</span><span class="o">:</span> <span class="nv">$titleSize</span>
+</span><span class='line'>  <span class="nc">.alt-title</span>
+</span><span class='line'>    <span class="k">@extend</span> <span class="nc">.title</span>
+</span><span class='line'>    <span class="na">border-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="nf">lighten</span><span class="p">(</span><span class="nv">$titleColor</span><span class="o">,</span> <span class="mi">80</span><span class="kt">%</span><span class="p">)</span>    <span class="c1">// #ccc</span>
+</span><span class='line'>    <span class="na">color</span><span class="o">:</span> <span class="nf">transparentize</span><span class="p">(</span><span class="nf">lighten</span><span class="p">(</span><span class="nv">$titleColor</span><span class="o">,</span> <span class="mi">20</span><span class="kt">%</span><span class="p">)</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.1</span><span class="p">)</span>
+</span><span class='line'>  <span class="nc">.sub-title</span>
+</span><span class='line'>    <span class="k">@extend</span> <span class="nc">.title</span>
+</span><span class='line'>    <span class="na">font-size</span><span class="o">:</span> <span class="nf">round</span><span class="p">(</span><span class="nv">$titleSize</span> <span class="o">*</span> <span class="mi">0</span><span class="mf">.85</span><span class="p">)</span>    <span class="c1">// 20.4px</span>
+</span><span class='line'>    <span class="k">&amp;</span><span class="nd">:hover</span>
+</span><span class='line'>      <span class="na">background-color</span><span class="o">:</span> <span class="nf">transparentize</span><span class="p">(</span><span class="nf">change-color</span><span class="p">(</span><span class="nv">$titleColor</span><span class="o">,</span> <span class="nv">$red</span><span class="o">:</span> <span class="mi">255</span><span class="p">)</span><span class="o">,</span> <span class="mi">0</span><span class="mf">.8</span><span class="p">)</span><span class="err">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>The resulting CSS might look something like this, depending upon how you
+set your Sass output style preference:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-1.css)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-1.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.article</span> <span class="nc">.title</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.article</span> <span class="nc">.alt-title</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.article</span> <span class="nc">.sub-title</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="m">#000</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">24px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.article</span> <span class="nc">.alt-title</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">border-bottom</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#cccccc</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">51</span><span class="o">,</span> <span class="m">51</span><span class="o">,</span> <span class="m">51</span><span class="o">,</span> <span class="m">0</span><span class="o">.</span><span class="m">9</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.article</span> <span class="nc">.sub-title</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">20px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nc">.article</span> <span class="nc">.sub-title</span><span class="nd">:hover</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">255</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">.</span><span class="m">2</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Pretty cool, right? You can see that the <code>@extend</code> keyword can be a very
+powerful tool, bringing a quasi-object-oriented paradigm to our CSS. The
+same could be true for the nested selectors; you just have to refer to
+<code>.article</code> once, and let the indentation take care of the scope for
+you.</p>
+
+<!-- more -->
+
+
+<h2>CSS Bloat</h2>
+
+<p>Surround your pullquote like this {" text to be quoted "}</p>
+
+<p><em>Note that I&rsquo;m not blaming Sass itself for any of these problems. It&rsquo;s
+quite simply that using some Sass features in a certain way can
+inadvertantly amplify poor CSS design decisions.</em></p>
+
+<h3>Case 1</h3>
+
+<p>Sass selectors that are nested like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-2.sass)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-2.sass'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nn">#product</span>
+</span><span class='line'>  <span class="nc">.overview</span>
+</span><span class='line'>    <span class="nc">.header</span>
+</span><span class='line'>      <span class="nt">h2</span>
+</span><span class='line'>        <span class="nt">span</span>
+</span><span class='line'>    <span class="nc">.content</span>
+</span><span class='line'>      <span class="nc">.promo</span>
+</span><span class='line'>        <span class="nc">.header</span>
+</span><span class='line'>          <span class="nt">div</span>
+</span><span class='line'>          <span class="nc">.inner</span>
+</span><span class='line'>            <span class="nt">a</span>
+</span><span class='line'>              <span class="nt">span</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>will result in CSS descendant selectors that look something like this:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-2.css)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-2.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nf">#product</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.header</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.header</span> <span class="nt">h2</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.header</span> <span class="nt">h2</span> <span class="nt">span</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.content</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.content</span> <span class="nc">.promo</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.content</span> <span class="nc">.promo</span> <span class="nc">.header</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.content</span> <span class="nc">.promo</span> <span class="nc">.header</span> <span class="nt">div</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.content</span> <span class="nc">.promo</span> <span class="nc">.header</span> <span class="nc">.inner</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.content</span> <span class="nc">.promo</span> <span class="nc">.header</span> <span class="nc">.inner</span> <span class="nt">a</span> <span class="p">{}</span>
+</span><span class='line'><span class="nf">#product</span> <span class="nc">.overview</span> <span class="nc">.content</span> <span class="nc">.promo</span> <span class="nc">.header</span> <span class="nc">.inner</span> <span class="nt">a</span> <span class="nt">span</span> <span class="p">{}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Yuck. I&rsquo;m not going to go into why this is bad, but you don&rsquo;t have to
+take my word for it; simply google &ldquo;<a href="//www.google.com/search?q=css+performance+descendant+selectors">CSS performance descendant selectors</a>&rdquo;
+and read up.</p>
+
+<p>With Sass, this kind of CSS bloat is extremely easy to cause if you get
+carried away with selector nesting. Observe the redundancy and the
+verbosity of the generated CSS. If the developer had taken the time to
+carefully construct his selectors, he could have avoided the need for
+this many levels of descendants in his CSS.</p>
+
+<p>To my great shame, that developer was yours truly.</p>
+
+<h3>Case 2</h3>
+
+<p>This one combines the <code>@extend</code>, nesting, and parent-selector features
+of Sass. <code>@extend</code> has been one of my favorite features of Sass ever
+since it was added. It lets you inherit the properties of one selector
+in another.  Here&rsquo;s how it can go awry, despite all the best intentions.
+The Sass:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-3.sass)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-3.sass'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.clearfix</span>
+</span><span class='line'>  <span class="k">&amp;</span><span class="nd">:after</span>
+</span><span class='line'>    <span class="na">clear</span><span class="o">:</span> <span class="no">both</span>
+</span><span class='line'>    <span class="na">content</span><span class="o">:</span> <span class="s1">&#39;</span><span class="s2">.&#39;</span>
+</span><span class='line'>    <span class="na">display</span><span class="o">:</span> <span class="no">block</span>
+</span><span class='line'>    <span class="na">height</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="na">line-height</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="na">overflow</span><span class="o">:</span> <span class="no">hidden</span>
+</span><span class='line'>    <span class="na">width</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.thing-1</span>
+</span><span class='line'>  <span class="k">@extend</span> <span class="nc">.clearfix</span>
+</span><span class='line'><span class="nc">.thing-2</span>
+</span><span class='line'>  <span class="k">@extend</span> <span class="nc">.clearfix</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ...</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.thing-99</span>
+</span><span class='line'>  <span class="k">@extend</span> <span class="nc">.clearfix</span>
+</span><span class='line'><span class="nc">.thing-100</span>
+</span><span class='line'>  <span class="k">@extend</span> <span class="nc">.clearfix</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>In the Sass, let&rsquo;s assume I extended <code>.clearfix</code> in 100 separate
+selectors at various places throughout my code. This is, unfortunately,
+a very realistic use case for something as commonly used as a clearfix,
+and as my project grows, it would eventually result in the following
+generated CSS:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-3.css)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-3.css'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.clearfix</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-1</span><span class="o">,</span> <span class="nc">.thing-2</span><span class="o">,</span> <span class="nc">.thing-3</span><span class="o">,</span> <span class="nc">.thing-4</span><span class="o">,</span> <span class="nc">.thing-5</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-6</span><span class="o">,</span> <span class="nc">.thing-7</span><span class="o">,</span> <span class="nc">.thing-8</span><span class="o">,</span> <span class="nc">.thing-9</span><span class="o">,</span> <span class="nc">.thing-10</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-11</span><span class="o">,</span> <span class="nc">.thing-12</span><span class="o">,</span> <span class="nc">.thing-13</span><span class="o">,</span> <span class="nc">.thing-14</span><span class="o">,</span> <span class="nc">.thing-15</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-16</span><span class="o">,</span> <span class="nc">.thing-17</span><span class="o">,</span> <span class="nc">.thing-18</span><span class="o">,</span> <span class="nc">.thing-19</span><span class="o">,</span> <span class="nc">.thing-20</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-21</span><span class="o">,</span> <span class="nc">.thing-22</span><span class="o">,</span> <span class="nc">.thing-23</span><span class="o">,</span> <span class="nc">.thing-24</span><span class="o">,</span> <span class="nc">.thing-25</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-26</span><span class="o">,</span> <span class="nc">.thing-27</span><span class="o">,</span> <span class="nc">.thing-28</span><span class="o">,</span> <span class="nc">.thing-29</span><span class="o">,</span> <span class="nc">.thing-30</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-31</span><span class="o">,</span> <span class="nc">.thing-32</span><span class="o">,</span> <span class="nc">.thing-33</span><span class="o">,</span> <span class="nc">.thing-34</span><span class="o">,</span> <span class="nc">.thing-35</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-36</span><span class="o">,</span> <span class="nc">.thing-37</span><span class="o">,</span> <span class="nc">.thing-38</span><span class="o">,</span> <span class="nc">.thing-39</span><span class="o">,</span> <span class="nc">.thing-40</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-41</span><span class="o">,</span> <span class="nc">.thing-42</span><span class="o">,</span> <span class="nc">.thing-43</span><span class="o">,</span> <span class="nc">.thing-44</span><span class="o">,</span> <span class="nc">.thing-45</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-46</span><span class="o">,</span> <span class="nc">.thing-47</span><span class="o">,</span> <span class="nc">.thing-48</span><span class="o">,</span> <span class="nc">.thing-49</span><span class="o">,</span> <span class="nc">.thing-50</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-51</span><span class="o">,</span> <span class="nc">.thing-52</span><span class="o">,</span> <span class="nc">.thing-53</span><span class="o">,</span> <span class="nc">.thing-54</span><span class="o">,</span> <span class="nc">.thing-55</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-56</span><span class="o">,</span> <span class="nc">.thing-57</span><span class="o">,</span> <span class="nc">.thing-58</span><span class="o">,</span> <span class="nc">.thing-59</span><span class="o">,</span> <span class="nc">.thing-60</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-61</span><span class="o">,</span> <span class="nc">.thing-62</span><span class="o">,</span> <span class="nc">.thing-63</span><span class="o">,</span> <span class="nc">.thing-64</span><span class="o">,</span> <span class="nc">.thing-65</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-66</span><span class="o">,</span> <span class="nc">.thing-67</span><span class="o">,</span> <span class="nc">.thing-68</span><span class="o">,</span> <span class="nc">.thing-69</span><span class="o">,</span> <span class="nc">.thing-70</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-71</span><span class="o">,</span> <span class="nc">.thing-72</span><span class="o">,</span> <span class="nc">.thing-73</span><span class="o">,</span> <span class="nc">.thing-74</span><span class="o">,</span> <span class="nc">.thing-75</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-76</span><span class="o">,</span> <span class="nc">.thing-77</span><span class="o">,</span> <span class="nc">.thing-78</span><span class="o">,</span> <span class="nc">.thing-79</span><span class="o">,</span> <span class="nc">.thing-80</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-81</span><span class="o">,</span> <span class="nc">.thing-82</span><span class="o">,</span> <span class="nc">.thing-83</span><span class="o">,</span> <span class="nc">.thing-84</span><span class="o">,</span> <span class="nc">.thing-85</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-86</span><span class="o">,</span> <span class="nc">.thing-87</span><span class="o">,</span> <span class="nc">.thing-88</span><span class="o">,</span> <span class="nc">.thing-89</span><span class="o">,</span> <span class="nc">.thing-90</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-91</span><span class="o">,</span> <span class="nc">.thing-92</span><span class="o">,</span> <span class="nc">.thing-93</span><span class="o">,</span> <span class="nc">.thing-94</span><span class="o">,</span> <span class="nc">.thing-95</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-96</span><span class="o">,</span> <span class="nc">.thing-97</span><span class="o">,</span> <span class="nc">.thing-98</span><span class="o">,</span> <span class="nc">.thing-99</span><span class="o">,</span> <span class="nc">.thing-100</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.clearfix</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-1</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-2</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-3</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-4</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-5</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-6</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-7</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-8</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-9</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-10</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-11</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-12</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-13</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-14</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-15</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-16</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-17</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-18</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-19</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-20</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-21</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-22</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-23</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-24</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-25</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-26</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-27</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-28</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-29</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-30</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-31</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-32</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-33</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-34</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-35</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-36</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-37</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-38</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-39</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-40</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-41</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-42</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-43</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-44</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-45</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-46</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-47</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-48</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-49</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-50</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-51</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-52</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-53</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-54</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-55</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-56</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-57</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-58</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-59</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-60</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-61</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-62</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-63</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-64</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-65</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-66</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-67</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-68</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-69</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-70</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-71</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-72</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-73</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-74</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-75</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-76</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-77</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-78</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-79</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-80</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-81</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-82</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-83</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-84</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-85</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-86</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-87</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-88</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-89</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-90</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-91</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-92</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-93</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-94</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-95</span><span class="nd">:after</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.thing-96</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-97</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-98</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-99</span><span class="nd">:after</span><span class="o">,</span> <span class="nc">.thing-100</span><span class="nd">:after</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">clear</span><span class="o">:</span> <span class="k">both</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">content</span><span class="o">:</span> <span class="s1">&#39;.&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">block</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">line-height</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>First, there is a nesting issue. Because I nested <code>&amp;:after</code> inside an
+empty parent selector, the generated CSS contains a huge list of
+selectors with no properties, then a second huge list with the clearfix
+styles. Plus, all these bogus selectors tend to clog up dev tools like
+Firebug, as shown in this screenshot:</p>
+
+<p><img src="/images/2011-07-09-responsible-sass-authoring/extend-clearfix-firebug-hell.png" alt="@extend .clearfix Firebug hell" /></p>
+
+<p>Secondly, this could have all been avoided if I had been more pragmatic
+and simply used <code>.clearfix</code> (or another class &ndash; I commonly use
+<code>.group</code>) in the HTML to apply the CSS and make it semantically
+meaningful at the same time. Using <code>@extend</code> is not the correct choice
+for this particular pattern:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-4.sass)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-4.sass'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.group</span><span class="nd">:after</span>
+</span><span class='line'>  <span class="na">clear</span><span class="o">:</span> <span class="no">both</span>
+</span><span class='line'>  <span class="na">content</span><span class="o">:</span> <span class="s1">&#39;</span><span class="s2">.&#39;</span>
+</span><span class='line'>  <span class="na">display</span><span class="o">:</span> <span class="no">block</span>
+</span><span class='line'>  <span class="na">height</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="na">line-height</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="na">overflow</span><span class="o">:</span> <span class="no">hidden</span>
+</span><span class='line'>  <span class="na">width</span><span class="o">:</span> <span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// That&#39;s right, I&#39;m not using @extend here.</span>
+</span><span class='line'><span class="c1">// It&#39;s almost like I&#39;m using actual CSS \o/</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (example-4.html)</span> <a href='/downloads/code/2011-07-09-responsible-sass-authoring/example-4.html'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;thing-1 group&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="c">&lt;!-- stuff floated left --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;section</span> <span class="na">class=</span><span class="s">&quot;primary-content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- ... --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/section&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c">&lt;!-- stuff floated right --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;aside</span> <span class="na">class=</span><span class="s">&quot;secondary-content&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c">&lt;!-- ... --&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/aside&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>Sass =&gt; CSS</h2>
+
+<p>Surround your pullquote like this {" text to be quoted "}</p>
+]]></content>
+  </entry>
+  
+</feed>

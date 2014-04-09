@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: vim | The Tude Abides]]></title>
+  <link href="http://stephentudor.com/blog/categories/vim/atom.xml" rel="self"/>
+  <link href="http://stephentudor.com/"/>
+  <updated>2014-04-08T22:09:34-04:00</updated>
+  <id>http://stephentudor.com/</id>
+  <author>
+    <name><![CDATA[Stephen Tudor]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[10 Vim Techniques for Novices]]></title>
+    <link href="http://stephentudor.com/blog/2011/08/04/10-vim-techniques-for-novices.html"/>
+    <updated>2011-08-04T08:37:00-04:00</updated>
+    <id>http://stephentudor.com/blog/2011/08/04/10-vim-techniques-for-novices</id>
+    <content type="html"><![CDATA[<p>Since I switched to Vim as my primary editor back in March of this year,
+I have discovered a wealth of useful tricks that help me get things
+done. Most of these techniques are truly indispensible, and should find
+a place in any Vim user&rsquo;s quiver.</p>
+
+<p>I should also note that at this time, I&rsquo;m nowhere near expert-level in
+my Vim abilities, so this post is intended to share some commands,
+patterns, and configurations with other Vim users who are still getting
+their feet wet with the editor. Experienced Vimmers will already know
+all this stuff, and more power to them. This is for the Vim n00bs out
+there.</p>
+
+<!-- more -->
+
+
+<h3>1. Open with Cursor at Last Edit Position</h3>
+
+<p>This one isn&rsquo;t so much a technique as it is a preference. If you make a
+change to a file, and then re-open it later, the following snippet in
+your .vimrc will position the cursor at the last spot you made an edit
+prior to closing the buffer or Vim itself:</p>
+
+<p>``` vim</p>
+
+<pre><code>autocmd BufReadPost *
+\ if line("'\"") &gt; 0 &amp;&amp; line("'\"") &lt;= line("$") |
+\   exe "normal! g`\"" |
+\ endif
+</code></pre>
+
+<p>```</p>
+
+<!-- " -->
+
+
+<h3>2. Visual Block Mode</h3>
+
+<p>You might know about Visual mode <code>v</code>, and even Visual Line mode <code>V</code>,
+but do you know about Visual Block mode? You can enter it with <code>^v</code>
+(that&rsquo;s <code>CTRL-v</code>), and then use Vim movement commands to select text
+in a box of columns and rows, rather than by lines. This can allow you
+to make some really powerful edits.</p>
+
+<p>Other editors, such as TextMate, can perform a similar blockwise
+selection using the Alt/Option key. Well, MacVim can do the same thing.
+Hold down Alt or Option, and click/drag with the mouse. I want to
+caution you against relying on this too much, though. Vim is designed to
+reward you for keeping your fingers <em>on the keys</em> as much as possible.</p>
+
+<h3>3. Quick Letter Swap</h3>
+
+<p>If I accidentally type &ldquo;teh&rdquo; instead of &ldquo;the&rdquo;, the natural reaction
+would be to go back, select those two letters, and retype them, but
+there&rsquo;s a simple way to swap any two adjacent letters:</p>
+
+<p>Move the cursor to the first letter of the swapped pair (in this
+example, the &ldquo;e&rdquo; of &ldquo;teh&rdquo;) and type <code>xp</code>. This cuts the character the
+cursor is on, and immediately pastes it after the next.</p>
+
+<h3>4. Repeat Last Edit (the magic dot)</h3>
+
+<p>The glorious <code>.</code> is a very powerful command, and probably my
+most-often used in this list. Typing <code>.</code> in normal mode repeats your
+most recent edit. It&rsquo;s dead simple to use, and just plain awesome in so
+many contexts.</p>
+
+<h3>5. Move and Edit by Text Object</h3>
+
+<p>At the root of Vim&rsquo;s idiosyncratic design is a variety of ways to easily
+move around a text file and edit it effortlessly:</p>
+
+<p><code>w</code> and <code>b</code> move the cursor forward and backward by <em>word</em>.  <br/>
+<code>(</code> and <code>)</code> move the cursor forward and backward by <em>sentence</em>.  <br/>
+<code>{</code> and <code>}</code> move the cursor forward and backward by <em>paragraph</em>.</p>
+
+<p>You can combine text objects with counts and actions to perform very
+powerful, concise edits.</p>
+
+<p>One of my favorite commands is <code>ciw</code>, and the pnemonic for it is Change
+Inside Word. If I can get my cursor <em>anywhere</em> in a word, it doesn&rsquo;t
+matter which character it&rsquo;s on, a quick <code>ciw</code> will cut the whole word
+and change to insert mode so I can enter new text in its place. No
+awkward text selection or repetitive deletion keying. Just <code>ciw</code> and
+type the new word.</p>
+
+<h3>6. Delete, Yank, and Paste a Line</h3>
+
+<p><code>dd</code> will &ldquo;delete&rdquo; a line, which is the same as <em>cut</em>.  <br/>
+<code>yy</code> will &ldquo;yank&rdquo; a line, which is the same as <em>copy</em>.  <br/>
+<code>p</code> will paste at the line <em>below</em> the cursor.  <br/>
+<code>P</code> or <code>SHIFT-p</code> will paste at the line <em>above</em> the cursor.</p>
+
+<p>Any of these commands can be preceded by a numeric count: <code>10p</code> will
+paste 10 times.</p>
+
+<h3>7. Easy Repeated Characters</h3>
+
+<p>Say I am working in Markdown format &mdash; which I often am; these blog posts
+are is written that way &mdash; and I want to use an underline-style H2:</p>
+
+<pre><code>This is my heading
+==================
+</code></pre>
+
+<p>I would prefer not to have to type who-knows-how-many equals signs in a
+row. How annoying. Luckily, something like this is dead simple in Vim.</p>
+
+<p>After typing your header, exit to normal mode and, with your cursor
+still on the line, type <code>yyp</code> to duplicate the line. The text now looks
+like this:</p>
+
+<pre><code>This is my heading
+This is my heading
+</code></pre>
+
+<p>At this point, your cursor should on the first character of the second
+line. Type <code>v$r=</code> to visually select the text to the end of the line,
+and replace all the characters with equals signs. That&rsquo;s it: the full
+command is <code>yypv$r=</code></p>
+
+<hr />
+
+<p><strong>Update:</strong> Honza Pokorny pointed out a shorter alternative to this command: <code>YpVr=</code></p>
+
+<hr />
+
+<p><strong>Update 2:</strong> Santosh Kumar observed that <code>V</code> may not be able to replace
+<code>v$</code> in every situation, particularly if there is whitespace at the
+beginning of the line.</p>
+
+<p>If you ever just want 80 stars in a row, say, to section off a part of
+source code, you could just type <code>80i*&lt;Esc&gt;</code> &mdash; easy.</p>
+
+<h3>8. Quick Find</h3>
+
+<p><code>/</code> will switch to a mode that allows you to enter a search string
+for the current buffer. If you have the proper settings in your .vimrc,</p>
+
+<p>Vim will even do an incremental search. When you have the search term
+you want, hit <code>&lt;Enter&gt;</code> and cycle forward through the search results <em>in
+the buffer</em> with <code>n</code>, and backwards with <code>N</code>.</p>
+
+<p><code>?</code> does the same thing as <code>/</code>, only in the reverse direction.
+You can also use <code>*</code> to quick-search the word your cursor is
+currently on.</p>
+
+<p>For some sane defaults, here are some of my .vimrc search settings:</p>
+
+<p>``` vim</p>
+
+<pre><code>set hlsearch   " Highlight search matches
+set incsearch  " Highlight matches as you type
+set ignorecase " Case-insensitive searching
+set smartcase  " ...but case-sensitive if expression has caps
+set wrapscan   " Set the search scan to wrap around the file
+
+" Press space bar to turn off search highlighting
+" and clear any message displayed
+nnoremap &lt;silent&gt; &lt;Space&gt; :nohl&lt;Bar&gt;:echo&lt;CR&gt;
+</code></pre>
+
+<p>```</p>
+
+<h3>9. Search &amp; Replace in a Buffer</h3>
+
+<p>Few of us can really consider ourselves experts with regular
+expressions, but if you have ever used them for any kind of text
+processing task, you realize how incredibly powerful (and yes, sometimes
+befuddling) they can be. Regexes are used in Vim&rsquo;s native search and
+replace.</p>
+
+<p>It is necessary to specify a range when doing a search and replace, and
+generally, you will want the action to be global, so you would type
+<code>:%s/pattern/replacement/g</code> and hit <code>&lt;Enter&gt;</code>. Done. The <code>%</code>
+represents the entire buffer, while the <code>s///g</code> structure is the
+standard search and replace command syntax.</p>
+
+<p>To search/replace within a given selection, first select your desired
+range in visual mode, then hit <code>:</code>. Vim will pre-fill your range as
+<code>'&lt;,'&gt;</code>, which means the current selection. Use the same <code>s///g</code>
+syntax as before to restrict the action to the selection you specified.</p>
+
+<p>The trailing <code>/g</code>? That&rsquo;s an option that I usually like to pass, as it
+tells Vim to replace all matches, not just the first one.</p>
+
+<h3>10. Project Search &amp; Replace</h3>
+
+<p>It&rsquo;s a common complaint: project search &amp; replace &mdash; an operation
+that spans one or more files &mdash; is one of the few glaring weaknesses of
+Vim. Until there is better support for this feature in Vim itself, it is
+possible to pull off in an unorthodox way: don&rsquo;t use Vim! Try this on
+for size (from the command line):</p>
+
+<p>``` sh</p>
+
+<pre><code>$ sed -i 's/pattern/replacement/' &lt;files&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>From within Vim, while in <code>:</code> command mode, you can use the same
+command, only beginning with a <code>!</code>. This pipes the command directly
+to a shell session and does the business. Note the relative consistency
+of sed&rsquo;s search &amp; replace syntax with Vim&rsquo;s native one.</p>
+
+<p>Passing commands from Vim to external programs is common, and often
+encouraged. Select some text and run the <code>:sort</code> command on it sometime
+&mdash; it actually calls the external <code>sort</code> program, which passes the
+sorted lines back to Vim.</p>
+
+<h2>My dotvim</h2>
+
+<p>I wouldn&rsquo;t consider <a href="http://github.com/smt/dotfiles">my Vim configuration</a>
+to be anything special, but it&rsquo;s mine, and I am always tweaking it (you
+Vim people know what I&rsquo;m talking about). If you are curious about what I
+might have in there, you can feel free have a look at it &mdash; it&rsquo;s on
+GitHub, of course, and all the plugins are set up as Git submodules with
+Pathogen.</p>
+
+<h2>Dive into Vim!</h2>
+
+<p>The nuts and bolts of how to use Vim are, of course, outside the scope
+of this article. <a href="http://vimcasts.org">VimCasts</a>, <a href="http://peepcode.com/products/smash-into-vim-i">PeepCode</a>,
+and Vim&rsquo;s built-in tutorial are at your disposal. That being said, I&rsquo;m
+willing to attempt to answer most questions you might have about Vim,
+either on <a href="http://twitter.com/tudorstudio">Twitter</a> or via the comments.</p>
+]]></content>
+  </entry>
+  
+</feed>

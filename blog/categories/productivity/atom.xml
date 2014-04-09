@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: productivity | The Tude Abides]]></title>
+  <link href="http://stephentudor.com/blog/categories/productivity/atom.xml" rel="self"/>
+  <link href="http://stephentudor.com/"/>
+  <updated>2014-04-08T22:09:34-04:00</updated>
+  <id>http://stephentudor.com/</id>
+  <author>
+    <name><![CDATA[Stephen Tudor]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Emergent Task Planner]]></title>
+    <link href="http://stephentudor.com/blog/2012/12/19/emergent-task-planner.html"/>
+    <updated>2012-12-19T11:11:00-05:00</updated>
+    <id>http://stephentudor.com/blog/2012/12/19/emergent-task-planner</id>
+    <content type="html"><![CDATA[<p>For a few years now I&rsquo;ve used David Seah&rsquo;s excellent
+<a href="http://davidseah.com/productivity-tools">Printable CEO</a> resources, to keep
+track of my activity across projects. I stopped doing it a while back for some
+reason, but recently rediscovered them, and decided they deserved a mention,
+particularly the
+<a href="http://davidseah.com/node/the-emergent-task-planner/">Emergent Task Planner(ETP)</a>.</p>
+
+<p><img src="http://f.cl.ly/items/0Z0Y0V3Q1i3g0l1i1i3O/ClouDrop%20Dec%204,%202012,%2012:37:35%20AM.png" alt="ETP top section" /></p>
+
+<p>The ETP really is great to use, and the pads you can buy from Amazon are of
+extremely high quality. What I like most is how much it reduces the friction of
+plotting how I&rsquo;ve spent my day. It&rsquo;s dead simple to just pick up and start
+using. I have found the ETP to be an <em>invaluable</em> asset for logging of how
+I spend my time between different projects.</p>
+
+<p>A word of caution: the ScanTron-phobic among us may wish to look elsewhere for
+suitable productivity tools, as the filling in of little ovals features
+prominently in these. But for the frictionless capturing of task-based
+information in the moment, I haven&rsquo;t found anything else that works nearly as
+well for me.</p>
+]]></content>
+  </entry>
+  
+</feed>
