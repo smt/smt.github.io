@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | The Tude Abides]]></title>
+  <link href="http://stephentudor.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://stephentudor.com/"/>
+  <updated>2014-06-12T09:34:12-04:00</updated>
+  <id>http://stephentudor.com/</id>
+  <author>
+    <name><![CDATA[Stephen Tudor]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[KSS and Middleman]]></title>
+    <link href="http://stephentudor.com/blog/2012/01/10/kss-and-middleman.html"/>
+    <updated>2012-01-10T15:11:00-05:00</updated>
+    <id>http://stephentudor.com/blog/2012/01/10/kss-and-middleman</id>
+    <content type="html"><![CDATA[<p>I love the idea of building an &ldquo;interactive style guide&rdquo; for a website
+design.  I really do. However, working in Agencyland, it can be
+extremely difficult to budget enough time for this kind of tool when
+seemingly higher-priority tasks pile up. Right or wrong, the utopian
+vision of a living style guide often becomes a foregone luxury in the
+throes of looming deadlines.</p>
+
+<p><em>Assumes the reader understands the basics of Ruby and CSS.</em></p>
+
+<!-- more -->
+
+
+<h2>Middleman</h2>
+
+<p>For an upcoming project at <a href="http://empathylab.com">work</a>, I&rsquo;ll be
+leading the effort to author static HTML templates for a different group
+of software integrators to wire up to a complex back-end architecture
+(rhymes with Shmeb-shmere).</p>
+
+<p>We are also going to be building a whole front-end stack with CSS and
+JavaScript to boot, so it makes sense to use a solid static framework to
+take the pain away from developing a massive amount of templates without
+any server-side help. The bottom line is that we need to be able to
+export flat HTML files that work the same as the development templates.</p>
+
+<p>Enter <a href="http://middlemanapp.com">Middleman</a>, a loosely-coupled, yet
+carefully curated collection of Ruby libraries that all contribute to a
+framework that is much greater than the sum of its parts. I won&rsquo;t go
+into all of its features here&thinsp;&mdash;&thinsp;you can visit the
+Middleman <a href="http://middlemanapp.com">site</a> for everything you need to
+know.</p>
+
+<p>For our purposes, Middleman looks to be a robust platform on which to
+build our static site.</p>
+
+<h2>KSS</h2>
+
+<p>I am a closet fan of documentation specs like RubyDoc and JSDoc, but
+they often introduce a lot of heavy baggage for developers.
+<a href="http://tomdoc.org">TomDoc</a> came on the scene not too long ago as a
+really simple doc spec that Githubbers use in their in-house Ruby code,
+and I was ecstatic when another Github guy, <a href="http://warpspire.com">Kyle Neath</a>,
+released his own <a href="http://github.com/kneath/kss">KSS</a> project in late
+2011. I think I&rsquo;ve subconsciously been yearning for this kind of CSS
+documentation support for some time.</p>
+
+<p>KSS is a documentation spec for CSS (one of the first of its kind that
+I&rsquo;ve heard of) that can be parsed by Ruby. This helps us do things
+like&hellip; generating an interactive style guide. It&rsquo;s certainly not a
+silver bullet, but KSS will lower some of the administrative barriers to
+putting together helpful CSS documentation.</p>
+
+<h2>KSS-ing Middleman</h2>
+
+<p>I thought it would be a good idea to try to port some of the
+<a href="https://github.com/kneath/kss/tree/master/example">KSS example app</a>
+code over to my basic Middleman app. The example shows several
+variations of form submit button styles, including states such as hover
+and disabled, which makes for an excellent use case.</p>
+
+<h3>The Styles</h3>
+
+<p>I&rsquo;m using <a href="http://sass-lang.com">Sass</a> and
+<a href="http://compass-style.org">Compass</a>, with Middleman, so I did a quick
+port of Kyle&rsquo;s example button CSS to Sass with some appropriate Compass
+mixins. I found that KSS broke when used with the original terse Sass
+format, but it did work fine with the newer SCSS format. I&rsquo;m not
+certain, but it&rsquo;s possible that this issue may be resolved in KSS in the
+future.</p>
+
+<p>Below is the result of porting the button CSS to <code>_button.scss</code>. The
+comment block at the top is where the documentation magic happens. You
+just describe what something is, specify a list of different states, and
+then reference a numbered section of the style guide. That&rsquo;s it.</p>
+
+<p>``` sass</p>
+
+<pre><code>// Your standard form button.
+//
+// :hover    - Highlights when hovering.
+// :disabled - Dims the button when disabled.
+// .primary  - Indicates button is the primary action.
+// .smaller  - A smaller button
+//
+// Styleguide 5.1.1
+button {
+  background-color: #f5f5f5;
+  @include background-image(linear-gradient(#f5f5f5, #e5e5e5));
+  border: 1px solid #ddd;
+  border-bottom-color: #bbb;
+  @include border-radius(3px);
+  @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.15));
+  color: #666;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Helvetica;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: normal;
+  padding: 5px 15px;
+  @include text-shadow(0 1px rgba(255, 255, 255, 0.9));
+
+  &amp;.primary, &amp;.primary:hover {
+    color: #fff;
+    background-color: #8add6d;
+    @include background-image(linear-gradient(#8add6d, #60b044));
+    border-color: #74bb5a;
+    border-bottom-color: #509338;
+    @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    @include text-shadow(0 -1px 0 rgba(0, 0, 0, 0.4));
+  }
+  &amp;.smaller {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  &amp;:hover {
+    color: #337797;
+    background-color: #f0f7fa;
+    @include background-image(linear-gradient(#f0f7fa, #d8eaf2));
+    border-color: #cbe3ee;
+    border-bottom-color: #97c7dd;
+  }
+  &amp;:disabled {
+    opacity: 0.5;
+  }
+}
+</code></pre>
+
+<p>```</p>
+
+<p>You actually <em>do</em> need to manage the numeric structure of the style guide
+yourself. However, I appreciate that KSS makes you maintain control over
+the meaningful aspects of organizing a style guide, while making it
+possible to automate the tedious parts.</p>
+
+<h3>The Config</h3>
+
+<p>For the style guide to look nice on the front end, there is also a small
+amount of boilerplate CSS and JavaScript code to make some of the magic
+happen, so I pulled those files in and called them from a separate
+layout, <code>layouts/styleguide.erb</code>.</p>
+
+<p>The KSS example app runs on Sinatra, and Middleman also basically runs
+on Sinatra with some abstractions on top, so setting up the
+configuration wasn&rsquo;t too tough. After adding <code>gem "kss", "~&gt; 0.1.1"</code> to
+the Gemfile and running <code>bundle install</code>, I added the following to
+Middleman&rsquo;s <code>config.rb</code> file:</p>
+
+<p>``` ruby</p>
+
+<pre><code>require "kss"
+page "/styleguide/*", :layout =&gt; :styleguide do
+  @styleguide = Kss::Parser.new('source/css')
+end
+
+helpers do
+  # Generates a styleguide block.
+  def styleguide_block(section, &amp;block)
+    @section = @styleguide.section(section)
+    @example_html = kss_capture{ block.call }
+    @_out_buf &lt;&lt; partial('styleguide/block')
+  end
+
+  # Captures the result of a block within an erb template without spitting it
+  # to the output buffer.
+  def kss_capture(&amp;block)
+    out, @_out_buf = @_out_buf, ""
+    yield
+    @_out_buf
+  ensure
+    @_out_buf = out
+  end
+end
+</code></pre>
+
+<p>```</p>
+
+<p>For all style guide templates, the above configuration exposes a
+variable containing a Ruby representation of all KSS-documented CSS in
+the site (because KSS parses all documentation blocks in the CSS). A
+couple of helpers are defined that the templates will have access to, in
+order to handle the generated style guide block.</p>
+
+<p><em>Due to a bug in Middleman 3.0 beta, wildcard file paths did not set
+local variables correctly. This bug should be resolved in 3.0 final.
+Additionally, I suspect that the </em><code>kss_capture</code><em> helper is not exactly
+optimal for use with Middleman, but I haven&rsquo;t taken the time to refactor
+the example code beyond simply getting it working. It was originally
+named </em><code>capture</code><em> in the example, but I renamed it to prevent conflicts
+with the existing Middleman </em><code>capture</code><em> helper, which I would have
+probably tried to use if it was available inside the config file.</em></p>
+
+<h3>The Templates</h3>
+
+<p>A partial template needs to be defined for rendering every style guide
+section. The template will be used by the <code>styleguide_block</code> helper
+defined in the config above: <code>styleguide/_block.erb</code>.</p>
+
+<p>``` erb</p>
+
+<pre><code>&lt;div class="styleguide-example"&gt;
+
+  &lt;h3&gt;&lt;%= @section.section %&gt; &lt;em&gt;&lt;%= @section.filename %&gt;&lt;/em&gt;&lt;/h3&gt;
+  &lt;div class="styleguide-description"&gt;
+    &lt;p&gt;&lt;%= @section.description %&gt;&lt;/p&gt;
+    &lt;% if @section.modifiers.any? %&gt;
+      &lt;ul class="styleguide-modifier"&gt;
+        &lt;% @section.modifiers.each do |modifier| %&gt;
+          &lt;li&gt;&lt;strong&gt;&lt;%= modifier.name %&gt;&lt;/strong&gt; - &lt;%= modifier.description %&gt;&lt;/li&gt;
+        &lt;% end %&gt;
+      &lt;/ul&gt;
+    &lt;% end %&gt;
+  &lt;/div&gt;
+  &lt;div class="styleguide-element"&gt;
+    &lt;%= @example_html %&gt;
+  &lt;/div&gt;
+  &lt;% @section.modifiers.each do |modifier| %&gt;
+    &lt;div class="styleguide-element styleguide-modifier"&gt;
+      &lt;span class="styleguide-modifier-name"&gt;&lt;%= modifier.name %&gt;&lt;/span&gt;
+      &lt;%= @example_html.sub('$modifier_class', " #{modifier.class_name}") %&gt;
+    &lt;/div&gt;
+  &lt;% end %&gt;
+
+&lt;/div&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>In <code>styleguide/buttons.html.erb</code>, I added the following template call:</p>
+
+<p>``` erb</p>
+
+<pre><code>&lt;% styleguide_block '5.1.1' do %&gt;
+  &lt;button class="$modifier_class"&gt;Default Button&lt;/button&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>```</p>
+
+<p>Note that there is a single <code>button</code> element in the block. This is where
+the magic happens, because it passes the <code>button</code> to <code>styleguide_block</code>,
+which imports the <code>styleguide/block</code> partial for the style guide section.</p>
+
+<p>The partial parses the KSS representation of the documented CSS for the
+given section of the style guide (5.1.1). It prints out the section
+number and SCSS filename, adds the documentation text to the page,
+cycles through each CSS modifier of <code>button</code>, and generates a new
+<code>&lt;button&gt;</code> tag for each modifier. The resulting section of the style
+guide will look like this:</p>
+
+<p><img src="/images/2012-01-10-kss-and-middleman/styleguide.png" title="Style guide example" ></p>
+
+<p>The original basic <code>button</code> element is listed first, followed by
+accurate examples of all of its documented modifiers. The KSS JavaScript
+file fakes the pseudo-selectors <code>:hover</code> and <code>:disabled</code>.</p>
+
+<h2>Onward</h2>
+
+<p>For my project, at least, this is an encouraging proof-of-concept that I
+plan to take forward. In the meantime, it looks like there is a generous
+amount of potential in both Middleman and KSS, so be sure to check out
+each of these projects.</p>
+
+<p>If you have used either Middleman or KSS, what has your experience been
+like thus far?</p>
+
+<h2>Update 2012-02-04</h2>
+
+<p>I have pushed my working code to a <a href="http://github.com/smt/middleman-kss">Github repo</a>.
+Some of the gems are a little out of date, but I wanted to get my
+initial version up first, and then work through any issues that might
+arise from updating libraries. Please let me know what you think; I&rsquo;m
+always open to suggestions for improvement.</p>
+
+<p>After checking out the code, just run <code>middleman</code> like any other
+Middleman app, and browse to <code>http://localhost:4567</code>.</p>
+]]></content>
+  </entry>
+  
+</feed>

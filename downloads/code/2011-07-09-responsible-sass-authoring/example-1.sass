@@ -1,0 +1,17 @@
+// Set a couple of vars
+$titleColor: #000
+$titleSize: 24px
+
+.article
+  .title
+    color: $titleColor
+    font-size: $titleSize
+  .alt-title
+    @extend .title
+    border-bottom: 1px solid lighten($titleColor, 80%)    // #ccc
+    color: transparentize(lighten($titleColor, 20%), 0.1)
+  .sub-title
+    @extend .title
+    font-size: round($titleSize * 0.85)    // 20.4px
+    &:hover
+      background-color: transparentize(change-color($titleColor, $red: 255), 0.8);

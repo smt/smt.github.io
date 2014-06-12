@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>OOCSS, for Great Justice - The Tude Abides</title>
+  <meta name="author" content="Stephen Tudor">
+
+  
+  <meta name="description" content="In my previous post, I
+hinted at a growing concern with CSS performance. Among those pioneering
+ways to approach the issue of maintainable-yet- &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://stephentudor.com/blog/2011/07/17/oocss-for-great-justice.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="" rel="alternate" title="The Tude Abides" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-545908-14']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Tude Abides</a></h1>
+  
+    <h2>A personal log of web developer Stephen Tudor</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:stephentudor.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives/index.html">Archives</a></li>
+  <li><a href="/colophon.html">Colophon</a></li>
+  <li><a href="http://meyerweb.com/eric/thoughts/2014/06/09/in-memoriam-2/">#663399</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">OOCSS, for Great Justice</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-17T13:55:00-04:00" pubdate data-updated="true">Jul 17<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In my <a href="/blog/2011/07/09/responsible-sass-authoring">previous post</a>, I
+hinted at a growing concern with CSS performance. Among those pioneering
+ways to approach the issue of maintainable-yet-efficient CSS is <a href="http://twitter.com/stubbornella">Nicole Sullivan</a>,
+who is perhaps best known for her open source <a href="http://oocss.org">Object-Oriented CSS</a>
+project.</p>
+
+<h2>Object-Oriented? CSS?</h2>
+
+<p>I have to admit that when I first checked out out OOCSS, I guffawed.
+While it&rsquo;s true that, at first blush, CSS does not have many of the
+traditional features of a genuine OO programming language, Nicole has
+been exploring ways in which CSS&#8217; inheritance/cascade can be analogous
+to OO concepts.</p>
+
+<p>It&rsquo;s taken me quite some time to come around. There are things in the
+OOCSS code base that seem to fly in the face of commonly-accepted CSS
+best practices. It is precisely this kind of resistance in the community
+that must have prompted Nicole to deliver her latest talk this year at
+Webstock, entitled <a href="http://www.webstock.org.nz/talks/speakers/nicole-sullivan/css-tools-massive-websites">Our Best Practices Are Killing Us</a> (<a href="http://www.slideshare.net/stubbornella/our-best-practices-are-killing-us">slides</a>).</p>
+
+<!-- more -->
+
+
+<h2>Semantics Pitfall</h2>
+
+<p>For the past several years, I have been painstakingly crafting HTML and
+CSS under the banner of &ldquo;best practices.&rdquo; Currently, one such practice
+has been to aggressively scope CSS by content type.</p>
+
+<p>Martin Sutherland <a href="http://sunpig.com/martin/archives/2008/10/07/maintainable-css-modular-to-the-max.html">describes this approach</a>
+better and more succinctly than I could, but just recently <a href="http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html">recanted in favor of OOCSS</a>.
+Martin had watched Nicole&rsquo;s talk, and it appears to have had the same
+effect on him as it had on me. He writes:</p>
+
+<blockquote><p>One of the hardest hurdles to leap in coming to like OOCSS was the<br/>somewhat heretical notion of adding &#8220;non-semantic&#8221; container elements<br/>and apparently &#8220;presentational&#8221; classnames to my HTML.</p><footer><strong>Martin Sutherland</strong> <cite><a href='http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html'>www.sunpig.com/martin/archives/&hellip;</a></cite></footer></blockquote>
+
+
+<p>Martin <a href="http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html">goes on to propose</a>
+(and I think he&rsquo;s right on target here) that there are multiple layers
+of semantics that belong in HTML:</p>
+
+<ol>
+<li>Structural semantics (core HTML elements)</li>
+<li>Ontological semantics (domain-specific meaning beyond core HTML)</li>
+<li>Visual semantics (representing visual intent)</li>
+</ol>
+
+
+<p><img class="left" src="/images/2011-07-17-oocss-for-great-justice/pitfall.jpeg" title="Pitfall Harry" ></p>
+
+<p>Lest we forget, one of the core purposes of CSS <strong>is</strong> to communicate
+the <a href="http://www.stubbornella.org/content/2010/06/12/visual-semantics-in-html-and-css/">visual semantics</a>
+of an HTML document. Many developers, myself included, have written many
+projects&#8217; worth of CSS that attempts to use only core HTML (structural)
+and domain-specific (ontological) semantics, while sidestepping the role
+that visual semantics ought to play, out of fear that we&rsquo;d be
+introducing the ultimate evil into our source code, <em>presentational
+classnames</em>.</p>
+
+<p>It is becoming more clear to me that we should not avoid the question of
+visual semantics in our CSS. The result of our having done so is visual
+style that is tightly bound to the content.</p>
+
+<p>Now, hearken back to the primitive days of yore when it was commonplace
+(and accepted) to see <code>&lt;font&gt;</code>, <code>&lt;u&gt;</code>, and <code>&lt;center&gt;</code> tags in HTML
+source.  It&rsquo;s another example of presentation coupled with content,
+only in a more obviously wrong form.</p>
+
+<p><strong>Is the intertwining of visual style and content not one of the
+problems, nay, <em>the</em> problem, that CSS was intended to address in the
+first place?</strong></p>
+
+<p>It seems to me that many of us are doing it wrong when we refuse to
+implement some level of visual semantics in our CSS and HTML.  Because
+of the belief that we&rsquo;re following &ldquo;best practices,&rdquo; we are robbing
+ourselves of opportunities to abstract out common styles into reusable
+patterns, and our projects suffer for it.</p>
+
+<h2>For Great Justice</h2>
+
+<p>I&rsquo;ve watched as some developers have begun to <a href="http://lazukars.com/post/7300553347/brain-vs-object-oriented-css">wrestle with the concepts of OOCSS</a>
+vs. what we have come to know as the industry standard practice of
+writing CSS in recent years.</p>
+
+<p><img class="right" src="/images/2011-07-17-oocss-for-great-justice/ZeroWing.png" title="ZeroWing" ></p>
+
+<p>Watch Nicole&rsquo;s OOCSS talks, and allow them ample time to marinate.
+Check out the <a href="http://github.com/stubbornella/oocss">source</a> of the
+<a href="http://oocss.org">OOCSS project</a>. I&rsquo;m still in process myself, as I
+continue to look for ways to strike the delicate balance between
+<em>appropriate</em> visual semantics in CSS and blatantly presentational
+naming.</p>
+
+<p>Not everything in OOCSS is a great idea to implement verbatim.  Remember
+that it is proof of concept and a collection of patterns, not a CSS
+boilerplate. I am still mildly horrified every time I see how <code>&lt;b&gt;</code> tags
+are used for rounded corners in the <a href="http://oocss.org/module.html">module example</a>,
+but I remind myself that the concepts are what make up OOCSS, not the
+specific implementation of the examples.</p>
+
+<p>Finally, I have linked to Martin&rsquo;s <a href="http://www.stubbornella.org/content/2010/06/12/visual-semantics-in-html-and-css/">article on OOCSS</a>
+in several places throughout this post. It really is required reading if
+you author CSS as part of your day job.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stephen Tudor</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-17T13:55:00-04:00" pubdate data-updated="true">Jul 17<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/code/'>code</a>, <a class='category' href='/blog/categories/css/'>css</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/07/10/dns-fail.html" title="Previous Post: DNS Fail">&laquo; DNS Fail</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/08/04/10-vim-techniques-for-novices.html" title="Next Post: 10 Vim Techniques for Novices">10 Vim Techniques for Novices &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About the Tude</h1>
+  <p>
+    <img class="left" src="http://www.gravatar.com/avatar/5de6eade9b61a1ea85aa936c4b703672?s=64" title="Stephen&rsquo;s avatar" >
+
+    I am Stephen Tudor, a creative web developer living in the greater Philadelphia&nbsp;area.
+  </p>
+  <p>
+    I currently work for <a href="http://ebayenterprise.com">eBay&nbsp;Enterprise</a>. My
+    opinions are my own, and not necessarily those of my&nbsp;employer.
+  </p>
+  
+    <p>
+    
+      <a href="http://twitter.com/tagsoup" class="twitter-follow-button" data-show-count="">Follow @tagsoup</a>
+    
+    </p>
+  
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/02/11/gulp-and-browserify.html">Gulp and Browserify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/19/emergent-task-planner.html">Emergent Task Planner</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/17/year-in-review.html">Year in Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/07/developers-are-artists.html">Developers Are Artists</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/10/kss-and-middleman.html">KSS and Middleman</a>
+      </li>
+    
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Stephen Tudor -
+  <span class="gpg">GPG: <a href="https://raw.githubusercontent.com/smt/smt.github.io/master/pubkey.txt" title="GnuPG Public Key for Stephen Tudor">3CE8EE52</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

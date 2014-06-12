@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: personal | The Tude Abides]]></title>
+  <link href="http://stephentudor.com/blog/categories/personal/atom.xml" rel="self"/>
+  <link href="http://stephentudor.com/"/>
+  <updated>2014-06-12T09:34:12-04:00</updated>
+  <id>http://stephentudor.com/</id>
+  <author>
+    <name><![CDATA[Stephen Tudor]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Year In Review]]></title>
+    <link href="http://stephentudor.com/blog/2012/12/17/year-in-review.html"/>
+    <updated>2012-12-17T23:05:00-05:00</updated>
+    <id>http://stephentudor.com/blog/2012/12/17/year-in-review</id>
+    <content type="html"><![CDATA[<p>It has been a very busy year for my family and me. I suppose this post is
+something of an excuse for the lack of updates to this blog, so enjoy the
+rambling stream of consciousness below. I have no agenda here, other than to
+briefly recall the year&rsquo;s highlights.</p>
+
+<!-- more -->
+
+
+<p>So 2012 happened. In the offing, I have been blessed to see my son <strong>William</strong>
+turn 3, and my marriage to <strong>Sarah</strong> turn 7. This year saw me turn 5 times the
+age of my marriage. Sarah and I sold our first home together and moved to our
+second.</p>
+
+<p>Sarah participated in a 2-day watercolor workshop put on by <a href="http://www.pafa.org">PAFA</a>.
+She had a great time, and came home full of inspiration for future art
+projects. Her paintings look fabulous.</p>
+
+<p>My father is retiring this year, after 35 years of teaching and conducting
+research at the same university, which also happens to be my <a href="http://www.sju.edu">alma mater</a>.
+It really is amazing to me how anyone can stay at one place for so long
+– literally my whole lifetime. He&rsquo;s always been my inspiration, and I owe so
+much to him and Mom that I haven&rsquo;t the words to express my full gratitude. I&rsquo;m
+just proud to be their son.</p>
+
+<p>I still play board games as often as I&rsquo;m able, which isn&rsquo;t a lot, but though
+the quantity of my playing has diminished, I feel the quality has increased
+– I&rsquo;m more selective about my gaming experiences these days, as my time is
+a more precious commodity than it once was. I&rsquo;ve been fortunate to make
+a number of dear friends through this misunderstood hobby.</p>
+
+<p>This year also saw my first foray into the world of pencil-and-paper
+role-playing games. Some friends and I started a basic Pathfinder campaign.
+I find it pretty interesting and fun, though I&rsquo;m still learning the ropes.
+I went with a pretty straightforward character since I&rsquo;m new at it.</p>
+
+<p>Professionally, I volunteered twice to be a TA for web development classes at
+<a href="http://girldevelopit.com/chapters/philadelphia">GDI Philly</a>. The first was for
+server-side programming with Node.js, and the second was an intermediate HTML
+&amp; CSS class.</p>
+
+<p>I am as much of a fan of Vim now as I ever was. I&rsquo;m writing this post in Vim
+right now.</p>
+
+<p>At <a href="http://empathylab.com">my day job</a>, I managed to get my fingers into an
+awful lot of different pies – heres a recap of the busy year I had at work:</p>
+
+<h3>Q1</h3>
+
+<blockquote><p>Wrapped up my involvement leading front-end development for the brand-new
+redesign of the <a href="http://redcross.org">American Red Cross</a> website, which
+eventually went on to a successful launch in September of this year. I&rsquo;d
+been on the project since the kickoff in March 2011. If you donated to
+Hurricane Sandy victims this year, you likely used code that I wrote.</p></blockquote>
+
+<h3>Q2</h3>
+
+<blockquote><p>Built a revolutionary JavaScript proof-of-concept app with my talented
+co-worker at the time, <a href="http://vickaita.com">Vick Aita</a>. The proof-of-concept
+won my company the contract to develop the full application for the client.
+This work had me making several trips out to California, and one trip to
+Belgium.</p></blockquote>
+
+<h3>Q3</h3>
+
+<blockquote><p>My company kicked off 3 simultaneous responsive web design projects for
+customers in the media &amp; entertainment space, and I was tapped to work across
+the projects with each team so that they could deliver consistently
+high-quality solutions.</p></blockquote>
+
+<h3>Q4</h3>
+
+<blockquote><p>As I continued to oversee our responsive web design development efforts, my
+focus shifted to some pressing departmental needs, such as documenting clearer
+development guidelines for our team, and helping to start a framework/pattern
+library of reusable components for future projects. I continued to support
+various client projects as the need arose. Toward the end of the year,
+I reunited with the aforementioned JS project from Q2, which is now in full
+development with a dedicated team.</p></blockquote>
+
+<hr />
+
+<h4>May you all have a wonderful ending to 2012, and an equally promising beginning to 2013!</h4>
+]]></content>
+  </entry>
+  
+</feed>

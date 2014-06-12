@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: meta | The Tude Abides]]></title>
+  <link href="http://stephentudor.com/blog/categories/meta/atom.xml" rel="self"/>
+  <link href="http://stephentudor.com/"/>
+  <updated>2014-06-12T09:34:12-04:00</updated>
+  <id>http://stephentudor.com/</id>
+  <author>
+    <name><![CDATA[Stephen Tudor]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[DNS Fail]]></title>
+    <link href="http://stephentudor.com/blog/2011/07/10/dns-fail.html"/>
+    <updated>2011-07-10T14:54:00-04:00</updated>
+    <id>http://stephentudor.com/blog/2011/07/10/dns-fail</id>
+    <content type="html"><![CDATA[<p>To those who tried to visit this site only to get a 404 error in the
+last 24 hours, I apologize. I believe DNS propagation was the culprit,
+and I jumped the gun by announcing that my post was up. I was able to
+view stephentudor.com just fine, but quickly found that several people,
+including my lovely wife, could not even get to the site initially.</p>
+
+<p>By this time, it appears that most folks have been able to access it. If
+you can see this post, you&rsquo;re fine. Otherwise, you&rsquo;re probably in the
+camp that is left wondering why <a href="//twitter.com/tudorstudio/status/89876273408655360">this joker posted a 404 URL to Twitter</a>.</p>
+
+<p>Again, mea culpa. I&rsquo;ll know better next time :)</p>
+]]></content>
+  </entry>
+  
+</feed>

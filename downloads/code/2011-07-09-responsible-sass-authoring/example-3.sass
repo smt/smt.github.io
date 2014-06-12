@@ -1,0 +1,22 @@
+.clearfix
+  &:after
+    clear: both
+    content: '.'
+    display: block
+    height: 0
+    line-height: 0
+    overflow: hidden
+    width: 0
+
+.thing-1
+  @extend .clearfix
+.thing-2
+  @extend .clearfix
+
+// ...
+
+.thing-99
+  @extend .clearfix
+.thing-100
+  @extend .clearfix
+

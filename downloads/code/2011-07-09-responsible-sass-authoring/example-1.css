@@ -1,0 +1,16 @@
+.article .title,
+.article .alt-title,
+.article .sub-title {
+    color: #000;
+    font-size: 24px;
+}
+.article .alt-title {
+    border-bottom: 1px solid #cccccc;
+    color: rgba(51, 51, 51, 0.9);
+}
+.article .sub-title {
+    font-size: 20px;
+}
+.article .sub-title:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+}
