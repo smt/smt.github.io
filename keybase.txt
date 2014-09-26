@@ -1,0 +1,65 @@
+==================================================================
+https://keybase.io/smt
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://stephentudor.com
+  * I am smt (https://keybase.io/smt) on keybase.
+  * I have a public key with fingerprint 39BA BC78 F86B 2538 3A17  0B8C 061E 37E6 948A 244D
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "39babc78f86b25383a170b8c061e37e6948a244d",
+            "host": "keybase.io",
+            "key_id": "061e37e6948a244d",
+            "uid": "cd0566fbf56b5cf7cba71fdbdc99a500",
+            "username": "smt"
+        },
+        "service": {
+            "hostname": "stephentudor.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1411764947,
+    "expire_in": 157680000,
+    "prev": "8a5e1620dc8420d1994e0582de70a0d9d599399ba430572d103099f70d5965ef",
+    "seqno": 25,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v1.0.5
+Comment: https://keybase.io/crypto
+
+yMHkAnicbVFZSFRRGJ4pF5wUUgnREvWkPbmcO3cfEUn0IczMzIixGO5y7nhp5t5Z
+7sw0uCRiEL2WVlhS+RCBgflSmiMaFoJJMqUPgZAPFtmihlbQYudKvnUezuH/v+X/
+//NPpe222Kx+/zwsmnXWW2cm1kOWk0XxV61A1OUocLSCc2j7UVTNjQK+gKoZwAFI
+XhREieUUjhHtNMmRAsFCkZMgQyCSRQxPcYKdomRQDFr0oKnANqIQRKWqjnM4cKky
+zv6HH9oGJBnSDKOICs2ItKSwkiiwhCKLssTzAg2hSQyigCZ4EWYHvQZoLwY4EVYl
+ZLZrVt0BDeRrQZoRkvVAqaR7sdQX0A1d0j0YbTEMn8MUG1GfyY4g0fXPxyWqmozH
+xoIwCgRVXQMOAjMlQzWNCYogWIbiKbYYoPM+NYBcqsmgWYaD+JhlUBhbcgKNCMYO
+ZYmj8E3wPIUgzdllxEIByrxM8zzJ4x+lSEizdpmAJOR5hYUYYGikAHMyv6YDh53G
+fQpucyjVrQlGKIBA+9OJMwkWq82SlLjL3JzFlrJ3Z58Vbcl/DiWuhwvLxm1dLzNT
+PjX9yJH3XF69+mT/cnf9Ql5D48GJgenOdxcGR7LHbt+KJH+0lFUOboxr0LW4ku7J
+39rajIGzrRmz3zeHfr0/xhyv/Nk1PvkoFnvhccZjWRcb4/M9o/2RTmXpy7KzYKOk
+tun+Kf1w2efrHRVHC+dKrAm5N8pXa5tPLHVHHxRY83v6vg0lLZ7Ou5kVrurrbY1U
+daVXr7XNbSiiKzNl9PeBtL5md2rwXlvNQkf/OnK/PXKn/mvO87hYN8JUXJqORaP+
+xw9zydfeK2vehLsN4sq+bPfwh5FeMOacqqsZznyWsdYwMx29Vh5MGkjVwp5q7s2k
+X/kLH1cS5Q==
+=ILq3
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/smt
+
+==================================================================
