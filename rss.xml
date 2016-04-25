@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>Stephen Tudor</title>
+        <link>https://smt.io</link>
+        <description><![CDATA[RSS feed for Stephen Tudor's blog]]></description>
+        <atom:link href="https://smt.io/rss.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Sun, 24 Apr 2016 02:26:45 UT</lastBuildDate>
+        <item>
+    <title>The Intervening Years</title>
+    <link>https://smt.io/2016/04/24/intervening-years/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">The Intervening Years</h1>
+        <div class="opacity08"><small>
+                <i>April 24, 2016 / <a href="https://smt.io/label/family/">Family</a>, <a href="https://smt.io/label/miscellaneous/">Miscellaneous</a></i>
+        </small></div>
+        <br>
+        <p>Is this thing on?</p>
+<h2 id="hiatus-isnt-really-the-best-descriptor">“Hiatus” isn’t really the best descriptor</h2>
+<p>I didn’t officially take a hiatus from my own blog, since it was never much of a blog in the first place. Regardless, with no apologies or excuses, I’m going to perform a brief rewind and fast-forward to catch us up to the present.</p>
+<h3 id="section">2013</h3>
+<ul>
+<li>Led several responsive web front-end prototype projects.</li>
+<li>Built a SPA to run in a custom Webkit browser on resource-starved embedded systems.</li>
+<li>Got hopelessly addicted to coffee.</li>
+<li>Left EPAM to join the Solutions Innovation team at eBay Enterprise.</li>
+</ul>
+<h3 id="section-1">2014</h3>
+<ul>
+<li>Supported sales consultants by preparing Magento demo environments to highlight client-specific use cases.</li>
+<li>Built small web apps at work, mostly self-directed.</li>
+<li>Built small web apps at home, totally self-directed.</li>
+<li>Learned how to automate server administration with Ansible and Docker.</li>
+<li>Welcomed our new daughter, Evelyn Rose, into our family!</li>
+</ul>
+<h3 id="section-2">2015</h3>
+<ul>
+<li>eBay announced their intention to spin off PayPal and eBay Enterprise.<br />
+</li>
+<li>Officially became a <a href="https://www.magentocommerce.com/certification/directory/dev/1584395/">Magento Certified Solution Specialist</a>.</li>
+<li>Ran a workshop with the Magento UX team on user-centered design methodology at <a href="https://magento.com/company/events/imagine-commerce-2015">Imagine Commerce 2015</a>.</li>
+<li>Left my post at eBay Enterprise to join the web production team at Anthropologie.</li>
+<li>Started using Python and ES6 full-time on a next-gen web platform project.</li>
+</ul>
+<h3 id="section-3">2016</h3>
+<ul>
+<li>Started learning Haskell through reading <a href="http://haskellbook.com/">Haskell Programming From First Principles</a>.</li>
+<li>Attended <a href="http://2016.phillyemergingtech.com/">Philly ETE</a> for the first time.</li>
+<li>Received a promotion to engineering manager for URBN IT.</li>
+</ul>
+    </div>
+</div>
+]]></description>
+    <pubDate>Sun, 24 Apr 2016 02:26:45 UT</pubDate>
+    <guid>https://smt.io/2016/04/24/intervening-years/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>Gulp and Browserify</title>
+    <link>https://smt.io/2014/02/11/gulp-browserify/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">Gulp and Browserify</h1>
+        <div class="opacity08"><small>
+                <i>February 11, 2014 / <a href="https://smt.io/label/javascript/">JavaScript</a>, <a href="https://smt.io/label/mad-coding/">Mad Coding</a>, <a href="https://smt.io/label/node/">Node.js</a></i>
+        </small></div>
+        <br>
+        <p>Just a quick write-up of some things I’ve been playing with lately.</p>
+<p>A few weeks ago, at lunch with some old coworkers, someone mentioned that <a href="http://gulpjs.com">gulp</a> might just be the new hotness that steals Grunt’s thunder. More recently, I was inspired by <a href="http://www.100percentjs.com/just-like-grunt-gulp-browserify-now/">Martin Genev</a> to look into the gulp build system and <a href="http://browserify.com">Browserify</a>. I’m pretty impressed with what I’ve seen of gulp thus far, but I feel the bigger story by far is Browserify.</p>
+<p><strong>Update (2014-04-09):</strong> <a href="http://viget.com/about/team/dtello">Dan Tello</a> has posted a <a href="http://viget.com/extend/gulp-browserify-starter-faq">far superior contribution</a> on this topic. The examples he gives are really compelling.</p>
+<h2 id="gulp">gulp</h2>
+<p>I’ve been on several projects now that use the Grunt build system, and I’m not trying to criticize Grunt – in many ways, it was a Godsend that saved us from the hell of Makefiles and build.xml files. However, I always found configuring Grunt to be a major chore, and I was always bad at it. The up-front configuration work can be pretty intimidating.</p>
+<p>In contrast, <a href="http://gulpjs.com">gulp</a> uses conventions similar to node.js streams. I’m no expert with using streams myself, but to be able to pipe operations into other operations, Unix-style, is quite intuitive. Writing a task in gulp is nearly as simple and natural as pseudo-coding what you want it to do.</p>
+<p>In this example, I defined a task to build and concatenate my JavaScript source into a single file (dist/built.js), adding a file watcher for good measure. Nice!</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> gulp <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp'</span>)<span class="op">;</span>
+<span class="kw">var</span> util <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp-util'</span>)<span class="op">;</span>
+<span class="kw">var</span> concat <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp-concat'</span>)<span class="op">;</span>
+<span class="kw">var</span> browserify <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp-browserify'</span>)<span class="op">;</span>
+
+<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">'scripts'</span><span class="op">,</span> <span class="kw">function</span> (cb) <span class="op">{</span>
+    <span class="va">gulp</span>.<span class="at">src</span>(<span class="st">'./src/app.js'</span>)
+        .<span class="at">pipe</span>(<span class="at">browserify</span>(<span class="op">{</span>
+            <span class="dt">basedir</span><span class="op">:</span> <span class="st">'./'</span><span class="op">,</span>
+            <span class="dt">debug</span><span class="op">:</span> <span class="op">!</span><span class="va">util</span>.<span class="va">env</span>.<span class="at">production</span>
+        <span class="op">}</span>))
+        .<span class="at">pipe</span>(<span class="at">concat</span>(<span class="st">'built.js'</span>))
+        .<span class="at">pipe</span>(<span class="va">gulp</span>.<span class="at">dest</span>(<span class="st">'./dist/'</span>))
+<span class="op">}</span>)<span class="op">;</span>
+
+<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">'watch'</span><span class="op">,</span> [<span class="st">'scripts'</span>]<span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+    <span class="kw">var</span> watcher <span class="op">=</span> <span class="va">gulp</span>.<span class="at">watch</span>(<span class="st">'./src/**/*.js'</span><span class="op">,</span> [<span class="st">'scripts'</span>])<span class="op">;</span>
+    <span class="va">watcher</span>.<span class="at">on</span>(<span class="st">'change'</span><span class="op">,</span> <span class="kw">function</span> (event) <span class="op">{</span>
+        <span class="va">console</span>.<span class="at">log</span>(<span class="st">'File '</span> <span class="op">+</span> <span class="va">event</span>.<span class="at">path</span> <span class="op">+</span> <span class="st">' was '</span> <span class="op">+</span> <span class="va">event</span>.<span class="at">type</span> <span class="op">+</span> <span class="st">', building scripts...'</span>)<span class="op">;</span>
+    <span class="op">}</span>)<span class="op">;</span>
+<span class="op">}</span>)<span class="op">;</span>
+
+<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">'default'</span><span class="op">,</span> [<span class="st">'scripts'</span><span class="op">,</span> <span class="st">'watch'</span>])<span class="op">;</span></code></pre></div>
+<h2 id="browserify">Browserify</h2>
+<p>I honestly don’t think I can do <a href="http://browserify.com">Browserify</a> any justice by attempting to explain it here, but it’s basically a library that allows you to use core node modules, npm modules, and your own modules written in node.js style <strong>in the browser</strong>.</p>
+<p>I’ve been a proponent of AMD and RequireJS for some time, but when it comes to writing modules in JavaScript, here’s my big question: Why not use the same conventions for the browser as for node.js, with minimal, if any, boilerplate needed?</p>
+<p>Browserify lets you do that. I wrote 3 or 4 modules, using node.js-style <code>require</code> statements for dependencies, and exposing what I needed to with <code>module.exports</code>. With very little configuration (see the gulpfile.js example above), Browserify wrapped all my modules appropriately, and built them to a single JS file, which I loaded in the browser. It worked. It was glorious. The blinders were off.</p>
+<p>My experience with Browserify thus far has only been with modules I’ve written myself. I haven’t even scratched the surface of using an npm module in the browser yet. That will be my next experiment. I’m genuinely excited.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Tue, 11 Feb 2014 19:28:52 UT</pubDate>
+    <guid>https://smt.io/2014/02/11/gulp-browserify/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>Emergent Task Planner</title>
+    <link>https://smt.io/2012/12/19/emergent-task-planner/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">Emergent Task Planner</h1>
+        <div class="opacity08"><small>
+                <i>December 19, 2012 / <a href="https://smt.io/label/productivity/">Productivity</a></i>
+        </small></div>
+        <br>
+        <p>For a few years now I’ve used David Seah’s excellent <a href="http://davidseah.com/productivity-tools">Printable CEO</a> resources, to keep track of my activity across projects. I stopped doing it a while back for some reason, but recently rediscovered them, and decided they deserved a mention, particularly the <a href="http://davidseah.com/node/the-emergent-task-planner/">Emergent Task Planner (ETP)</a>.</p>
+<div class="figure">
+<img src="https://smt.io/images/etp-top-section.png" alt="ETP top section" />
+<p class="caption">ETP top section</p>
+</div>
+<p>The ETP really is great to use, and the pads you can buy from Amazon are of extremely high quality. What I like most is how much it reduces the friction of plotting how I’ve spent my day. It’s dead simple to just pick up and start using. I have found the ETP to be an <em>invaluable</em> asset for logging of how I spend my time between different projects.</p>
+<p>A word of caution: the ScanTron-phobic among us may wish to look elsewhere for suitable productivity tools, as the filling in of little ovals features prominently in these. But for the frictionless capturing of task-based information in the moment, I haven’t found anything else that works nearly as well for me.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Wed, 19 Dec 2012 11:11:26 UT</pubDate>
+    <guid>https://smt.io/2012/12/19/emergent-task-planner/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>2012: Year In Review</title>
+    <link>https://smt.io/2012/12/17/year-in-review/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">2012: Year In Review</h1>
+        <div class="opacity08"><small>
+                <i>December 17, 2012 / <a href="https://smt.io/label/family/">Family</a>, <a href="https://smt.io/label/miscellaneous/">Miscellaneous</a></i>
+        </small></div>
+        <br>
+        <p>It has been a very busy year for my family and me. I suppose this post is something of an excuse for the lack of updates to this blog, so enjoy the rambling stream of consciousness below. I have no agenda here, other than to briefly recall the year’s highlights.</p>
+<p>So 2012 happened. In the offing, I have been blessed to see my son <strong>William</strong> turn 3, and my marriage to <strong>Sarah</strong> turn 7. This year saw me turn 5 times the age of my marriage. Sarah and I sold our first home together and moved to our second.</p>
+<p>Sarah participated in a 2-day watercolor workshop put on by <a href="http://www.pafa.org">PAFA</a>. She had a great time, and came home full of inspiration for future art projects. Her paintings look fabulous.</p>
+<p>My father is retiring this year, after 35 years of teaching and conducting research at the same university, which also happens to be my <a href="http://www.sju.edu">alma mater</a>. It really is amazing to me how anyone can stay at one place for so long – literally my whole lifetime. He’s always been my inspiration, and I owe so much to him and Mom that I haven’t the words to express my full gratitude. I’m just proud to be their son.</p>
+<p>I still play board games as often as I’m able, which isn’t a lot, but though the quantity of my playing has diminished, I feel the quality has increased – I’m more selective about my gaming experiences these days, as my time is a more precious commodity than it once was. I’ve been fortunate to make a number of dear friends through this misunderstood hobby.</p>
+<p>This year also saw my first foray into the world of pencil-and-paper role-playing games. Some friends and I started a basic Pathfinder campaign. I find it pretty interesting and fun, though I’m still learning the ropes. I went with a pretty straightforward character since I’m new at it.</p>
+<p>Professionally, I volunteered twice to be a TA for web development classes at <a href="http://girldevelopit.com/chapters/philadelphia">GDI Philly</a>. The first was for server-side programming with Node.js, and the second was an intermediate HTML &amp; CSS class.</p>
+<p>I am as much of a fan of Vim now as I ever was. I’m writing this post in Vim right now.</p>
+<p>At <a href="http://empathylab.com">my day job</a>, I managed to get my fingers into an awful lot of different pies – heres a recap of the busy year I had at work:</p>
+<h3 id="q1">Q1</h3>
+<blockquote>
+<p>Wrapped up my involvement leading front-end development for the brand-new redesign of the <a href="http://redcross.org">American Red Cross</a> website, which eventually went on to a successful launch in September of this year. I’d been on the project since the kickoff in March 2011. If you donated to Hurricane Sandy victims this year, you likely used code that I wrote.</p>
+</blockquote>
+<h3 id="q2">Q2</h3>
+<blockquote>
+<p>Built a revolutionary JavaScript proof-of-concept app with my talented co-worker at the time, <a href="http://vickaita.com">Vick Aita</a>. The proof-of-concept won my company the contract to develop the full application for the client. This work had me making several trips out to California, and one trip to Belgium.</p>
+</blockquote>
+<h3 id="q3">Q3</h3>
+<blockquote>
+<p>My company kicked off 3 simultaneous responsive web design projects for customers in the media &amp; entertainment space, and I was tapped to work across the projects with each team so that they could deliver consistently high-quality solutions.</p>
+</blockquote>
+<h3 id="q4">Q4</h3>
+<blockquote>
+<p>As I continued to oversee our responsive web design development efforts, my focus shifted to some pressing departmental needs, such as documenting clearer development guidelines for our team, and helping to start a framework/pattern library of reusable components for future projects. I continued to support various client projects as the need arose. Toward the end of the year, I reunited with the aforementioned JS project from Q2, which is now in full development with a dedicated team.</p>
+</blockquote>
+<hr />
+<h4 id="may-you-all-have-a-wonderful-ending-to-2012-and-an-equally-promising-beginning-to-2013">May you all have a wonderful ending to 2012, and an equally promising beginning to 2013!</h4>
+    </div>
+</div>
+]]></description>
+    <pubDate>Mon, 17 Dec 2012 23:05:41 UT</pubDate>
+    <guid>https://smt.io/2012/12/17/year-in-review/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>Developers Are Artists</title>
+    <link>https://smt.io/2012/10/07/developers-are-artists/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">Developers Are Artists</h1>
+        <div class="opacity08"><small>
+                <i>October  7, 2012 / <a href="https://smt.io/label/mad-coding/">Mad Coding</a></i>
+        </small></div>
+        <br>
+        <p>Software development is, in part, an artistic practice. As a developer, your brush is a keyboard; your canvas, a text editor. You derive satisfaction from crafting solutions to real problems, and it is your creativity that brings the solutions to life.</p>
+<h2 id="beautiful-code">Beautiful Code</h2>
+<p>Development is necessarily a balancing act of competing concerns:</p>
+<ul>
+<li>Performance</li>
+<li>Scalability</li>
+<li>Maintainability</li>
+<li>Usability</li>
+<li>Accessibility</li>
+<li><strong>Beauty</strong></li>
+</ul>
+<p>Yes, we care very much about beauty in our code, but unlike most other concerns, it is subjective by nature. Beauty is very much in the eye of the beholder.</p>
+<p>Teaching how to design beautiful code is as challenging as teaching “the practice of software development.” Each of us is left to ourselves to figure it out, either by following the example of others, or stumbling upon it ourselves in a blinding aura of caffeine-induced revelation. More often than not, at least in my experience, it’s the former.</p>
+<h3 id="so-artists">So… Artists?</h3>
+<p>As tempting as it is to draw upon the analogy of being “under-appreciated in our time,” it is noteworthy that developers often experience a similar creative arc as artists of other disciplines. A great deal of code makes its initial appearance as a “s****y first draft,” to quote Anne LaMott. Before that, it may even have begun its life as a simple whiteboard doodle. Eventually, we revise and refactor that first idea as we gain a fuller understanding of the problem, and the best code eventually emerges. More often than not, it also happens to be more elegant code, the rough edges having been smoothed out, and the redundancy reduced. If all goes well, the developer can put down her brush at this point and take a step back to take in the full scope of her work.</p>
+<pre class="scss"><code>$break-small: 320px;
+$break-large: 1024px;
+
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: $break-small) { @content; }
+  }
+  @else if $media == medium-screens {
+    @media only screen and (min-width: $break-small + 1) and (max-width: $break-large - 1) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media only screen and (min-width: $break-large) { @content; }
+  }
+}
+
+.profile-pic {
+  float: left;
+  width: 250px;
+  @include respond-to(handhelds) { width: 100% ;}
+  @include respond-to(medium-screens) { width: 125px; }
+  @include respond-to(wide-screens) { float: none; }
+}</code></pre>
+<p>In the example above (from <a href="http://thesassway.com/intermediate/responsive-web-design-in-sass-using-media-queries-in-sass-32">The Sass Way</a>), the <code>respond-to</code> Sass mixin provides a more attractive way to specify <span class="citation">@media</span> queries in CSS, abstracting away some of the ugliness for the author. Obviously, abstraction isn’t always the best course of action, but oftentimes the biggest reason for doing it is to end up with a cleaner codebase.</p>
+<h2 id="beauty-often-takes-care-of-itself.">Beauty often takes care of itself.</h2>
+<p>We must remember that beauty in code is a means, not an end, to our satisfaction in development work. Most of us provide our services for hire. In practical terms, each of those other competing concerns has a real link to business value, and will tend to trump “beauty” when the two are in conflict. However, I find that if everything else properly accounted for, beauty will often take care of itself in the process.</p>
+<p>We’ve been talking about this for a while now.</p>
+<ul>
+<li>2007 – O’Reilly publishes the book <a href="http://shop.oreilly.com/product/9780596510046.do">Beautiful Code</a>, a collection of essays by notable members of the profession on how they approach programming problems in ways they deem beautiful.</li>
+<li>2008 – Jeff Atwood proclaims that <a href="http://www.codinghorror.com/blog/2008/02/code-isnt-beautiful.html">Code Isn’t Beautiful</a> in reaction to O’Reilly’s book, finding beauty not in the code itself, but in the ideas and algorithms beneath the surface.</li>
+<li>2009 – Chris Coyier describes <a href="http://css-tricks.com/what-beautiful-html-code-looks-like/">What Beautiful HTML Code Looks Like</a>, focusing on how beauty in HTML is derived from craftsmanship.</li>
+<li>2010 – Martin van Emden argues <a href="http://vanemden.wordpress.com/2010/10/05/in-defense-of-beautiful-code-2/">In Defense of Beautiful Code</a>, demonstrating that there are ways to write the same code that are more beautiful than others.</li>
+<li>2011 – Alberto Gutierrez discusses <a href="http://www.makinggoodsoftware.com/2011/03/27/the-obsession-with-beautiful-code-the-refactor-syndrome/">The Obsession With Beautiful Code</a>, underscoring the dangers of pursuing beauty for beauty’s sake.</li>
+</ul>
+<p>Gutierrez’ post particularly resonates with me, despite its being the least complementary to my point of view, because I have observed many of the tendencies he lists in myself as well as in many of my peers. Developers need to be aware that subjective coding style can be conflated with beauty on occasion, and it often has little to do with code quality. However, I do not agree that <a href="http://www.makinggoodsoftware.com/2009/11/09/the-four-golden-rules-to-be-a-better-software-developer/">all code is crap</a>.</p>
+<p>While it is true that much of what we work on is, at best, <em>ephemeral</em> even if it does end up seeing the light of day, what we gain in experience will stay with us for future opportunities to create beautiful code.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Sun, 07 Oct 2012 11:53:56 UT</pubDate>
+    <guid>https://smt.io/2012/10/07/developers-are-artists/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>KSS and Middleman</title>
+    <link>https://smt.io/2012/01/10/kss-middleman/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">KSS and Middleman</h1>
+        <div class="opacity08"><small>
+                <i>January 10, 2012 / <a href="https://smt.io/label/kss/">KSS</a>, <a href="https://smt.io/label/mad-coding/">Mad Coding</a>, <a href="https://smt.io/label/middleman/">Middleman</a>, <a href="https://smt.io/label/ruby/">Ruby</a>, <a href="https://smt.io/label/sass/">Sass</a>, <a href="https://smt.io/label/site-generators/">Site Generators</a></i>
+        </small></div>
+        <br>
+        <p>I love the idea of building an “interactive style guide” for a website design. I really do. However, working in Agencyland, it can be extremely difficult to budget enough time for this kind of tool when seemingly higher-priority tasks pile up. Right or wrong, the utopian vision of a living style guide often becomes a foregone luxury in the throes of looming deadlines.</p>
+<p><em>Assumes the reader understands the basics of Ruby and CSS.</em></p>
+<h2 id="middleman">Middleman</h2>
+<p>For an upcoming project at <a href="http://empathylab.com">work</a>, I’ll be leading the effort to author static HTML templates for a different group of software integrators to wire up to a complex back-end architecture (rhymes with WebSmear).</p>
+<p>We are also going to be building a whole front-end stack with CSS and JavaScript to boot, so it makes sense to use a solid static framework to take the pain away from developing a massive amount of templates without any server-side help. The bottom line is that we need to be able to export flat HTML files that work the same as the development templates.</p>
+<p>Enter <a href="http://middlemanapp.com">Middleman</a>, a loosely-coupled, yet carefully curated collection of Ruby libraries that all contribute to a framework that is much greater than the sum of its parts. I won’t go into all of its features here — you can visit the Middleman <a href="http://middlemanapp.com">site</a> for everything you need to know.</p>
+<p>For our purposes, Middleman looks to be a robust platform on which to build our static site.</p>
+<h2 id="kss">KSS</h2>
+<p>I am a closet fan of documentation specs like RubyDoc and JSDoc, but they often introduce a lot of heavy baggage for developers. <a href="http://tomdoc.org">TomDoc</a> came on the scene not too long ago as a really simple doc spec that Githubbers use in their in-house Ruby code, and I was ecstatic when another Github guy, <a href="http://warpspire.com">Kyle Neath</a>, released his own <a href="http://github.com/kneath/kss">KSS</a> project in late 2011. I think I’ve subconsciously been yearning for this kind of CSS documentation support for some time.</p>
+<p>KSS is a documentation spec for CSS (one of the first of its kind that I’ve heard of) that can be parsed by Ruby. This helps us do things like… generating an interactive style guide. It’s certainly not a silver bullet, but KSS will lower some of the administrative barriers to putting together helpful CSS documentation.</p>
+<h2 id="kss-ing-middleman">KSS-ing Middleman</h2>
+<p>I thought it would be a good idea to try to port some of the <a href="https://github.com/kneath/kss/tree/master/example">KSS example app</a> code over to my basic Middleman app. The example shows several variations of form submit button styles, including states such as hover and disabled, which makes for an excellent use case.</p>
+<h3 id="the-styles">The Styles</h3>
+<p>I’m using <a href="http://sass-lang.com">Sass</a> and <a href="http://compass-style.org">Compass</a>, with Middleman, so I did a quick port of Kyle’s example button CSS to Sass with some appropriate Compass mixins. I found that KSS broke when used with the original terse Sass format, but it did work fine with the newer SCSS format. I’m not certain, but it’s possible that this issue may be resolved in KSS in the future.</p>
+<p>Below is the result of porting the button CSS to <code>_button.scss</code>. The comment block at the top is where the documentation magic happens. You just describe what something is, specify a list of different states, and then reference a numbered section of the style guide. That’s it.</p>
+<pre class="scss"><code>// Your standard form button.
+//
+// :hover    - Highlights when hovering.
+// :disabled - Dims the button when disabled.
+// .primary  - Indicates button is the primary action.
+// .smaller  - A smaller button
+//
+// Styleguide 5.1.1
+button {
+  background-color: #f5f5f5;
+  @include background-image(linear-gradient(#f5f5f5, #e5e5e5));
+  border: 1px solid #ddd;
+  border-bottom-color: #bbb;
+  @include border-radius(3px);
+  @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.15));
+  color: #666;
+  cursor: pointer;
+  font-family: &quot;Helvetica Neue&quot;, Helvetica;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: normal;
+  padding: 5px 15px;
+  @include text-shadow(0 1px rgba(255, 255, 255, 0.9));
+
+  &amp;.primary, &amp;.primary:hover {
+    color: #fff;
+    background-color: #8add6d;
+    @include background-image(linear-gradient(#8add6d, #60b044));
+    border-color: #74bb5a;
+    border-bottom-color: #509338;
+    @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    @include text-shadow(0 -1px 0 rgba(0, 0, 0, 0.4));
+  }
+  &amp;.smaller {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  &amp;:hover {
+    color: #337797;
+    background-color: #f0f7fa;
+    @include background-image(linear-gradient(#f0f7fa, #d8eaf2));
+    border-color: #cbe3ee;
+    border-bottom-color: #97c7dd;
+  }
+  &amp;:disabled {
+    opacity: 0.5;
+  }
+}</code></pre>
+<p>You actually <em>do</em> need to manage the numeric structure of the style guide yourself. However, I appreciate that KSS makes you maintain control over the meaningful aspects of organizing a style guide, while making it possible to automate the tedious parts.</p>
+<h3 id="the-config">The Config</h3>
+<p>For the style guide to look nice on the front end, there is also a small amount of boilerplate CSS and JavaScript code to make some of the magic happen, so I pulled those files in and called them from a separate layout, <code>layouts/styleguide.erb</code>.</p>
+<p>The KSS example app runs on Sinatra, and Middleman also basically runs on Sinatra with some abstractions on top, so setting up the configuration wasn’t too tough. After adding <code>gem &quot;kss&quot;, &quot;~&gt; 0.1.1&quot;</code> to the Gemfile and running <code>bundle install</code>, I added the following to Middleman’s <code>config.rb</code> file:</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">require <span class="st">&quot;kss&quot;</span>
+page <span class="st">&quot;/styleguide/*&quot;</span>, <span class="st">:layout</span> =&gt; <span class="st">:styleguide</span> <span class="kw">do</span>
+  <span class="ot">@styleguide</span> = <span class="dt">Kss</span>::<span class="dt">Parser</span>.new(<span class="st">'source/css'</span>)
+<span class="kw">end</span>
+
+helpers <span class="kw">do</span>
+  <span class="co"># Generates a styleguide block.</span>
+  <span class="kw">def</span> styleguide_block(section, &amp;block)
+    <span class="ot">@section</span> = <span class="ot">@styleguide</span>.section(section)
+    <span class="ot">@example_html</span> = kss_capture{ block.call }
+    <span class="ot">@_out_buf</span> &lt;&lt; partial(<span class="st">'styleguide/block'</span>)
+  <span class="kw">end</span>
+
+  <span class="co"># Captures the result of a block within an erb template without spitting it</span>
+  <span class="co"># to the output buffer.</span>
+  <span class="kw">def</span> kss_capture(&amp;block)
+    out, <span class="ot">@_out_buf</span> = <span class="ot">@_out_buf</span>, <span class="st">&quot;&quot;</span>
+    <span class="kw">yield</span>
+    <span class="ot">@_out_buf</span>
+  <span class="kw">ensure</span>
+    <span class="ot">@_out_buf</span> = out
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+<p>For all style guide templates, the above configuration exposes a variable containing a Ruby representation of all KSS-documented CSS in the site (because KSS parses all documentation blocks in the CSS). A couple of helpers are defined that the templates will have access to, in order to handle the generated style guide block.</p>
+<blockquote>
+<p><em>(Due to a bug in Middleman 3.0 beta, wildcard file paths did not set local variables correctly. This bug should be resolved in 3.0 final. Additionally, I suspect that the <code>kss_capture</code> helper is not exactly optimal for use with Middleman, but I haven’t taken the time to refactor the example code beyond simply getting it working. It was originally named <code>capture</code> in the example, but I renamed it to prevent conflicts with the existing Middleman <code>capture</code> helper, which I would have probably tried to use if it was available inside the config file.)</em></p>
+</blockquote>
+<h3 id="the-templates">The Templates</h3>
+<p>A partial template needs to be defined for rendering every style guide section. The template will be used by the <code>styleguide_block</code> helper defined in the config above: <code>styleguide/_block.erb</code>.</p>
+<pre class="erb"><code>&lt;div class=&quot;styleguide-example&quot;&gt;
+
+  &lt;h3&gt;&lt;%= @section.section %&gt; &lt;em&gt;&lt;%= @section.filename %&gt;&lt;/em&gt;&lt;/h3&gt;
+  &lt;div class=&quot;styleguide-description&quot;&gt;
+    &lt;p&gt;&lt;%= @section.description %&gt;&lt;/p&gt;
+    &lt;% if @section.modifiers.any? %&gt;
+      &lt;ul class=&quot;styleguide-modifier&quot;&gt;
+        &lt;% @section.modifiers.each do |modifier| %&gt;
+          &lt;li&gt;&lt;strong&gt;&lt;%= modifier.name %&gt;&lt;/strong&gt; - &lt;%= modifier.description %&gt;&lt;/li&gt;
+        &lt;% end %&gt;
+      &lt;/ul&gt;
+    &lt;% end %&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;styleguide-element&quot;&gt;
+    &lt;%= @example_html %&gt;
+  &lt;/div&gt;
+  &lt;% @section.modifiers.each do |modifier| %&gt;
+    &lt;div class=&quot;styleguide-element styleguide-modifier&quot;&gt;
+      &lt;span class=&quot;styleguide-modifier-name&quot;&gt;&lt;%= modifier.name %&gt;&lt;/span&gt;
+      &lt;%= @example_html.sub('$modifier_class', &quot; #{modifier.class_name}&quot;) %&gt;
+    &lt;/div&gt;
+  &lt;% end %&gt;
+
+&lt;/div&gt;</code></pre>
+<p>In <code>styleguide/buttons.html.erb</code>, I added the following template call:</p>
+<pre class="erb"><code>&lt;% styleguide_block '5.1.1' do %&gt;
+  &lt;button class=&quot;$modifier_class&quot;&gt;Default Button&lt;/button&gt;
+&lt;% end %&gt;</code></pre>
+<p>Note that there is a single <code>button</code> element in the block. This is where the magic happens, because it passes the <code>button</code> to <code>styleguide_block</code>, which imports the <code>styleguide/block</code> partial for the style guide section.</p>
+<p>The partial parses the KSS representation of the documented CSS for the given section of the style guide (5.1.1). It prints out the section number and SCSS filename, adds the documentation text to the page, cycles through each CSS modifier of <code>button</code>, and generates a new <code>&lt;button&gt;</code> tag for each modifier. The resulting section of the style guide will look like this:</p>
+<div class="figure">
+<img src="https://smt.io/images/kss-styleguide.png" alt="Style guide example" />
+<p class="caption">Style guide example</p>
+</div>
+<p>The original basic <code>button</code> element is listed first, followed by accurate examples of all of its documented modifiers. The KSS JavaScript file fakes the pseudo-selectors <code>:hover</code> and <code>:disabled</code>.</p>
+<h2 id="onward">Onward</h2>
+<p>For my project, at least, this is an encouraging proof-of-concept that I plan to take forward. In the meantime, it looks like there is a generous amount of potential in both Middleman and KSS, so be sure to check out each of these projects.</p>
+<p>If you have used either Middleman or KSS, what has your experience been like thus far?</p>
+<h2 id="update-2012-02-04">Update 2012-02-04</h2>
+<p>I have pushed my working code to a <a href="http://github.com/smt/middleman-kss">Github repo</a>. Some of the gems are a little out of date, but I wanted to get my initial version up first, and then work through any issues that might arise from updating libraries. Please let me know what you think; I’m always open to suggestions for improvement.</p>
+<p>After checking out the code, just run <code>middleman</code> like any other Middleman app, and browse to <code>http://localhost:4567</code>.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Tue, 10 Jan 2012 15:11:12 UT</pubDate>
+    <guid>https://smt.io/2012/01/10/kss-middleman/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>10 Vim Techniques for Novices</title>
+    <link>https://smt.io/2011/08/04/10-vim-techniques-for-novices/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">10 Vim Techniques for Novices</h1>
+        <div class="opacity08"><small>
+                <i>August  4, 2011 / <a href="https://smt.io/label/vim/">Vim</a></i>
+        </small></div>
+        <br>
+        <p>Since I switched to Vim as my primary editor back in March of this year, I have discovered a wealth of useful tricks that help me get things done. Most of these techniques are truly indispensable, and should find a place in any Vim user’s quiver.</p>
+<p>I should also note that at this time, I’m nowhere near expert-level in my Vim abilities, so this post is intended to share some commands, patterns, and configurations with other Vim users who are still getting their feet wet with the editor.</p>
+<p><strong>Experienced Vimmers will already know all this stuff, and more power to them. This is for the Vim n00bs out there.</strong></p>
+<h2 id="open-with-cursor-at-last-edit-position">1. Open with Cursor at Last Edit Position</h2>
+<p>This one isn’t so much a technique as it is a preference. If you make a change to a file, and then re-open it later, the following snippet in your .vimrc will position the cursor at the last spot you made an edit prior to closing the buffer or Vim itself:</p>
+<pre class="vim"><code>autocmd BufReadPost *
+    \ if line(&quot;'\&quot;&quot;) &gt; 0 &amp;&amp; line(&quot;'\&quot;&quot;) &lt;= line(&quot;$&quot;) |
+    \   exe &quot;normal! g`\&quot;&quot; |
+    \ endif</code></pre>
+<h2 id="visual-block-mode">2. Visual Block Mode</h2>
+<p>You might know about Visual mode <code>v</code>, and even Visual Line mode <code>V</code>, but do you know about Visual Block mode? You can enter it with <code>&lt;C-V&gt;</code> (that’s <code>CTRL-V</code>), and then use Vim movement commands to select text in a box of columns and rows, rather than by lines. This can allow you to make some really powerful edits.</p>
+<p>Other editors, such as TextMate, can perform a similar blockwise selection using the Alt/Option key. Well, MacVim can do the same thing. Hold down Alt or Option, and click/drag with the mouse. I want to caution you against relying on this too much, though. Vim is designed to reward you for keeping your fingers <em>on the keys</em> as much as possible.</p>
+<h2 id="quick-letter-swap">3. Quick Letter Swap</h2>
+<p>If I accidentally type “teh” instead of “the”, the natural reaction would be to go back, select those two letters, and retype them, but there’s a simple way to swap any two adjacent letters:</p>
+<p>Move the cursor to the first letter of the swapped pair (in this example, the “e” of “teh”) and type <code>xp</code>. This cuts the character the cursor is on, and immediately pastes it after the next.</p>
+<h2 id="repeat-last-edit-the-magic-dot">4. Repeat Last Edit (the magic dot)</h2>
+<p>The glorious <code>.</code> is a very powerful command, and probably my most-often used in this list. Typing <code>.</code> in normal mode repeats your most recent edit. It’s dead simple to use, and just plain awesome in so many contexts.</p>
+<h2 id="move-and-edit-by-text-object">5. Move and Edit by Text Object</h2>
+<p>At the root of Vim’s idiosyncratic design is a variety of ways to easily move around a text file and edit it effortlessly:</p>
+<p><code>w</code> and <code>b</code> move the cursor forward and backward by <em>word</em>.<br />
+<code>(</code> and <code>)</code> move the cursor forward and backward by <em>sentence</em>.<br />
+<code>{</code> and <code>}</code> move the cursor forward and backward by <em>paragraph</em>.</p>
+<p>You can combine text objects with counts and actions to perform very powerful, concise edits.</p>
+<p>One of my favorite commands is <code>ciw</code>, and the pnemonic for it is Change Inside Word. If I can get my cursor <em>anywhere</em> in a word, it doesn’t matter which character it’s on, a quick <code>ciw</code> will cut the whole word and change to insert mode so I can enter new text in its place. No awkward text selection or repetitive deletion keying. Just <code>ciw</code> and type the new word.</p>
+<h2 id="delete-yank-and-paste-a-line">6. Delete, Yank, and Paste a Line</h2>
+<p><code>dd</code> will “delete” a line, which is the same as <em>cut</em>.<br />
+<code>yy</code> will “yank” a line, which is the same as <em>copy</em>.<br />
+<code>p</code> will paste at the line <em>below</em> the cursor.<br />
+<code>P</code> (<code>SHIFT-p</code>) will paste at the line <em>above</em> the cursor.</p>
+<p>Any of these commands can be preceded by a numeric count: <code>10p</code> will paste 10 times.</p>
+<h2 id="easy-repeated-characters">7. Easy Repeated Characters</h2>
+<p>Say I am working in Markdown format – which I often am; these blog posts are is written that way – and I want to use an underline-style H2:</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">This is my heading
+==================</code></pre></div>
+<p>I would prefer not to have to type who-knows-how-many equals signs in a row. How annoying. Luckily, something like this is dead simple in Vim.</p>
+<p>After typing your header, exit to normal mode and, with your cursor still on the line, type <code>yyp</code> to duplicate the line. The text now looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">This is my heading
+This is my heading</code></pre></div>
+<p>At this point, your cursor should on the first character of the second line. Type <code>v$r=</code> to visually select the text to the end of the line, and replace all the characters with equals signs. That’s it: the full command is <code>yypv$r=</code></p>
+<hr />
+<p><strong>Update:</strong> Honza Pokorny pointed out a shorter alternative to this command: <code>YpVr=</code></p>
+<hr />
+<p><strong>Update 2:</strong> Santosh Kumar observed that <code>V</code> may not be able to replace <code>v$</code> in every situation, particularly if there is whitespace at the beginning of the line.</p>
+<p>If you ever just want 80 stars in a row, say, to section off a part of source code, you could just type <code>80i*&lt;Esc&gt;</code> – easy.</p>
+<h2 id="quick-find">8. Quick Find</h2>
+<p><code>/</code> will switch to a mode that allows you to enter a search string for the current buffer. If you have the proper settings in your .vimrc,</p>
+<p>Vim will even do an incremental search. When you have the search term you want, hit <code>&lt;Enter&gt;</code> and cycle forward through the search results <em>in the buffer</em> with <code>n</code>, and backwards with <code>N</code>.</p>
+<p><code>?</code> does the same thing as <code>/</code>, only in the reverse direction. You can also use <code>*</code> to quick-search the word your cursor is currently on.</p>
+<p>For some sane defaults, here are some of my .vimrc search settings:</p>
+<pre class="vim"><code>set hlsearch   &quot; Highlight search matches
+set incsearch  &quot; Highlight matches as you type
+set ignorecase &quot; Case-insensitive searching
+set smartcase  &quot; ...but case-sensitive if expression has caps
+set wrapscan   &quot; Set the search scan to wrap around the file
+
+&quot; Press space bar to turn off search highlighting
+&quot; and clear any message displayed
+nnoremap &lt;silent&gt; &lt;Space&gt; :nohl&lt;Bar&gt;:echo&lt;CR&gt;</code></pre>
+<h2 id="search-replace-in-a-buffer">9. Search &amp; Replace in a Buffer</h2>
+<p>Few of us can really consider ourselves experts with regular expressions, but if you have ever used them for any kind of text processing task, you realize how incredibly powerful (and yes, sometimes befuddling) they can be. Regexes are used in Vim’s native search and replace.</p>
+<p>It is necessary to specify a range when doing a search and replace, and generally, you will want the action to be global, so you would type <code>:%s/pattern/replacement/g</code> and hit <code>&lt;Enter&gt;</code>. Done. The <code>%</code> represents the entire buffer, while the <code>s///g</code> structure is the standard search and replace command syntax.</p>
+<p>To search/replace within a given selection, first select your desired range in visual mode, then hit <code>:</code>. Vim will pre-fill your range as <code>'&lt;,'&gt;</code>, which means the current selection. Use the same <code>s///g</code> syntax as before to restrict the action to the selection you specified.</p>
+<p>The trailing <code>/g</code>? That’s an option that I usually like to pass, as it tells Vim to replace all matches, not just the first one.</p>
+<h2 id="project-search-replace">10. Project Search &amp; Replace</h2>
+<p>It’s a common complaint: project search &amp; replace – an operation that spans one or more files – is one of the few glaring weaknesses of Vim. Until there is better support for this feature in Vim itself, it is possible to pull off in an unorthodox way: don’t use Vim! Try this on for size (from the command line):</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">sed</span> -i <span class="st">'s/pattern/replacement/'</span> <span class="kw">&lt;</span>files<span class="kw">&gt;</span></code></pre></div>
+<p>From within Vim, while in <code>:</code> command mode, you can use the same command, only beginning with a <code>!</code>. This pipes the command directly to a shell session and does the business. Note the relative consistency of sed’s search &amp; replace syntax with Vim’s native one.</p>
+<p>Passing commands from Vim to external programs is common, and often encouraged. Select some text and run the <code>:sort</code> command on it sometime – it actually calls the external <code>sort</code> program, which passes the sorted lines back to Vim.</p>
+<h2 id="my-dotvim">My dotvim</h2>
+<p>I wouldn’t consider <a href="http://github.com/smt/dotfiles">my Vim configuration</a> to be anything special, but it’s mine, and I am always tweaking it (you Vim people know what I’m talking about). If you are curious about what I might have in there, you can feel free have a look at it – it’s on GitHub, of course, and all the plugins are set up as Git submodules with Pathogen.</p>
+<h2 id="dive-into-vim">Dive into Vim!</h2>
+<p>The nuts and bolts of how to use Vim are, of course, outside the scope of this article. <a href="http://vimcasts.org">VimCasts</a>, <a href="http://peepcode.com/products/smash-into-vim-i">PeepCode</a>, and Vim’s built-in tutorial are at your disposal. That being said, I’m willing to attempt to answer most questions you might have about Vim, either on <a href="http://twitter.com/tagsoup">Twitter</a> or via the comments.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Thu, 04 Aug 2011 08:37:27 UT</pubDate>
+    <guid>https://smt.io/2011/08/04/10-vim-techniques-for-novices/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>OOCSS, For Great Justice</title>
+    <link>https://smt.io/2011/07/17/oocss-for-great-justice/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">OOCSS, For Great Justice</h1>
+        <div class="opacity08"><small>
+                <i>July 17, 2011 / <a href="https://smt.io/label/css/">CSS</a>, <a href="https://smt.io/label/mad-coding/">Mad Coding</a></i>
+        </small></div>
+        <br>
+        <p>In my <a href="https://smt.io/2011/07/09/responsible-sass-authoring/">previous post</a>, I hinted at a growing concern with CSS performance. Among those pioneering ways to approach the issue of maintainable-yet-efficient CSS is <a href="http://twitter.com/stubbornella">Nicole Sullivan</a>, who is perhaps best known for her open source <a href="http://oocss.org">Object-Oriented CSS</a> project.</p>
+<h2 id="object-oriented-css">Object-Oriented? CSS?</h2>
+<p>I have to admit that when I first checked out out OOCSS, I guffawed. While it’s true that, at first blush, CSS does not have many of the traditional features of a genuine OO programming language, Nicole has been exploring ways in which CSS’ inheritance/<wbr>cascade can be analogous to OO concepts.</p>
+<p>It’s taken me quite some time to come around. There are things in the OOCSS code base that seem to fly in the face of commonly-accepted CSS best practices. It is precisely this kind of resistance in the community that must have prompted Nicole to deliver her latest talk this year at Webstock, entitled <a href="http://www.webstock.org.nz/talks/speakers/nicole-sullivan/css-tools-massive-websites">Our Best Practices Are Killing Us</a> (<a href="http://www.slideshare.net/stubbornella/our-best-practices-are-killing-us">slides</a>).</p>
+<h2 id="semantics-pitfall">Semantics Pitfall</h2>
+<p>For the past several years, I have been painstakingly crafting HTML and CSS under the banner of “best practices.” Currently, one such practice has been to aggressively scope CSS by content type.</p>
+<p>Martin Sutherland <a href="http://sunpig.com/martin/archives/2008/10/07/maintainable-css-modular-to-the-max.html">describes this approach</a> better and more succinctly than I could, but just recently <a href="http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html">recanted in favor of OOCSS</a>. Martin had watched Nicole’s talk, and it appears to have had the same effect on him as it had on me. He writes:</p>
+<blockquote>
+<p>One of the hardest hurdles to leap in coming to like OOCSS was the somewhat heretical notion of adding “non-semantic” container elements and apparently “presentational” classnames to my HTML.</p>
+</blockquote>
+<p>Martin <a href="http://www.sunpig.com/martin/archives/2011/06/25/oocss-and-html-semantics.html">goes on to propose</a> (and I think he’s right on target here) that there are multiple layers of semantics that belong in HTML:</p>
+<ol style="list-style-type: decimal">
+<li>Structural semantics (core HTML elements)</li>
+<li>Ontological semantics (domain-specific meaning beyond core HTML)</li>
+<li>Visual semantics (representing visual intent)</li>
+</ol>
+<div class="figure">
+<img src="https://smt.io/images/pitfall.jpeg" alt="Pitfall Harry" />
+<p class="caption">Pitfall Harry</p>
+</div>
+<p>Lest we forget, one of the core purposes of CSS <strong>is</strong> to communicate the <a href="http://www.stubbornella.org/content/2010/06/12/visual-semantics-in-html-and-css/">visual semantics</a> of an HTML document. Many developers, myself included, have written many projects’ worth of CSS that attempts to use only core HTML (structural) and domain-specific (ontological) semantics, while sidestepping the role that visual semantics ought to play, out of fear that we’d be introducing the ultimate evil into our source code, <em>presentational classnames</em>.</p>
+<p>It is becoming more clear to me that we should not avoid the question of visual semantics in our CSS. The result of our having done so is visual style that is tightly bound to the content.</p>
+<p>Now, hearken back to the primitive days of yore when it was commonplace (and accepted) to see <code>&lt;font&gt;</code>, <code>&lt;u&gt;</code>, and <code>&lt;center&gt;</code> tags in HTML source. It’s another example of presentation coupled with content, only in a more obviously wrong form.</p>
+<p><strong>Is the intertwining of visual style and content not one of the problems, nay, <em>the</em> problem, that CSS was intended to address in the first place?</strong></p>
+<p>It seems to me that many of us are doing it wrong when we refuse to implement some level of visual semantics in our CSS and HTML. Because of the belief that we’re following “best practices,” we are robbing ourselves of opportunities to abstract out common styles into reusable patterns, and our projects suffer for it.</p>
+<h2 id="for-great-justice">For Great Justice</h2>
+<p>I’ve watched as some developers have begun to <a href="http://lazukars.com/post/7300553347/brain-vs-object-oriented-css">wrestle with the concepts of OOCSS</a> vs. what we have come to know as the industry standard practice of writing CSS in recent years.</p>
+<div class="figure">
+<img src="https://smt.io/images/allyourbase.jpg" alt="ZeroWing" />
+<p class="caption">ZeroWing</p>
+</div>
+<p>Watch Nicole’s OOCSS talks, and allow them ample time to marinate. Check out the <a href="http://github.com/stubbornella/oocss">source</a> of the <a href="http://oocss.org">OOCSS project</a>. I’m still in process myself, as I continue to look for ways to strike the delicate balance between <em>appropriate</em> visual semantics in CSS and blatantly presentational naming.</p>
+<p>Not everything in OOCSS is a great idea to implement verbatim. Remember that it is proof of concept and a collection of patterns, not a CSS boilerplate. I am still mildly horrified every time I see how <code>&lt;b&gt;</code> tags are used for rounded corners in the <a href="http://oocss.org/module.html">module example</a>, but I remind myself that the concepts are what make up OOCSS, not the specific implementation of the examples.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Sun, 17 Jul 2011 13:55:42 UT</pubDate>
+    <guid>https://smt.io/2011/07/17/oocss-for-great-justice/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
+    <title>Responsible Sass Authoring</title>
+    <link>https://smt.io/2011/07/09/responsible-sass-authoring/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">Responsible Sass Authoring</h1>
+        <div class="opacity08"><small>
+                <i>July  9, 2011 / <a href="https://smt.io/label/css/">CSS</a>, <a href="https://smt.io/label/mad-coding/">Mad Coding</a>, <a href="https://smt.io/label/sass/">Sass</a></i>
+        </small></div>
+        <br>
+        <p>In capable hands, <a href="http://sass-lang.org">Sass</a> can do amazing things for your CSS. With Sass, you can use functions and variables that later get compiled into valid CSS. This can greatly reduce code repetition and the potential for mistakes.</p>
+<p>For example, not that you would, but you could write some Sass like this:</p>
+<pre class="sass"><code>// Set a couple of vars
+$titleColor: #000
+$titleSize: 24px
+
+.article
+  .title
+    color: $titleColor
+    font-size: $titleSize
+  .alt-title
+    @extend .title
+    border-bottom: 1px solid lighten($titleColor, 80%)    // #ccc
+    color: transparentize(lighten($titleColor, 20%), 0.1)
+  .sub-title
+    @extend .title
+    font-size: round($titleSize * 0.85)    // 20.4px
+    &amp;:hover
+      background-color: transparentize(change-color($titleColor, $red: 255), 0.8);</code></pre>
+<p>The resulting CSS might look something like this, depending upon how you set your Sass output style preference:</p>
+<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.article</span> <span class="fl">.title</span>,
+<span class="fl">.article</span> <span class="fl">.alt-title</span>,
+<span class="fl">.article</span> <span class="fl">.sub-title</span> <span class="kw">{</span>
+    <span class="kw">color:</span> <span class="dt">#000</span><span class="kw">;</span>
+    <span class="kw">font-size:</span> <span class="dt">24px</span><span class="kw">;</span>
+<span class="kw">}</span>
+<span class="fl">.article</span> <span class="fl">.alt-title</span> <span class="kw">{</span>
+    <span class="kw">border-bottom:</span> <span class="dt">1px</span> <span class="dt">solid</span> <span class="dt">#cccccc</span><span class="kw">;</span>
+    <span class="kw">color:</span> <span class="dt">rgba(51</span>, <span class="dt">51</span>, <span class="dt">51</span>, <span class="dt">0.9)</span><span class="kw">;</span>
+<span class="kw">}</span>
+<span class="fl">.article</span> <span class="fl">.sub-title</span> <span class="kw">{</span>
+    <span class="kw">font-size:</span> <span class="dt">20px</span><span class="kw">;</span>
+<span class="kw">}</span>
+<span class="fl">.article</span> <span class="fl">.sub-title</span><span class="dv">:hover</span> <span class="kw">{</span>
+    <span class="kw">background-color:</span> <span class="dt">rgba(255</span>, <span class="dt">0</span>, <span class="dt">0</span>, <span class="dt">0.2)</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre></div>
+<p>Pretty cool, right? You can see that the <code>@extend</code> keyword can be a very powerful tool, bringing a quasi-object-oriented paradigm to our CSS. The same could be true for the nested selectors; you just have to refer to <code>.article</code> once, and let the indentation take care of the scope for you.</p>
+<h2 id="css-bloat">CSS Bloat</h2>
+<p>Over a year of using Sass every day at my day job has taught me this: Just because Sass allows you to do something, it doesn’t mean that thing should be done.</p>
+<p>Sass clearly offers many ways to make our lives easier as developers. The benefits of using it are obvious and many. <code>@import</code> is awesome; it lets us concatenate many development Sass files into one production CSS file if we wish. Variables and mixins can be amazingly handy.</p>
+<p>Selector nesting, <code>@extend</code>, and parent-selector (&amp;), while incredibly useful when care is taken, can also be prone to generate sub-optimal CSS when used carelessly, <em>especially</em> in cases where they are used in combination. Long-term, CSS that is compiled from Sass that abuses these features can quickly become extremely bloated and challenging to maintain. Let’s take a look at some examples of some really sad CSS. The examples I’m using are inspired by actual projects I’ve worked on (with some key edits to protect the innocent).</p>
+<p><em>Note that I’m not blaming Sass itself for any of these problems. It’s quite simply that using some Sass features in a certain way can inadvertently amplify poor CSS design decisions.</em></p>
+<h3 id="case-1">Case 1</h3>
+<p>Sass selectors that are nested like this:</p>
+<pre class="sass"><code>#product
+  .overview
+    .header
+      h2
+        span
+    .content
+      .promo
+        .header
+          div
+          .inner
+            a
+              span</code></pre>
+<p>will result in CSS descendant selectors that look something like this:</p>
+<pre class="sass"><code>#product {}
+#product .overview {}
+#product .overview .header {}
+#product .overview .header h2 {}
+#product .overview .header h2 span {}
+#product .overview .content {}
+#product .overview .content .promo {}
+#product .overview .content .promo .header {}
+#product .overview .content .promo .header div {}
+#product .overview .content .promo .header .inner {}
+#product .overview .content .promo .header .inner a {}
+#product .overview .content .promo .header .inner a span {}</code></pre>
+<p>Yuck. I’m not going to go into why this is bad, but you don’t have to take my word for it; simply google “<a href="https://www.google.com/search?q=css+performance+descendant+selectors">CSS performance descendant selectors</a>” and read up.</p>
+<p>With Sass, this kind of CSS bloat is extremely easy to cause if you get carried away with selector nesting. Observe the redundancy and the verbosity of the generated CSS. If the developer had taken the time to carefully construct his selectors, he could have avoided the need for this many levels of descendants in his CSS.</p>
+<p>To my great shame, that developer was yours truly.</p>
+<h3 id="case-2">Case 2</h3>
+<p>This one combines the <code>@extend</code>, nesting, and parent-selector features of Sass. <code>@extend</code> has been one of my favorite features of Sass ever since it was added. It lets you inherit the properties of one selector in another. Here’s how it can go awry, despite all the best intentions. The Sass:</p>
+<pre class="sass"><code>.clearfix
+  &amp;:after
+    clear: both
+    content: '.'
+    display: block
+    height: 0
+    line-height: 0
+    overflow: hidden
+    width: 0
+
+.thing-1
+  @extend .clearfix
+.thing-2
+  @extend .clearfix
+
+// ...
+
+.thing-99
+  @extend .clearfix
+.thing-100
+  @extend .clearfix</code></pre>
+<p>In the Sass, let’s assume I extended <code>.clearfix</code> in 100 separate selectors at various places throughout my code. This is, unfortunately, a very realistic use case for something as commonly used as a clearfix, and as my project grows, it would eventually result in the following generated CSS:</p>
+<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.clearfix</span>,
+<span class="fl">.thing-1</span>, <span class="fl">.thing-2</span>, <span class="fl">.thing-3</span>, <span class="fl">.thing-4</span>, <span class="fl">.thing-5</span>,
+<span class="fl">.thing-6</span>, <span class="fl">.thing-7</span>, <span class="fl">.thing-8</span>, <span class="fl">.thing-9</span>, <span class="fl">.thing-10</span>,
+<span class="fl">.thing-11</span>, <span class="fl">.thing-12</span>, <span class="fl">.thing-13</span>, <span class="fl">.thing-14</span>, <span class="fl">.thing-15</span>,
+<span class="fl">.thing-16</span>, <span class="fl">.thing-17</span>, <span class="fl">.thing-18</span>, <span class="fl">.thing-19</span>, <span class="fl">.thing-20</span>,
+<span class="fl">.thing-21</span>, <span class="fl">.thing-22</span>, <span class="fl">.thing-23</span>, <span class="fl">.thing-24</span>, <span class="fl">.thing-25</span>,
+<span class="fl">.thing-26</span>, <span class="fl">.thing-27</span>, <span class="fl">.thing-28</span>, <span class="fl">.thing-29</span>, <span class="fl">.thing-30</span>,
+<span class="fl">.thing-31</span>, <span class="fl">.thing-32</span>, <span class="fl">.thing-33</span>, <span class="fl">.thing-34</span>, <span class="fl">.thing-35</span>,
+<span class="fl">.thing-36</span>, <span class="fl">.thing-37</span>, <span class="fl">.thing-38</span>, <span class="fl">.thing-39</span>, <span class="fl">.thing-40</span>,
+<span class="fl">.thing-41</span>, <span class="fl">.thing-42</span>, <span class="fl">.thing-43</span>, <span class="fl">.thing-44</span>, <span class="fl">.thing-45</span>,
+<span class="fl">.thing-46</span>, <span class="fl">.thing-47</span>, <span class="fl">.thing-48</span>, <span class="fl">.thing-49</span>, <span class="fl">.thing-50</span>,
+<span class="fl">.thing-51</span>, <span class="fl">.thing-52</span>, <span class="fl">.thing-53</span>, <span class="fl">.thing-54</span>, <span class="fl">.thing-55</span>,
+<span class="fl">.thing-56</span>, <span class="fl">.thing-57</span>, <span class="fl">.thing-58</span>, <span class="fl">.thing-59</span>, <span class="fl">.thing-60</span>,
+<span class="fl">.thing-61</span>, <span class="fl">.thing-62</span>, <span class="fl">.thing-63</span>, <span class="fl">.thing-64</span>, <span class="fl">.thing-65</span>,
+<span class="fl">.thing-66</span>, <span class="fl">.thing-67</span>, <span class="fl">.thing-68</span>, <span class="fl">.thing-69</span>, <span class="fl">.thing-70</span>,
+<span class="fl">.thing-71</span>, <span class="fl">.thing-72</span>, <span class="fl">.thing-73</span>, <span class="fl">.thing-74</span>, <span class="fl">.thing-75</span>,
+<span class="fl">.thing-76</span>, <span class="fl">.thing-77</span>, <span class="fl">.thing-78</span>, <span class="fl">.thing-79</span>, <span class="fl">.thing-80</span>,
+<span class="fl">.thing-81</span>, <span class="fl">.thing-82</span>, <span class="fl">.thing-83</span>, <span class="fl">.thing-84</span>, <span class="fl">.thing-85</span>,
+<span class="fl">.thing-86</span>, <span class="fl">.thing-87</span>, <span class="fl">.thing-88</span>, <span class="fl">.thing-89</span>, <span class="fl">.thing-90</span>,
+<span class="fl">.thing-91</span>, <span class="fl">.thing-92</span>, <span class="fl">.thing-93</span>, <span class="fl">.thing-94</span>, <span class="fl">.thing-95</span>,
+<span class="fl">.thing-96</span>, <span class="fl">.thing-97</span>, <span class="fl">.thing-98</span>, <span class="fl">.thing-99</span>, <span class="fl">.thing-100</span> <span class="kw">{}</span>
+
+<span class="fl">.clearfix</span><span class="dv">:after</span>,
+<span class="fl">.thing-1</span><span class="dv">:after</span>, <span class="fl">.thing-2</span><span class="dv">:after</span>, <span class="fl">.thing-3</span><span class="dv">:after</span>, <span class="fl">.thing-4</span><span class="dv">:after</span>, <span class="fl">.thing-5</span><span class="dv">:after</span>,
+<span class="fl">.thing-6</span><span class="dv">:after</span>, <span class="fl">.thing-7</span><span class="dv">:after</span>, <span class="fl">.thing-8</span><span class="dv">:after</span>, <span class="fl">.thing-9</span><span class="dv">:after</span>, <span class="fl">.thing-10</span><span class="dv">:after</span>,
+<span class="fl">.thing-11</span><span class="dv">:after</span>, <span class="fl">.thing-12</span><span class="dv">:after</span>, <span class="fl">.thing-13</span><span class="dv">:after</span>, <span class="fl">.thing-14</span><span class="dv">:after</span>, <span class="fl">.thing-15</span><span class="dv">:after</span>,
+<span class="fl">.thing-16</span><span class="dv">:after</span>, <span class="fl">.thing-17</span><span class="dv">:after</span>, <span class="fl">.thing-18</span><span class="dv">:after</span>, <span class="fl">.thing-19</span><span class="dv">:after</span>, <span class="fl">.thing-20</span><span class="dv">:after</span>,
+<span class="fl">.thing-21</span><span class="dv">:after</span>, <span class="fl">.thing-22</span><span class="dv">:after</span>, <span class="fl">.thing-23</span><span class="dv">:after</span>, <span class="fl">.thing-24</span><span class="dv">:after</span>, <span class="fl">.thing-25</span><span class="dv">:after</span>,
+<span class="fl">.thing-26</span><span class="dv">:after</span>, <span class="fl">.thing-27</span><span class="dv">:after</span>, <span class="fl">.thing-28</span><span class="dv">:after</span>, <span class="fl">.thing-29</span><span class="dv">:after</span>, <span class="fl">.thing-30</span><span class="dv">:after</span>,
+<span class="fl">.thing-31</span><span class="dv">:after</span>, <span class="fl">.thing-32</span><span class="dv">:after</span>, <span class="fl">.thing-33</span><span class="dv">:after</span>, <span class="fl">.thing-34</span><span class="dv">:after</span>, <span class="fl">.thing-35</span><span class="dv">:after</span>,
+<span class="fl">.thing-36</span><span class="dv">:after</span>, <span class="fl">.thing-37</span><span class="dv">:after</span>, <span class="fl">.thing-38</span><span class="dv">:after</span>, <span class="fl">.thing-39</span><span class="dv">:after</span>, <span class="fl">.thing-40</span><span class="dv">:after</span>,
+<span class="fl">.thing-41</span><span class="dv">:after</span>, <span class="fl">.thing-42</span><span class="dv">:after</span>, <span class="fl">.thing-43</span><span class="dv">:after</span>, <span class="fl">.thing-44</span><span class="dv">:after</span>, <span class="fl">.thing-45</span><span class="dv">:after</span>,
+<span class="fl">.thing-46</span><span class="dv">:after</span>, <span class="fl">.thing-47</span><span class="dv">:after</span>, <span class="fl">.thing-48</span><span class="dv">:after</span>, <span class="fl">.thing-49</span><span class="dv">:after</span>, <span class="fl">.thing-50</span><span class="dv">:after</span>,
+<span class="fl">.thing-51</span><span class="dv">:after</span>, <span class="fl">.thing-52</span><span class="dv">:after</span>, <span class="fl">.thing-53</span><span class="dv">:after</span>, <span class="fl">.thing-54</span><span class="dv">:after</span>, <span class="fl">.thing-55</span><span class="dv">:after</span>,
+<span class="fl">.thing-56</span><span class="dv">:after</span>, <span class="fl">.thing-57</span><span class="dv">:after</span>, <span class="fl">.thing-58</span><span class="dv">:after</span>, <span class="fl">.thing-59</span><span class="dv">:after</span>, <span class="fl">.thing-60</span><span class="dv">:after</span>,
+<span class="fl">.thing-61</span><span class="dv">:after</span>, <span class="fl">.thing-62</span><span class="dv">:after</span>, <span class="fl">.thing-63</span><span class="dv">:after</span>, <span class="fl">.thing-64</span><span class="dv">:after</span>, <span class="fl">.thing-65</span><span class="dv">:after</span>,
+<span class="fl">.thing-66</span><span class="dv">:after</span>, <span class="fl">.thing-67</span><span class="dv">:after</span>, <span class="fl">.thing-68</span><span class="dv">:after</span>, <span class="fl">.thing-69</span><span class="dv">:after</span>, <span class="fl">.thing-70</span><span class="dv">:after</span>,
+<span class="fl">.thing-71</span><span class="dv">:after</span>, <span class="fl">.thing-72</span><span class="dv">:after</span>, <span class="fl">.thing-73</span><span class="dv">:after</span>, <span class="fl">.thing-74</span><span class="dv">:after</span>, <span class="fl">.thing-75</span><span class="dv">:after</span>,
+<span class="fl">.thing-76</span><span class="dv">:after</span>, <span class="fl">.thing-77</span><span class="dv">:after</span>, <span class="fl">.thing-78</span><span class="dv">:after</span>, <span class="fl">.thing-79</span><span class="dv">:after</span>, <span class="fl">.thing-80</span><span class="dv">:after</span>,
+<span class="fl">.thing-81</span><span class="dv">:after</span>, <span class="fl">.thing-82</span><span class="dv">:after</span>, <span class="fl">.thing-83</span><span class="dv">:after</span>, <span class="fl">.thing-84</span><span class="dv">:after</span>, <span class="fl">.thing-85</span><span class="dv">:after</span>,
+<span class="fl">.thing-86</span><span class="dv">:after</span>, <span class="fl">.thing-87</span><span class="dv">:after</span>, <span class="fl">.thing-88</span><span class="dv">:after</span>, <span class="fl">.thing-89</span><span class="dv">:after</span>, <span class="fl">.thing-90</span><span class="dv">:after</span>,
+<span class="fl">.thing-91</span><span class="dv">:after</span>, <span class="fl">.thing-92</span><span class="dv">:after</span>, <span class="fl">.thing-93</span><span class="dv">:after</span>, <span class="fl">.thing-94</span><span class="dv">:after</span>, <span class="fl">.thing-95</span><span class="dv">:after</span>,
+<span class="fl">.thing-96</span><span class="dv">:after</span>, <span class="fl">.thing-97</span><span class="dv">:after</span>, <span class="fl">.thing-98</span><span class="dv">:after</span>, <span class="fl">.thing-99</span><span class="dv">:after</span>, <span class="fl">.thing-100</span><span class="dv">:after</span> <span class="kw">{</span>
+    <span class="kw">clear:</span> <span class="dt">both</span><span class="kw">;</span>
+    <span class="kw">content:</span> <span class="st">'.'</span><span class="kw">;</span>
+    <span class="kw">display:</span> <span class="dt">block</span><span class="kw">;</span>
+    <span class="kw">height:</span> <span class="dt">0</span><span class="kw">;</span>
+    <span class="kw">line-height:</span> <span class="dt">0</span><span class="kw">;</span>
+    <span class="kw">overflow:</span> <span class="dt">hidden</span><span class="kw">;</span>
+    <span class="kw">width:</span> <span class="dt">0</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre></div>
+<p>First, there is a nesting issue. Because I nested <code>&amp;:after</code> inside an empty parent selector, the generated CSS contains a huge list of selectors with no properties, then a second huge list with the clearfix styles. Plus, all these bogus selectors tend to clog up dev tools like Firebug, as shown in this screenshot:</p>
+<div class="figure">
+<img src="https://smt.io/images/extend-clearfix-firebug-hell.png" alt="@extend .clearfix Firebug hell" />
+<p class="caption"><span class="citation">@extend</span> .clearfix Firebug hell</p>
+</div>
+<p>Secondly, this could have all been avoided if I had been more pragmatic and simply used <code>.clearfix</code> (or another class – I commonly use <code>.group</code>) in the HTML to apply the CSS and make it semantically meaningful at the same time. Using <code>@extend</code> is not the correct choice for this particular pattern:</p>
+<pre class="sass"><code>.group:after
+  clear: both
+  content: '.'
+  display: block
+  height: 0
+  line-height: 0
+  overflow: hidden
+  width: 0
+
+// That's right, I'm not using @extend here.
+// It's almost like I'm using actual CSS \o/</code></pre>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;thing-1 group&quot;</span><span class="kw">&gt;</span>
+  <span class="co">&lt;!-- stuff floated left --&gt;</span>
+  <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;primary-content&quot;</span><span class="kw">&gt;</span>
+    <span class="co">&lt;!-- ... --&gt;</span>
+  <span class="kw">&lt;/section&gt;</span>
+
+  <span class="co">&lt;!-- stuff floated right --&gt;</span>
+  <span class="kw">&lt;aside</span><span class="ot"> class=</span><span class="st">&quot;secondary-content&quot;</span><span class="kw">&gt;</span>
+    <span class="co">&lt;!-- ... --&gt;</span>
+  <span class="kw">&lt;/aside&gt;</span>
+<span class="kw">&lt;/div&gt;</span></code></pre></div>
+<h2 id="sass-css">Sass =&gt; CSS</h2>
+<p>I, for one, side with those who seek to balance CSS performance concerns with maintainability concerns. It’s important to remember that no matter what you do in Sass, it will eventually end up as CSS. Whether it does more harm than good will be up to you.</p>
+<p>Ironically, though it might seem at first that we have veered too far towards the maintainability side of the spectrum with our CSS, it turns out that the status quo isn’t terribly well suited for either maintainability or performance.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Sat, 09 Jul 2011 13:04:26 UT</pubDate>
+    <guid>https://smt.io/2011/07/09/responsible-sass-authoring/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+
+    </channel>
+</rss>

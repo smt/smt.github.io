@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Cache-Control" content="max-age=86400, must-revalidate" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Stephen Tudor">
+        <title>Developers Are Artists | smt.io: Stephen Tudor</title>
+        <link rel="stylesheet" type="text/css" href="/css/hemingway.css" />
+        <link rel="stylesheet" type="text/css" href="/css/white.css" />
+        <link rel="stylesheet" type="text/css" href="/css/icons.css" />
+        <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
+        <script type="text/javascript">
+
+          /* var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+          _gaq.push(['_setDomainName', 'smt.io']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+              if (document.URL.indexOf("smt.io") >= 0) {
+                  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              }
+          })(); */
+
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div class="inside nocontent">
+                <!-- <div id="me"><h2><a href="/">Stephen Tudor</a></h2></div> -->
+                <div id="me"><h2><a href="/" title="Stephen Tudor"><img src="/images/smt.io-logo-black-121x55.png" alt="smt.io: Stephen Tudor" /></a></h2></div>
+                <div class="links">
+                    <a id="email" class="toplink" target="_blank"><span class="icon-mail"></span></a>
+                    <a href="http://www.linkedin.com/in/smtudor" class="toplink" target="_blank"><span class="icon-linkedin"></span></a>
+                    <a href="http://github.com/smt/" class="toplink" target="_blank"><span class="icon-github"></span></a>
+                    <a href="http://twitter.com/tagsoup" class="toplink" target="_blank"><span class="icon-twitter"></span></a>
+                </div>
+                <div class="links top-search-icon">
+                    <a href="/search.html" class="toplink"><span class="icon-search"></span></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <div id="primary">
+    <div class="inside">
+        <h1 class="title">Developers Are Artists</h1>
+        <div class="opacity08"><small>
+                <i>October  7, 2012 / <a href="/label/mad-coding/">Mad Coding</a></i>
+        </small></div>
+        <br>
+        <p>Software development is, in part, an artistic practice. As a developer, your brush is a keyboard; your canvas, a text editor. You derive satisfaction from crafting solutions to real problems, and it is your creativity that brings the solutions to life.</p>
+<h2 id="beautiful-code">Beautiful Code</h2>
+<p>Development is necessarily a balancing act of competing concerns:</p>
+<ul>
+<li>Performance</li>
+<li>Scalability</li>
+<li>Maintainability</li>
+<li>Usability</li>
+<li>Accessibility</li>
+<li><strong>Beauty</strong></li>
+</ul>
+<p>Yes, we care very much about beauty in our code, but unlike most other concerns, it is subjective by nature. Beauty is very much in the eye of the beholder.</p>
+<p>Teaching how to design beautiful code is as challenging as teaching “the practice of software development.” Each of us is left to ourselves to figure it out, either by following the example of others, or stumbling upon it ourselves in a blinding aura of caffeine-induced revelation. More often than not, at least in my experience, it’s the former.</p>
+<h3 id="so-artists">So… Artists?</h3>
+<p>As tempting as it is to draw upon the analogy of being “under-appreciated in our time,” it is noteworthy that developers often experience a similar creative arc as artists of other disciplines. A great deal of code makes its initial appearance as a “s****y first draft,” to quote Anne LaMott. Before that, it may even have begun its life as a simple whiteboard doodle. Eventually, we revise and refactor that first idea as we gain a fuller understanding of the problem, and the best code eventually emerges. More often than not, it also happens to be more elegant code, the rough edges having been smoothed out, and the redundancy reduced. If all goes well, the developer can put down her brush at this point and take a step back to take in the full scope of her work.</p>
+<pre class="scss"><code>$break-small: 320px;
+$break-large: 1024px;
+
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: $break-small) { @content; }
+  }
+  @else if $media == medium-screens {
+    @media only screen and (min-width: $break-small + 1) and (max-width: $break-large - 1) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media only screen and (min-width: $break-large) { @content; }
+  }
+}
+
+.profile-pic {
+  float: left;
+  width: 250px;
+  @include respond-to(handhelds) { width: 100% ;}
+  @include respond-to(medium-screens) { width: 125px; }
+  @include respond-to(wide-screens) { float: none; }
+}</code></pre>
+<p>In the example above (from <a href="http://thesassway.com/intermediate/responsive-web-design-in-sass-using-media-queries-in-sass-32">The Sass Way</a>), the <code>respond-to</code> Sass mixin provides a more attractive way to specify <span class="citation">@media</span> queries in CSS, abstracting away some of the ugliness for the author. Obviously, abstraction isn’t always the best course of action, but oftentimes the biggest reason for doing it is to end up with a cleaner codebase.</p>
+<h2 id="beauty-often-takes-care-of-itself.">Beauty often takes care of itself.</h2>
+<p>We must remember that beauty in code is a means, not an end, to our satisfaction in development work. Most of us provide our services for hire. In practical terms, each of those other competing concerns has a real link to business value, and will tend to trump “beauty” when the two are in conflict. However, I find that if everything else properly accounted for, beauty will often take care of itself in the process.</p>
+<p>We’ve been talking about this for a while now.</p>
+<ul>
+<li>2007 – O’Reilly publishes the book <a href="http://shop.oreilly.com/product/9780596510046.do">Beautiful Code</a>, a collection of essays by notable members of the profession on how they approach programming problems in ways they deem beautiful.</li>
+<li>2008 – Jeff Atwood proclaims that <a href="http://www.codinghorror.com/blog/2008/02/code-isnt-beautiful.html">Code Isn’t Beautiful</a> in reaction to O’Reilly’s book, finding beauty not in the code itself, but in the ideas and algorithms beneath the surface.</li>
+<li>2009 – Chris Coyier describes <a href="http://css-tricks.com/what-beautiful-html-code-looks-like/">What Beautiful HTML Code Looks Like</a>, focusing on how beauty in HTML is derived from craftsmanship.</li>
+<li>2010 – Martin van Emden argues <a href="http://vanemden.wordpress.com/2010/10/05/in-defense-of-beautiful-code-2/">In Defense of Beautiful Code</a>, demonstrating that there are ways to write the same code that are more beautiful than others.</li>
+<li>2011 – Alberto Gutierrez discusses <a href="http://www.makinggoodsoftware.com/2011/03/27/the-obsession-with-beautiful-code-the-refactor-syndrome/">The Obsession With Beautiful Code</a>, underscoring the dangers of pursuing beauty for beauty’s sake.</li>
+</ul>
+<p>Gutierrez’ post particularly resonates with me, despite its being the least complementary to my point of view, because I have observed many of the tendencies he lists in myself as well as in many of my peers. Developers need to be aware that subjective coding style can be conflated with beauty on occasion, and it often has little to do with code quality. However, I do not agree that <a href="http://www.makinggoodsoftware.com/2009/11/09/the-four-golden-rules-to-be-a-better-software-developer/">all code is crap</a>.</p>
+<p>While it is true that much of what we work on is, at best, <em>ephemeral</em> even if it does end up seeing the light of day, what we gain in experience will stay with us for future opportunities to create beautiful code.</p>
+    </div>
+</div>
+
+<hr class="hide">
+
+<div id="secondary">
+    <div class="inside">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            // /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            // var disqus_shortname = 'stephentudor'; // required: replace example with your forum shortname
+
+            // /* * * DON'T EDIT BELOW THIS LINE * * */
+            // (function() {
+            //     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            //     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            //     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            // })();
+        </script>
+        <!-- <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+    </div>
+</div>
+<hr class="hide">
+
+
+        <div id="ancillary">
+            <div class="inside nocontent">
+                <div class="block first">
+                    <div class="widget">
+                        <h2>Pages</h2>
+                        <div class="menu-pages-container">
+                            <ul id="menu-pages" class="menu">
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about-me/">About Me</a></li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/blog/page/1/">Writing</a></li>
+                                <!-- <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/past-personal-projects/">Past Personal Projects</a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="textwidget">
+                            <small>
+                                This site is written in Haskell &amp; powered by <a href="http://jaspervdj.be/hakyll/" class="links underline">Hakyll</a>.
+                                See <a href="https://github.com/smt/hakyll-blog/blob/master/site.hs" class="links underline">github</a> for source code.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <br>
+                        <a href="/rss.xml" class="toplink feed" target="_blank"><span class="icon-feed"></span></a>
+                    </div>
+                </div>
+
+                <div class="block second">
+                    <div class="widget">
+                        <h2>Recent Posts</h2>
+                        <ul>
+                            <li><a href="/2016/04/24/intervening-years/" title="The Intervening Years">The Intervening Years</a></li>
+<li><a href="/2014/02/11/gulp-browserify/" title="Gulp and Browserify">Gulp and Browserify</a></li>
+<li><a href="/2012/12/19/emergent-task-planner/" title="Emergent Task Planner">Emergent Task Planner</a></li>
+<li><a href="/2012/12/17/year-in-review/" title="2012: Year In Review">2012: Year In Review</a></li>
+<li><a href="/2012/10/07/developers-are-artists/" title="Developers Are Artists">Developers Are Artists</a></li>
+<li><a href="/2012/01/10/kss-middleman/" title="KSS and Middleman">KSS and Middleman</a></li>
+<li><a href="/2011/08/04/10-vim-techniques-for-novices/" title="10 Vim Techniques for Novices">10 Vim Techniques for Novices</a></li>
+<li><a href="/2011/07/17/oocss-for-great-justice/" title="OOCSS, For Great Justice">OOCSS, For Great Justice</a></li>
+<li><a href="/2011/07/09/responsible-sass-authoring/" title="Responsible Sass Authoring">Responsible Sass Authoring</a></li>
+
+                        </ul>
+                    </div>
+                    <!-- <div class="widget">
+                        <div class="textwidget">
+                            <a href="/blog/page/2/" class="readmore">more...</a>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="block third">
+                    <div class="widget">
+                        <h2>Labels</h2>
+                        <ul>
+                            <!-- <li class="cat-item"><a href="/label/board-games/" title="View all posts filed under Board Games">Board Games</a></li> -->
+                            <li class="cat-item"><a href="/label/css/" title="View all posts filed under CSS">CSS</a></li>
+                            <!-- <li class="cat-item"><a href="/label/guitar/" title="View all posts filed under Guitar">Guitar</a></li> -->
+                            <li class="cat-item"><a href="/label/javascript/" title="View all posts filed under JavaScript">JavaScript</a></li>
+                            <!-- <li class="cat-item"><a href="/label/linux-unix/" title="View all posts filed under Linux/Unix">Linux/Unix</a></li> -->
+                            <li class="cat-item"><a href="/label/mad-coding/" title="View all posts filed under Mad Coding">Mad Coding</a></li>
+                            <li class="cat-item"><a href="/label/miscellaneous/" title="View all posts filed under Miscellaneous">Miscellaneous</a></li>
+                            <li class="cat-item"><a href="/label/productivity/" title="View all posts filed under Productivity">Productivity</a></li>
+                            <!-- <li class="cat-item"><a href="/label/security/" title="View all posts filed under Security">Security</a></li> -->
+                            <li class="cat-item"><a href="/label/vim/" title="View all posts filed under Vim">Vim</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <hr class="hide">
+        <br class="clear">
+    </body>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+    <script src="/js/highlight.js/highlight.pack.js" type="text/javascript"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/main.js" type="text/javascript"></script>
+</html>

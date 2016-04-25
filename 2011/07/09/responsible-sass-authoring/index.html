@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Cache-Control" content="max-age=86400, must-revalidate" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Stephen Tudor">
+        <title>Responsible Sass Authoring | smt.io: Stephen Tudor</title>
+        <link rel="stylesheet" type="text/css" href="/css/hemingway.css" />
+        <link rel="stylesheet" type="text/css" href="/css/white.css" />
+        <link rel="stylesheet" type="text/css" href="/css/icons.css" />
+        <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
+        <script type="text/javascript">
+
+          /* var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+          _gaq.push(['_setDomainName', 'smt.io']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+              if (document.URL.indexOf("smt.io") >= 0) {
+                  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              }
+          })(); */
+
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div class="inside nocontent">
+                <!-- <div id="me"><h2><a href="/">Stephen Tudor</a></h2></div> -->
+                <div id="me"><h2><a href="/" title="Stephen Tudor"><img src="/images/smt.io-logo-black-121x55.png" alt="smt.io: Stephen Tudor" /></a></h2></div>
+                <div class="links">
+                    <a id="email" class="toplink" target="_blank"><span class="icon-mail"></span></a>
+                    <a href="http://www.linkedin.com/in/smtudor" class="toplink" target="_blank"><span class="icon-linkedin"></span></a>
+                    <a href="http://github.com/smt/" class="toplink" target="_blank"><span class="icon-github"></span></a>
+                    <a href="http://twitter.com/tagsoup" class="toplink" target="_blank"><span class="icon-twitter"></span></a>
+                </div>
+                <div class="links top-search-icon">
+                    <a href="/search.html" class="toplink"><span class="icon-search"></span></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <div id="primary">
+    <div class="inside">
+        <h1 class="title">Responsible Sass Authoring</h1>
+        <div class="opacity08"><small>
+                <i>July  9, 2011 / <a href="/label/css/">CSS</a>, <a href="/label/mad-coding/">Mad Coding</a>, <a href="/label/sass/">Sass</a></i>
+        </small></div>
+        <br>
+        <p>In capable hands, <a href="http://sass-lang.org">Sass</a> can do amazing things for your CSS. With Sass, you can use functions and variables that later get compiled into valid CSS. This can greatly reduce code repetition and the potential for mistakes.</p>
+<p>For example, not that you would, but you could write some Sass like this:</p>
+<pre class="sass"><code>// Set a couple of vars
+$titleColor: #000
+$titleSize: 24px
+
+.article
+  .title
+    color: $titleColor
+    font-size: $titleSize
+  .alt-title
+    @extend .title
+    border-bottom: 1px solid lighten($titleColor, 80%)    // #ccc
+    color: transparentize(lighten($titleColor, 20%), 0.1)
+  .sub-title
+    @extend .title
+    font-size: round($titleSize * 0.85)    // 20.4px
+    &amp;:hover
+      background-color: transparentize(change-color($titleColor, $red: 255), 0.8);</code></pre>
+<p>The resulting CSS might look something like this, depending upon how you set your Sass output style preference:</p>
+<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.article</span> <span class="fl">.title</span>,
+<span class="fl">.article</span> <span class="fl">.alt-title</span>,
+<span class="fl">.article</span> <span class="fl">.sub-title</span> <span class="kw">{</span>
+    <span class="kw">color:</span> <span class="dt">#000</span><span class="kw">;</span>
+    <span class="kw">font-size:</span> <span class="dt">24px</span><span class="kw">;</span>
+<span class="kw">}</span>
+<span class="fl">.article</span> <span class="fl">.alt-title</span> <span class="kw">{</span>
+    <span class="kw">border-bottom:</span> <span class="dt">1px</span> <span class="dt">solid</span> <span class="dt">#cccccc</span><span class="kw">;</span>
+    <span class="kw">color:</span> <span class="dt">rgba(51</span>, <span class="dt">51</span>, <span class="dt">51</span>, <span class="dt">0.9)</span><span class="kw">;</span>
+<span class="kw">}</span>
+<span class="fl">.article</span> <span class="fl">.sub-title</span> <span class="kw">{</span>
+    <span class="kw">font-size:</span> <span class="dt">20px</span><span class="kw">;</span>
+<span class="kw">}</span>
+<span class="fl">.article</span> <span class="fl">.sub-title</span><span class="dv">:hover</span> <span class="kw">{</span>
+    <span class="kw">background-color:</span> <span class="dt">rgba(255</span>, <span class="dt">0</span>, <span class="dt">0</span>, <span class="dt">0.2)</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre></div>
+<p>Pretty cool, right? You can see that the <code>@extend</code> keyword can be a very powerful tool, bringing a quasi-object-oriented paradigm to our CSS. The same could be true for the nested selectors; you just have to refer to <code>.article</code> once, and let the indentation take care of the scope for you.</p>
+<h2 id="css-bloat">CSS Bloat</h2>
+<p>Over a year of using Sass every day at my day job has taught me this: Just because Sass allows you to do something, it doesn’t mean that thing should be done.</p>
+<p>Sass clearly offers many ways to make our lives easier as developers. The benefits of using it are obvious and many. <code>@import</code> is awesome; it lets us concatenate many development Sass files into one production CSS file if we wish. Variables and mixins can be amazingly handy.</p>
+<p>Selector nesting, <code>@extend</code>, and parent-selector (&amp;), while incredibly useful when care is taken, can also be prone to generate sub-optimal CSS when used carelessly, <em>especially</em> in cases where they are used in combination. Long-term, CSS that is compiled from Sass that abuses these features can quickly become extremely bloated and challenging to maintain. Let’s take a look at some examples of some really sad CSS. The examples I’m using are inspired by actual projects I’ve worked on (with some key edits to protect the innocent).</p>
+<p><em>Note that I’m not blaming Sass itself for any of these problems. It’s quite simply that using some Sass features in a certain way can inadvertently amplify poor CSS design decisions.</em></p>
+<h3 id="case-1">Case 1</h3>
+<p>Sass selectors that are nested like this:</p>
+<pre class="sass"><code>#product
+  .overview
+    .header
+      h2
+        span
+    .content
+      .promo
+        .header
+          div
+          .inner
+            a
+              span</code></pre>
+<p>will result in CSS descendant selectors that look something like this:</p>
+<pre class="sass"><code>#product {}
+#product .overview {}
+#product .overview .header {}
+#product .overview .header h2 {}
+#product .overview .header h2 span {}
+#product .overview .content {}
+#product .overview .content .promo {}
+#product .overview .content .promo .header {}
+#product .overview .content .promo .header div {}
+#product .overview .content .promo .header .inner {}
+#product .overview .content .promo .header .inner a {}
+#product .overview .content .promo .header .inner a span {}</code></pre>
+<p>Yuck. I’m not going to go into why this is bad, but you don’t have to take my word for it; simply google “<a href="https://www.google.com/search?q=css+performance+descendant+selectors">CSS performance descendant selectors</a>” and read up.</p>
+<p>With Sass, this kind of CSS bloat is extremely easy to cause if you get carried away with selector nesting. Observe the redundancy and the verbosity of the generated CSS. If the developer had taken the time to carefully construct his selectors, he could have avoided the need for this many levels of descendants in his CSS.</p>
+<p>To my great shame, that developer was yours truly.</p>
+<h3 id="case-2">Case 2</h3>
+<p>This one combines the <code>@extend</code>, nesting, and parent-selector features of Sass. <code>@extend</code> has been one of my favorite features of Sass ever since it was added. It lets you inherit the properties of one selector in another. Here’s how it can go awry, despite all the best intentions. The Sass:</p>
+<pre class="sass"><code>.clearfix
+  &amp;:after
+    clear: both
+    content: '.'
+    display: block
+    height: 0
+    line-height: 0
+    overflow: hidden
+    width: 0
+
+.thing-1
+  @extend .clearfix
+.thing-2
+  @extend .clearfix
+
+// ...
+
+.thing-99
+  @extend .clearfix
+.thing-100
+  @extend .clearfix</code></pre>
+<p>In the Sass, let’s assume I extended <code>.clearfix</code> in 100 separate selectors at various places throughout my code. This is, unfortunately, a very realistic use case for something as commonly used as a clearfix, and as my project grows, it would eventually result in the following generated CSS:</p>
+<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.clearfix</span>,
+<span class="fl">.thing-1</span>, <span class="fl">.thing-2</span>, <span class="fl">.thing-3</span>, <span class="fl">.thing-4</span>, <span class="fl">.thing-5</span>,
+<span class="fl">.thing-6</span>, <span class="fl">.thing-7</span>, <span class="fl">.thing-8</span>, <span class="fl">.thing-9</span>, <span class="fl">.thing-10</span>,
+<span class="fl">.thing-11</span>, <span class="fl">.thing-12</span>, <span class="fl">.thing-13</span>, <span class="fl">.thing-14</span>, <span class="fl">.thing-15</span>,
+<span class="fl">.thing-16</span>, <span class="fl">.thing-17</span>, <span class="fl">.thing-18</span>, <span class="fl">.thing-19</span>, <span class="fl">.thing-20</span>,
+<span class="fl">.thing-21</span>, <span class="fl">.thing-22</span>, <span class="fl">.thing-23</span>, <span class="fl">.thing-24</span>, <span class="fl">.thing-25</span>,
+<span class="fl">.thing-26</span>, <span class="fl">.thing-27</span>, <span class="fl">.thing-28</span>, <span class="fl">.thing-29</span>, <span class="fl">.thing-30</span>,
+<span class="fl">.thing-31</span>, <span class="fl">.thing-32</span>, <span class="fl">.thing-33</span>, <span class="fl">.thing-34</span>, <span class="fl">.thing-35</span>,
+<span class="fl">.thing-36</span>, <span class="fl">.thing-37</span>, <span class="fl">.thing-38</span>, <span class="fl">.thing-39</span>, <span class="fl">.thing-40</span>,
+<span class="fl">.thing-41</span>, <span class="fl">.thing-42</span>, <span class="fl">.thing-43</span>, <span class="fl">.thing-44</span>, <span class="fl">.thing-45</span>,
+<span class="fl">.thing-46</span>, <span class="fl">.thing-47</span>, <span class="fl">.thing-48</span>, <span class="fl">.thing-49</span>, <span class="fl">.thing-50</span>,
+<span class="fl">.thing-51</span>, <span class="fl">.thing-52</span>, <span class="fl">.thing-53</span>, <span class="fl">.thing-54</span>, <span class="fl">.thing-55</span>,
+<span class="fl">.thing-56</span>, <span class="fl">.thing-57</span>, <span class="fl">.thing-58</span>, <span class="fl">.thing-59</span>, <span class="fl">.thing-60</span>,
+<span class="fl">.thing-61</span>, <span class="fl">.thing-62</span>, <span class="fl">.thing-63</span>, <span class="fl">.thing-64</span>, <span class="fl">.thing-65</span>,
+<span class="fl">.thing-66</span>, <span class="fl">.thing-67</span>, <span class="fl">.thing-68</span>, <span class="fl">.thing-69</span>, <span class="fl">.thing-70</span>,
+<span class="fl">.thing-71</span>, <span class="fl">.thing-72</span>, <span class="fl">.thing-73</span>, <span class="fl">.thing-74</span>, <span class="fl">.thing-75</span>,
+<span class="fl">.thing-76</span>, <span class="fl">.thing-77</span>, <span class="fl">.thing-78</span>, <span class="fl">.thing-79</span>, <span class="fl">.thing-80</span>,
+<span class="fl">.thing-81</span>, <span class="fl">.thing-82</span>, <span class="fl">.thing-83</span>, <span class="fl">.thing-84</span>, <span class="fl">.thing-85</span>,
+<span class="fl">.thing-86</span>, <span class="fl">.thing-87</span>, <span class="fl">.thing-88</span>, <span class="fl">.thing-89</span>, <span class="fl">.thing-90</span>,
+<span class="fl">.thing-91</span>, <span class="fl">.thing-92</span>, <span class="fl">.thing-93</span>, <span class="fl">.thing-94</span>, <span class="fl">.thing-95</span>,
+<span class="fl">.thing-96</span>, <span class="fl">.thing-97</span>, <span class="fl">.thing-98</span>, <span class="fl">.thing-99</span>, <span class="fl">.thing-100</span> <span class="kw">{}</span>
+
+<span class="fl">.clearfix</span><span class="dv">:after</span>,
+<span class="fl">.thing-1</span><span class="dv">:after</span>, <span class="fl">.thing-2</span><span class="dv">:after</span>, <span class="fl">.thing-3</span><span class="dv">:after</span>, <span class="fl">.thing-4</span><span class="dv">:after</span>, <span class="fl">.thing-5</span><span class="dv">:after</span>,
+<span class="fl">.thing-6</span><span class="dv">:after</span>, <span class="fl">.thing-7</span><span class="dv">:after</span>, <span class="fl">.thing-8</span><span class="dv">:after</span>, <span class="fl">.thing-9</span><span class="dv">:after</span>, <span class="fl">.thing-10</span><span class="dv">:after</span>,
+<span class="fl">.thing-11</span><span class="dv">:after</span>, <span class="fl">.thing-12</span><span class="dv">:after</span>, <span class="fl">.thing-13</span><span class="dv">:after</span>, <span class="fl">.thing-14</span><span class="dv">:after</span>, <span class="fl">.thing-15</span><span class="dv">:after</span>,
+<span class="fl">.thing-16</span><span class="dv">:after</span>, <span class="fl">.thing-17</span><span class="dv">:after</span>, <span class="fl">.thing-18</span><span class="dv">:after</span>, <span class="fl">.thing-19</span><span class="dv">:after</span>, <span class="fl">.thing-20</span><span class="dv">:after</span>,
+<span class="fl">.thing-21</span><span class="dv">:after</span>, <span class="fl">.thing-22</span><span class="dv">:after</span>, <span class="fl">.thing-23</span><span class="dv">:after</span>, <span class="fl">.thing-24</span><span class="dv">:after</span>, <span class="fl">.thing-25</span><span class="dv">:after</span>,
+<span class="fl">.thing-26</span><span class="dv">:after</span>, <span class="fl">.thing-27</span><span class="dv">:after</span>, <span class="fl">.thing-28</span><span class="dv">:after</span>, <span class="fl">.thing-29</span><span class="dv">:after</span>, <span class="fl">.thing-30</span><span class="dv">:after</span>,
+<span class="fl">.thing-31</span><span class="dv">:after</span>, <span class="fl">.thing-32</span><span class="dv">:after</span>, <span class="fl">.thing-33</span><span class="dv">:after</span>, <span class="fl">.thing-34</span><span class="dv">:after</span>, <span class="fl">.thing-35</span><span class="dv">:after</span>,
+<span class="fl">.thing-36</span><span class="dv">:after</span>, <span class="fl">.thing-37</span><span class="dv">:after</span>, <span class="fl">.thing-38</span><span class="dv">:after</span>, <span class="fl">.thing-39</span><span class="dv">:after</span>, <span class="fl">.thing-40</span><span class="dv">:after</span>,
+<span class="fl">.thing-41</span><span class="dv">:after</span>, <span class="fl">.thing-42</span><span class="dv">:after</span>, <span class="fl">.thing-43</span><span class="dv">:after</span>, <span class="fl">.thing-44</span><span class="dv">:after</span>, <span class="fl">.thing-45</span><span class="dv">:after</span>,
+<span class="fl">.thing-46</span><span class="dv">:after</span>, <span class="fl">.thing-47</span><span class="dv">:after</span>, <span class="fl">.thing-48</span><span class="dv">:after</span>, <span class="fl">.thing-49</span><span class="dv">:after</span>, <span class="fl">.thing-50</span><span class="dv">:after</span>,
+<span class="fl">.thing-51</span><span class="dv">:after</span>, <span class="fl">.thing-52</span><span class="dv">:after</span>, <span class="fl">.thing-53</span><span class="dv">:after</span>, <span class="fl">.thing-54</span><span class="dv">:after</span>, <span class="fl">.thing-55</span><span class="dv">:after</span>,
+<span class="fl">.thing-56</span><span class="dv">:after</span>, <span class="fl">.thing-57</span><span class="dv">:after</span>, <span class="fl">.thing-58</span><span class="dv">:after</span>, <span class="fl">.thing-59</span><span class="dv">:after</span>, <span class="fl">.thing-60</span><span class="dv">:after</span>,
+<span class="fl">.thing-61</span><span class="dv">:after</span>, <span class="fl">.thing-62</span><span class="dv">:after</span>, <span class="fl">.thing-63</span><span class="dv">:after</span>, <span class="fl">.thing-64</span><span class="dv">:after</span>, <span class="fl">.thing-65</span><span class="dv">:after</span>,
+<span class="fl">.thing-66</span><span class="dv">:after</span>, <span class="fl">.thing-67</span><span class="dv">:after</span>, <span class="fl">.thing-68</span><span class="dv">:after</span>, <span class="fl">.thing-69</span><span class="dv">:after</span>, <span class="fl">.thing-70</span><span class="dv">:after</span>,
+<span class="fl">.thing-71</span><span class="dv">:after</span>, <span class="fl">.thing-72</span><span class="dv">:after</span>, <span class="fl">.thing-73</span><span class="dv">:after</span>, <span class="fl">.thing-74</span><span class="dv">:after</span>, <span class="fl">.thing-75</span><span class="dv">:after</span>,
+<span class="fl">.thing-76</span><span class="dv">:after</span>, <span class="fl">.thing-77</span><span class="dv">:after</span>, <span class="fl">.thing-78</span><span class="dv">:after</span>, <span class="fl">.thing-79</span><span class="dv">:after</span>, <span class="fl">.thing-80</span><span class="dv">:after</span>,
+<span class="fl">.thing-81</span><span class="dv">:after</span>, <span class="fl">.thing-82</span><span class="dv">:after</span>, <span class="fl">.thing-83</span><span class="dv">:after</span>, <span class="fl">.thing-84</span><span class="dv">:after</span>, <span class="fl">.thing-85</span><span class="dv">:after</span>,
+<span class="fl">.thing-86</span><span class="dv">:after</span>, <span class="fl">.thing-87</span><span class="dv">:after</span>, <span class="fl">.thing-88</span><span class="dv">:after</span>, <span class="fl">.thing-89</span><span class="dv">:after</span>, <span class="fl">.thing-90</span><span class="dv">:after</span>,
+<span class="fl">.thing-91</span><span class="dv">:after</span>, <span class="fl">.thing-92</span><span class="dv">:after</span>, <span class="fl">.thing-93</span><span class="dv">:after</span>, <span class="fl">.thing-94</span><span class="dv">:after</span>, <span class="fl">.thing-95</span><span class="dv">:after</span>,
+<span class="fl">.thing-96</span><span class="dv">:after</span>, <span class="fl">.thing-97</span><span class="dv">:after</span>, <span class="fl">.thing-98</span><span class="dv">:after</span>, <span class="fl">.thing-99</span><span class="dv">:after</span>, <span class="fl">.thing-100</span><span class="dv">:after</span> <span class="kw">{</span>
+    <span class="kw">clear:</span> <span class="dt">both</span><span class="kw">;</span>
+    <span class="kw">content:</span> <span class="st">'.'</span><span class="kw">;</span>
+    <span class="kw">display:</span> <span class="dt">block</span><span class="kw">;</span>
+    <span class="kw">height:</span> <span class="dt">0</span><span class="kw">;</span>
+    <span class="kw">line-height:</span> <span class="dt">0</span><span class="kw">;</span>
+    <span class="kw">overflow:</span> <span class="dt">hidden</span><span class="kw">;</span>
+    <span class="kw">width:</span> <span class="dt">0</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre></div>
+<p>First, there is a nesting issue. Because I nested <code>&amp;:after</code> inside an empty parent selector, the generated CSS contains a huge list of selectors with no properties, then a second huge list with the clearfix styles. Plus, all these bogus selectors tend to clog up dev tools like Firebug, as shown in this screenshot:</p>
+<div class="figure">
+<img src="/images/extend-clearfix-firebug-hell.png" alt="@extend .clearfix Firebug hell" />
+<p class="caption"><span class="citation">@extend</span> .clearfix Firebug hell</p>
+</div>
+<p>Secondly, this could have all been avoided if I had been more pragmatic and simply used <code>.clearfix</code> (or another class – I commonly use <code>.group</code>) in the HTML to apply the CSS and make it semantically meaningful at the same time. Using <code>@extend</code> is not the correct choice for this particular pattern:</p>
+<pre class="sass"><code>.group:after
+  clear: both
+  content: '.'
+  display: block
+  height: 0
+  line-height: 0
+  overflow: hidden
+  width: 0
+
+// That's right, I'm not using @extend here.
+// It's almost like I'm using actual CSS \o/</code></pre>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;thing-1 group&quot;</span><span class="kw">&gt;</span>
+  <span class="co">&lt;!-- stuff floated left --&gt;</span>
+  <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;primary-content&quot;</span><span class="kw">&gt;</span>
+    <span class="co">&lt;!-- ... --&gt;</span>
+  <span class="kw">&lt;/section&gt;</span>
+
+  <span class="co">&lt;!-- stuff floated right --&gt;</span>
+  <span class="kw">&lt;aside</span><span class="ot"> class=</span><span class="st">&quot;secondary-content&quot;</span><span class="kw">&gt;</span>
+    <span class="co">&lt;!-- ... --&gt;</span>
+  <span class="kw">&lt;/aside&gt;</span>
+<span class="kw">&lt;/div&gt;</span></code></pre></div>
+<h2 id="sass-css">Sass =&gt; CSS</h2>
+<p>I, for one, side with those who seek to balance CSS performance concerns with maintainability concerns. It’s important to remember that no matter what you do in Sass, it will eventually end up as CSS. Whether it does more harm than good will be up to you.</p>
+<p>Ironically, though it might seem at first that we have veered too far towards the maintainability side of the spectrum with our CSS, it turns out that the status quo isn’t terribly well suited for either maintainability or performance.</p>
+    </div>
+</div>
+
+<hr class="hide">
+
+<div id="secondary">
+    <div class="inside">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            // /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            // var disqus_shortname = 'stephentudor'; // required: replace example with your forum shortname
+
+            // /* * * DON'T EDIT BELOW THIS LINE * * */
+            // (function() {
+            //     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            //     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            //     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            // })();
+        </script>
+        <!-- <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+    </div>
+</div>
+<hr class="hide">
+
+
+        <div id="ancillary">
+            <div class="inside nocontent">
+                <div class="block first">
+                    <div class="widget">
+                        <h2>Pages</h2>
+                        <div class="menu-pages-container">
+                            <ul id="menu-pages" class="menu">
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about-me/">About Me</a></li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/blog/page/1/">Writing</a></li>
+                                <!-- <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/past-personal-projects/">Past Personal Projects</a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="textwidget">
+                            <small>
+                                This site is written in Haskell &amp; powered by <a href="http://jaspervdj.be/hakyll/" class="links underline">Hakyll</a>.
+                                See <a href="https://github.com/smt/hakyll-blog/blob/master/site.hs" class="links underline">github</a> for source code.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <br>
+                        <a href="/rss.xml" class="toplink feed" target="_blank"><span class="icon-feed"></span></a>
+                    </div>
+                </div>
+
+                <div class="block second">
+                    <div class="widget">
+                        <h2>Recent Posts</h2>
+                        <ul>
+                            <li><a href="/2016/04/24/intervening-years/" title="The Intervening Years">The Intervening Years</a></li>
+<li><a href="/2014/02/11/gulp-browserify/" title="Gulp and Browserify">Gulp and Browserify</a></li>
+<li><a href="/2012/12/19/emergent-task-planner/" title="Emergent Task Planner">Emergent Task Planner</a></li>
+<li><a href="/2012/12/17/year-in-review/" title="2012: Year In Review">2012: Year In Review</a></li>
+<li><a href="/2012/10/07/developers-are-artists/" title="Developers Are Artists">Developers Are Artists</a></li>
+<li><a href="/2012/01/10/kss-middleman/" title="KSS and Middleman">KSS and Middleman</a></li>
+<li><a href="/2011/08/04/10-vim-techniques-for-novices/" title="10 Vim Techniques for Novices">10 Vim Techniques for Novices</a></li>
+<li><a href="/2011/07/17/oocss-for-great-justice/" title="OOCSS, For Great Justice">OOCSS, For Great Justice</a></li>
+<li><a href="/2011/07/09/responsible-sass-authoring/" title="Responsible Sass Authoring">Responsible Sass Authoring</a></li>
+
+                        </ul>
+                    </div>
+                    <!-- <div class="widget">
+                        <div class="textwidget">
+                            <a href="/blog/page/2/" class="readmore">more...</a>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="block third">
+                    <div class="widget">
+                        <h2>Labels</h2>
+                        <ul>
+                            <!-- <li class="cat-item"><a href="/label/board-games/" title="View all posts filed under Board Games">Board Games</a></li> -->
+                            <li class="cat-item"><a href="/label/css/" title="View all posts filed under CSS">CSS</a></li>
+                            <!-- <li class="cat-item"><a href="/label/guitar/" title="View all posts filed under Guitar">Guitar</a></li> -->
+                            <li class="cat-item"><a href="/label/javascript/" title="View all posts filed under JavaScript">JavaScript</a></li>
+                            <!-- <li class="cat-item"><a href="/label/linux-unix/" title="View all posts filed under Linux/Unix">Linux/Unix</a></li> -->
+                            <li class="cat-item"><a href="/label/mad-coding/" title="View all posts filed under Mad Coding">Mad Coding</a></li>
+                            <li class="cat-item"><a href="/label/miscellaneous/" title="View all posts filed under Miscellaneous">Miscellaneous</a></li>
+                            <li class="cat-item"><a href="/label/productivity/" title="View all posts filed under Productivity">Productivity</a></li>
+                            <!-- <li class="cat-item"><a href="/label/security/" title="View all posts filed under Security">Security</a></li> -->
+                            <li class="cat-item"><a href="/label/vim/" title="View all posts filed under Vim">Vim</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <hr class="hide">
+        <br class="clear">
+    </body>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+    <script src="/js/highlight.js/highlight.pack.js" type="text/javascript"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/main.js" type="text/javascript"></script>
+</html>

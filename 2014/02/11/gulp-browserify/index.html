@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Cache-Control" content="max-age=86400, must-revalidate" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Stephen Tudor">
+        <title>Gulp and Browserify | smt.io: Stephen Tudor</title>
+        <link rel="stylesheet" type="text/css" href="/css/hemingway.css" />
+        <link rel="stylesheet" type="text/css" href="/css/white.css" />
+        <link rel="stylesheet" type="text/css" href="/css/icons.css" />
+        <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
+        <script type="text/javascript">
+
+          /* var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+          _gaq.push(['_setDomainName', 'smt.io']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+              if (document.URL.indexOf("smt.io") >= 0) {
+                  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              }
+          })(); */
+
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div class="inside nocontent">
+                <!-- <div id="me"><h2><a href="/">Stephen Tudor</a></h2></div> -->
+                <div id="me"><h2><a href="/" title="Stephen Tudor"><img src="/images/smt.io-logo-black-121x55.png" alt="smt.io: Stephen Tudor" /></a></h2></div>
+                <div class="links">
+                    <a id="email" class="toplink" target="_blank"><span class="icon-mail"></span></a>
+                    <a href="http://www.linkedin.com/in/smtudor" class="toplink" target="_blank"><span class="icon-linkedin"></span></a>
+                    <a href="http://github.com/smt/" class="toplink" target="_blank"><span class="icon-github"></span></a>
+                    <a href="http://twitter.com/tagsoup" class="toplink" target="_blank"><span class="icon-twitter"></span></a>
+                </div>
+                <div class="links top-search-icon">
+                    <a href="/search.html" class="toplink"><span class="icon-search"></span></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <div id="primary">
+    <div class="inside">
+        <h1 class="title">Gulp and Browserify</h1>
+        <div class="opacity08"><small>
+                <i>February 11, 2014 / <a href="/label/javascript/">JavaScript</a>, <a href="/label/mad-coding/">Mad Coding</a>, <a href="/label/node/">Node.js</a></i>
+        </small></div>
+        <br>
+        <p>Just a quick write-up of some things I’ve been playing with lately.</p>
+<p>A few weeks ago, at lunch with some old coworkers, someone mentioned that <a href="http://gulpjs.com">gulp</a> might just be the new hotness that steals Grunt’s thunder. More recently, I was inspired by <a href="http://www.100percentjs.com/just-like-grunt-gulp-browserify-now/">Martin Genev</a> to look into the gulp build system and <a href="http://browserify.com">Browserify</a>. I’m pretty impressed with what I’ve seen of gulp thus far, but I feel the bigger story by far is Browserify.</p>
+<p><strong>Update (2014-04-09):</strong> <a href="http://viget.com/about/team/dtello">Dan Tello</a> has posted a <a href="http://viget.com/extend/gulp-browserify-starter-faq">far superior contribution</a> on this topic. The examples he gives are really compelling.</p>
+<h2 id="gulp">gulp</h2>
+<p>I’ve been on several projects now that use the Grunt build system, and I’m not trying to criticize Grunt – in many ways, it was a Godsend that saved us from the hell of Makefiles and build.xml files. However, I always found configuring Grunt to be a major chore, and I was always bad at it. The up-front configuration work can be pretty intimidating.</p>
+<p>In contrast, <a href="http://gulpjs.com">gulp</a> uses conventions similar to node.js streams. I’m no expert with using streams myself, but to be able to pipe operations into other operations, Unix-style, is quite intuitive. Writing a task in gulp is nearly as simple and natural as pseudo-coding what you want it to do.</p>
+<p>In this example, I defined a task to build and concatenate my JavaScript source into a single file (dist/built.js), adding a file watcher for good measure. Nice!</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> gulp <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp'</span>)<span class="op">;</span>
+<span class="kw">var</span> util <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp-util'</span>)<span class="op">;</span>
+<span class="kw">var</span> concat <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp-concat'</span>)<span class="op">;</span>
+<span class="kw">var</span> browserify <span class="op">=</span> <span class="at">require</span>(<span class="st">'gulp-browserify'</span>)<span class="op">;</span>
+
+<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">'scripts'</span><span class="op">,</span> <span class="kw">function</span> (cb) <span class="op">{</span>
+    <span class="va">gulp</span>.<span class="at">src</span>(<span class="st">'./src/app.js'</span>)
+        .<span class="at">pipe</span>(<span class="at">browserify</span>(<span class="op">{</span>
+            <span class="dt">basedir</span><span class="op">:</span> <span class="st">'./'</span><span class="op">,</span>
+            <span class="dt">debug</span><span class="op">:</span> <span class="op">!</span><span class="va">util</span>.<span class="va">env</span>.<span class="at">production</span>
+        <span class="op">}</span>))
+        .<span class="at">pipe</span>(<span class="at">concat</span>(<span class="st">'built.js'</span>))
+        .<span class="at">pipe</span>(<span class="va">gulp</span>.<span class="at">dest</span>(<span class="st">'./dist/'</span>))
+<span class="op">}</span>)<span class="op">;</span>
+
+<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">'watch'</span><span class="op">,</span> [<span class="st">'scripts'</span>]<span class="op">,</span> <span class="kw">function</span> () <span class="op">{</span>
+    <span class="kw">var</span> watcher <span class="op">=</span> <span class="va">gulp</span>.<span class="at">watch</span>(<span class="st">'./src/**/*.js'</span><span class="op">,</span> [<span class="st">'scripts'</span>])<span class="op">;</span>
+    <span class="va">watcher</span>.<span class="at">on</span>(<span class="st">'change'</span><span class="op">,</span> <span class="kw">function</span> (event) <span class="op">{</span>
+        <span class="va">console</span>.<span class="at">log</span>(<span class="st">'File '</span> <span class="op">+</span> <span class="va">event</span>.<span class="at">path</span> <span class="op">+</span> <span class="st">' was '</span> <span class="op">+</span> <span class="va">event</span>.<span class="at">type</span> <span class="op">+</span> <span class="st">', building scripts...'</span>)<span class="op">;</span>
+    <span class="op">}</span>)<span class="op">;</span>
+<span class="op">}</span>)<span class="op">;</span>
+
+<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">'default'</span><span class="op">,</span> [<span class="st">'scripts'</span><span class="op">,</span> <span class="st">'watch'</span>])<span class="op">;</span></code></pre></div>
+<h2 id="browserify">Browserify</h2>
+<p>I honestly don’t think I can do <a href="http://browserify.com">Browserify</a> any justice by attempting to explain it here, but it’s basically a library that allows you to use core node modules, npm modules, and your own modules written in node.js style <strong>in the browser</strong>.</p>
+<p>I’ve been a proponent of AMD and RequireJS for some time, but when it comes to writing modules in JavaScript, here’s my big question: Why not use the same conventions for the browser as for node.js, with minimal, if any, boilerplate needed?</p>
+<p>Browserify lets you do that. I wrote 3 or 4 modules, using node.js-style <code>require</code> statements for dependencies, and exposing what I needed to with <code>module.exports</code>. With very little configuration (see the gulpfile.js example above), Browserify wrapped all my modules appropriately, and built them to a single JS file, which I loaded in the browser. It worked. It was glorious. The blinders were off.</p>
+<p>My experience with Browserify thus far has only been with modules I’ve written myself. I haven’t even scratched the surface of using an npm module in the browser yet. That will be my next experiment. I’m genuinely excited.</p>
+    </div>
+</div>
+
+<hr class="hide">
+
+<div id="secondary">
+    <div class="inside">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            // /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            // var disqus_shortname = 'stephentudor'; // required: replace example with your forum shortname
+
+            // /* * * DON'T EDIT BELOW THIS LINE * * */
+            // (function() {
+            //     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            //     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            //     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            // })();
+        </script>
+        <!-- <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+    </div>
+</div>
+<hr class="hide">
+
+
+        <div id="ancillary">
+            <div class="inside nocontent">
+                <div class="block first">
+                    <div class="widget">
+                        <h2>Pages</h2>
+                        <div class="menu-pages-container">
+                            <ul id="menu-pages" class="menu">
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about-me/">About Me</a></li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/blog/page/1/">Writing</a></li>
+                                <!-- <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/past-personal-projects/">Past Personal Projects</a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="textwidget">
+                            <small>
+                                This site is written in Haskell &amp; powered by <a href="http://jaspervdj.be/hakyll/" class="links underline">Hakyll</a>.
+                                See <a href="https://github.com/smt/hakyll-blog/blob/master/site.hs" class="links underline">github</a> for source code.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <br>
+                        <a href="/rss.xml" class="toplink feed" target="_blank"><span class="icon-feed"></span></a>
+                    </div>
+                </div>
+
+                <div class="block second">
+                    <div class="widget">
+                        <h2>Recent Posts</h2>
+                        <ul>
+                            <li><a href="/2016/04/24/intervening-years/" title="The Intervening Years">The Intervening Years</a></li>
+<li><a href="/2014/02/11/gulp-browserify/" title="Gulp and Browserify">Gulp and Browserify</a></li>
+<li><a href="/2012/12/19/emergent-task-planner/" title="Emergent Task Planner">Emergent Task Planner</a></li>
+<li><a href="/2012/12/17/year-in-review/" title="2012: Year In Review">2012: Year In Review</a></li>
+<li><a href="/2012/10/07/developers-are-artists/" title="Developers Are Artists">Developers Are Artists</a></li>
+<li><a href="/2012/01/10/kss-middleman/" title="KSS and Middleman">KSS and Middleman</a></li>
+<li><a href="/2011/08/04/10-vim-techniques-for-novices/" title="10 Vim Techniques for Novices">10 Vim Techniques for Novices</a></li>
+<li><a href="/2011/07/17/oocss-for-great-justice/" title="OOCSS, For Great Justice">OOCSS, For Great Justice</a></li>
+<li><a href="/2011/07/09/responsible-sass-authoring/" title="Responsible Sass Authoring">Responsible Sass Authoring</a></li>
+
+                        </ul>
+                    </div>
+                    <!-- <div class="widget">
+                        <div class="textwidget">
+                            <a href="/blog/page/2/" class="readmore">more...</a>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="block third">
+                    <div class="widget">
+                        <h2>Labels</h2>
+                        <ul>
+                            <!-- <li class="cat-item"><a href="/label/board-games/" title="View all posts filed under Board Games">Board Games</a></li> -->
+                            <li class="cat-item"><a href="/label/css/" title="View all posts filed under CSS">CSS</a></li>
+                            <!-- <li class="cat-item"><a href="/label/guitar/" title="View all posts filed under Guitar">Guitar</a></li> -->
+                            <li class="cat-item"><a href="/label/javascript/" title="View all posts filed under JavaScript">JavaScript</a></li>
+                            <!-- <li class="cat-item"><a href="/label/linux-unix/" title="View all posts filed under Linux/Unix">Linux/Unix</a></li> -->
+                            <li class="cat-item"><a href="/label/mad-coding/" title="View all posts filed under Mad Coding">Mad Coding</a></li>
+                            <li class="cat-item"><a href="/label/miscellaneous/" title="View all posts filed under Miscellaneous">Miscellaneous</a></li>
+                            <li class="cat-item"><a href="/label/productivity/" title="View all posts filed under Productivity">Productivity</a></li>
+                            <!-- <li class="cat-item"><a href="/label/security/" title="View all posts filed under Security">Security</a></li> -->
+                            <li class="cat-item"><a href="/label/vim/" title="View all posts filed under Vim">Vim</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <hr class="hide">
+        <br class="clear">
+    </body>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+    <script src="/js/highlight.js/highlight.pack.js" type="text/javascript"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/main.js" type="text/javascript"></script>
+</html>

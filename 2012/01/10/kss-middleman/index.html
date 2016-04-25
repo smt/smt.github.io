@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Cache-Control" content="max-age=86400, must-revalidate" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Stephen Tudor">
+        <title>KSS and Middleman | smt.io: Stephen Tudor</title>
+        <link rel="stylesheet" type="text/css" href="/css/hemingway.css" />
+        <link rel="stylesheet" type="text/css" href="/css/white.css" />
+        <link rel="stylesheet" type="text/css" href="/css/icons.css" />
+        <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
+        <script type="text/javascript">
+
+          /* var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);
+          _gaq.push(['_setDomainName', 'smt.io']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+              if (document.URL.indexOf("smt.io") >= 0) {
+                  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              }
+          })(); */
+
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div class="inside nocontent">
+                <!-- <div id="me"><h2><a href="/">Stephen Tudor</a></h2></div> -->
+                <div id="me"><h2><a href="/" title="Stephen Tudor"><img src="/images/smt.io-logo-black-121x55.png" alt="smt.io: Stephen Tudor" /></a></h2></div>
+                <div class="links">
+                    <a id="email" class="toplink" target="_blank"><span class="icon-mail"></span></a>
+                    <a href="http://www.linkedin.com/in/smtudor" class="toplink" target="_blank"><span class="icon-linkedin"></span></a>
+                    <a href="http://github.com/smt/" class="toplink" target="_blank"><span class="icon-github"></span></a>
+                    <a href="http://twitter.com/tagsoup" class="toplink" target="_blank"><span class="icon-twitter"></span></a>
+                </div>
+                <div class="links top-search-icon">
+                    <a href="/search.html" class="toplink"><span class="icon-search"></span></a>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <div id="primary">
+    <div class="inside">
+        <h1 class="title">KSS and Middleman</h1>
+        <div class="opacity08"><small>
+                <i>January 10, 2012 / <a href="/label/kss/">KSS</a>, <a href="/label/mad-coding/">Mad Coding</a>, <a href="/label/middleman/">Middleman</a>, <a href="/label/ruby/">Ruby</a>, <a href="/label/sass/">Sass</a>, <a href="/label/site-generators/">Site Generators</a></i>
+        </small></div>
+        <br>
+        <p>I love the idea of building an “interactive style guide” for a website design. I really do. However, working in Agencyland, it can be extremely difficult to budget enough time for this kind of tool when seemingly higher-priority tasks pile up. Right or wrong, the utopian vision of a living style guide often becomes a foregone luxury in the throes of looming deadlines.</p>
+<p><em>Assumes the reader understands the basics of Ruby and CSS.</em></p>
+<h2 id="middleman">Middleman</h2>
+<p>For an upcoming project at <a href="http://empathylab.com">work</a>, I’ll be leading the effort to author static HTML templates for a different group of software integrators to wire up to a complex back-end architecture (rhymes with WebSmear).</p>
+<p>We are also going to be building a whole front-end stack with CSS and JavaScript to boot, so it makes sense to use a solid static framework to take the pain away from developing a massive amount of templates without any server-side help. The bottom line is that we need to be able to export flat HTML files that work the same as the development templates.</p>
+<p>Enter <a href="http://middlemanapp.com">Middleman</a>, a loosely-coupled, yet carefully curated collection of Ruby libraries that all contribute to a framework that is much greater than the sum of its parts. I won’t go into all of its features here — you can visit the Middleman <a href="http://middlemanapp.com">site</a> for everything you need to know.</p>
+<p>For our purposes, Middleman looks to be a robust platform on which to build our static site.</p>
+<h2 id="kss">KSS</h2>
+<p>I am a closet fan of documentation specs like RubyDoc and JSDoc, but they often introduce a lot of heavy baggage for developers. <a href="http://tomdoc.org">TomDoc</a> came on the scene not too long ago as a really simple doc spec that Githubbers use in their in-house Ruby code, and I was ecstatic when another Github guy, <a href="http://warpspire.com">Kyle Neath</a>, released his own <a href="http://github.com/kneath/kss">KSS</a> project in late 2011. I think I’ve subconsciously been yearning for this kind of CSS documentation support for some time.</p>
+<p>KSS is a documentation spec for CSS (one of the first of its kind that I’ve heard of) that can be parsed by Ruby. This helps us do things like… generating an interactive style guide. It’s certainly not a silver bullet, but KSS will lower some of the administrative barriers to putting together helpful CSS documentation.</p>
+<h2 id="kss-ing-middleman">KSS-ing Middleman</h2>
+<p>I thought it would be a good idea to try to port some of the <a href="https://github.com/kneath/kss/tree/master/example">KSS example app</a> code over to my basic Middleman app. The example shows several variations of form submit button styles, including states such as hover and disabled, which makes for an excellent use case.</p>
+<h3 id="the-styles">The Styles</h3>
+<p>I’m using <a href="http://sass-lang.com">Sass</a> and <a href="http://compass-style.org">Compass</a>, with Middleman, so I did a quick port of Kyle’s example button CSS to Sass with some appropriate Compass mixins. I found that KSS broke when used with the original terse Sass format, but it did work fine with the newer SCSS format. I’m not certain, but it’s possible that this issue may be resolved in KSS in the future.</p>
+<p>Below is the result of porting the button CSS to <code>_button.scss</code>. The comment block at the top is where the documentation magic happens. You just describe what something is, specify a list of different states, and then reference a numbered section of the style guide. That’s it.</p>
+<pre class="scss"><code>// Your standard form button.
+//
+// :hover    - Highlights when hovering.
+// :disabled - Dims the button when disabled.
+// .primary  - Indicates button is the primary action.
+// .smaller  - A smaller button
+//
+// Styleguide 5.1.1
+button {
+  background-color: #f5f5f5;
+  @include background-image(linear-gradient(#f5f5f5, #e5e5e5));
+  border: 1px solid #ddd;
+  border-bottom-color: #bbb;
+  @include border-radius(3px);
+  @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.15));
+  color: #666;
+  cursor: pointer;
+  font-family: &quot;Helvetica Neue&quot;, Helvetica;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: normal;
+  padding: 5px 15px;
+  @include text-shadow(0 1px rgba(255, 255, 255, 0.9));
+
+  &amp;.primary, &amp;.primary:hover {
+    color: #fff;
+    background-color: #8add6d;
+    @include background-image(linear-gradient(#8add6d, #60b044));
+    border-color: #74bb5a;
+    border-bottom-color: #509338;
+    @include box-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    @include text-shadow(0 -1px 0 rgba(0, 0, 0, 0.4));
+  }
+  &amp;.smaller {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  &amp;:hover {
+    color: #337797;
+    background-color: #f0f7fa;
+    @include background-image(linear-gradient(#f0f7fa, #d8eaf2));
+    border-color: #cbe3ee;
+    border-bottom-color: #97c7dd;
+  }
+  &amp;:disabled {
+    opacity: 0.5;
+  }
+}</code></pre>
+<p>You actually <em>do</em> need to manage the numeric structure of the style guide yourself. However, I appreciate that KSS makes you maintain control over the meaningful aspects of organizing a style guide, while making it possible to automate the tedious parts.</p>
+<h3 id="the-config">The Config</h3>
+<p>For the style guide to look nice on the front end, there is also a small amount of boilerplate CSS and JavaScript code to make some of the magic happen, so I pulled those files in and called them from a separate layout, <code>layouts/styleguide.erb</code>.</p>
+<p>The KSS example app runs on Sinatra, and Middleman also basically runs on Sinatra with some abstractions on top, so setting up the configuration wasn’t too tough. After adding <code>gem &quot;kss&quot;, &quot;~&gt; 0.1.1&quot;</code> to the Gemfile and running <code>bundle install</code>, I added the following to Middleman’s <code>config.rb</code> file:</p>
+<div class="sourceCode"><pre class="sourceCode ruby"><code class="sourceCode ruby">require <span class="st">&quot;kss&quot;</span>
+page <span class="st">&quot;/styleguide/*&quot;</span>, <span class="st">:layout</span> =&gt; <span class="st">:styleguide</span> <span class="kw">do</span>
+  <span class="ot">@styleguide</span> = <span class="dt">Kss</span>::<span class="dt">Parser</span>.new(<span class="st">'source/css'</span>)
+<span class="kw">end</span>
+
+helpers <span class="kw">do</span>
+  <span class="co"># Generates a styleguide block.</span>
+  <span class="kw">def</span> styleguide_block(section, &amp;block)
+    <span class="ot">@section</span> = <span class="ot">@styleguide</span>.section(section)
+    <span class="ot">@example_html</span> = kss_capture{ block.call }
+    <span class="ot">@_out_buf</span> &lt;&lt; partial(<span class="st">'styleguide/block'</span>)
+  <span class="kw">end</span>
+
+  <span class="co"># Captures the result of a block within an erb template without spitting it</span>
+  <span class="co"># to the output buffer.</span>
+  <span class="kw">def</span> kss_capture(&amp;block)
+    out, <span class="ot">@_out_buf</span> = <span class="ot">@_out_buf</span>, <span class="st">&quot;&quot;</span>
+    <span class="kw">yield</span>
+    <span class="ot">@_out_buf</span>
+  <span class="kw">ensure</span>
+    <span class="ot">@_out_buf</span> = out
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre></div>
+<p>For all style guide templates, the above configuration exposes a variable containing a Ruby representation of all KSS-documented CSS in the site (because KSS parses all documentation blocks in the CSS). A couple of helpers are defined that the templates will have access to, in order to handle the generated style guide block.</p>
+<blockquote>
+<p><em>(Due to a bug in Middleman 3.0 beta, wildcard file paths did not set local variables correctly. This bug should be resolved in 3.0 final. Additionally, I suspect that the <code>kss_capture</code> helper is not exactly optimal for use with Middleman, but I haven’t taken the time to refactor the example code beyond simply getting it working. It was originally named <code>capture</code> in the example, but I renamed it to prevent conflicts with the existing Middleman <code>capture</code> helper, which I would have probably tried to use if it was available inside the config file.)</em></p>
+</blockquote>
+<h3 id="the-templates">The Templates</h3>
+<p>A partial template needs to be defined for rendering every style guide section. The template will be used by the <code>styleguide_block</code> helper defined in the config above: <code>styleguide/_block.erb</code>.</p>
+<pre class="erb"><code>&lt;div class=&quot;styleguide-example&quot;&gt;
+
+  &lt;h3&gt;&lt;%= @section.section %&gt; &lt;em&gt;&lt;%= @section.filename %&gt;&lt;/em&gt;&lt;/h3&gt;
+  &lt;div class=&quot;styleguide-description&quot;&gt;
+    &lt;p&gt;&lt;%= @section.description %&gt;&lt;/p&gt;
+    &lt;% if @section.modifiers.any? %&gt;
+      &lt;ul class=&quot;styleguide-modifier&quot;&gt;
+        &lt;% @section.modifiers.each do |modifier| %&gt;
+          &lt;li&gt;&lt;strong&gt;&lt;%= modifier.name %&gt;&lt;/strong&gt; - &lt;%= modifier.description %&gt;&lt;/li&gt;
+        &lt;% end %&gt;
+      &lt;/ul&gt;
+    &lt;% end %&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;styleguide-element&quot;&gt;
+    &lt;%= @example_html %&gt;
+  &lt;/div&gt;
+  &lt;% @section.modifiers.each do |modifier| %&gt;
+    &lt;div class=&quot;styleguide-element styleguide-modifier&quot;&gt;
+      &lt;span class=&quot;styleguide-modifier-name&quot;&gt;&lt;%= modifier.name %&gt;&lt;/span&gt;
+      &lt;%= @example_html.sub('$modifier_class', &quot; #{modifier.class_name}&quot;) %&gt;
+    &lt;/div&gt;
+  &lt;% end %&gt;
+
+&lt;/div&gt;</code></pre>
+<p>In <code>styleguide/buttons.html.erb</code>, I added the following template call:</p>
+<pre class="erb"><code>&lt;% styleguide_block '5.1.1' do %&gt;
+  &lt;button class=&quot;$modifier_class&quot;&gt;Default Button&lt;/button&gt;
+&lt;% end %&gt;</code></pre>
+<p>Note that there is a single <code>button</code> element in the block. This is where the magic happens, because it passes the <code>button</code> to <code>styleguide_block</code>, which imports the <code>styleguide/block</code> partial for the style guide section.</p>
+<p>The partial parses the KSS representation of the documented CSS for the given section of the style guide (5.1.1). It prints out the section number and SCSS filename, adds the documentation text to the page, cycles through each CSS modifier of <code>button</code>, and generates a new <code>&lt;button&gt;</code> tag for each modifier. The resulting section of the style guide will look like this:</p>
+<div class="figure">
+<img src="/images/kss-styleguide.png" alt="Style guide example" />
+<p class="caption">Style guide example</p>
+</div>
+<p>The original basic <code>button</code> element is listed first, followed by accurate examples of all of its documented modifiers. The KSS JavaScript file fakes the pseudo-selectors <code>:hover</code> and <code>:disabled</code>.</p>
+<h2 id="onward">Onward</h2>
+<p>For my project, at least, this is an encouraging proof-of-concept that I plan to take forward. In the meantime, it looks like there is a generous amount of potential in both Middleman and KSS, so be sure to check out each of these projects.</p>
+<p>If you have used either Middleman or KSS, what has your experience been like thus far?</p>
+<h2 id="update-2012-02-04">Update 2012-02-04</h2>
+<p>I have pushed my working code to a <a href="http://github.com/smt/middleman-kss">Github repo</a>. Some of the gems are a little out of date, but I wanted to get my initial version up first, and then work through any issues that might arise from updating libraries. Please let me know what you think; I’m always open to suggestions for improvement.</p>
+<p>After checking out the code, just run <code>middleman</code> like any other Middleman app, and browse to <code>http://localhost:4567</code>.</p>
+    </div>
+</div>
+
+<hr class="hide">
+
+<div id="secondary">
+    <div class="inside">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            // /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            // var disqus_shortname = 'stephentudor'; // required: replace example with your forum shortname
+
+            // /* * * DON'T EDIT BELOW THIS LINE * * */
+            // (function() {
+            //     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            //     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            //     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            // })();
+        </script>
+        <!-- <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+    </div>
+</div>
+<hr class="hide">
+
+
+        <div id="ancillary">
+            <div class="inside nocontent">
+                <div class="block first">
+                    <div class="widget">
+                        <h2>Pages</h2>
+                        <div class="menu-pages-container">
+                            <ul id="menu-pages" class="menu">
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/about-me/">About Me</a></li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/blog/page/1/">Writing</a></li>
+                                <!-- <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/past-personal-projects/">Past Personal Projects</a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <div class="textwidget">
+                            <small>
+                                This site is written in Haskell &amp; powered by <a href="http://jaspervdj.be/hakyll/" class="links underline">Hakyll</a>.
+                                See <a href="https://github.com/smt/hakyll-blog/blob/master/site.hs" class="links underline">github</a> for source code.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <br>
+                        <a href="/rss.xml" class="toplink feed" target="_blank"><span class="icon-feed"></span></a>
+                    </div>
+                </div>
+
+                <div class="block second">
+                    <div class="widget">
+                        <h2>Recent Posts</h2>
+                        <ul>
+                            <li><a href="/2016/04/24/intervening-years/" title="The Intervening Years">The Intervening Years</a></li>
+<li><a href="/2014/02/11/gulp-browserify/" title="Gulp and Browserify">Gulp and Browserify</a></li>
+<li><a href="/2012/12/19/emergent-task-planner/" title="Emergent Task Planner">Emergent Task Planner</a></li>
+<li><a href="/2012/12/17/year-in-review/" title="2012: Year In Review">2012: Year In Review</a></li>
+<li><a href="/2012/10/07/developers-are-artists/" title="Developers Are Artists">Developers Are Artists</a></li>
+<li><a href="/2012/01/10/kss-middleman/" title="KSS and Middleman">KSS and Middleman</a></li>
+<li><a href="/2011/08/04/10-vim-techniques-for-novices/" title="10 Vim Techniques for Novices">10 Vim Techniques for Novices</a></li>
+<li><a href="/2011/07/17/oocss-for-great-justice/" title="OOCSS, For Great Justice">OOCSS, For Great Justice</a></li>
+<li><a href="/2011/07/09/responsible-sass-authoring/" title="Responsible Sass Authoring">Responsible Sass Authoring</a></li>
+
+                        </ul>
+                    </div>
+                    <!-- <div class="widget">
+                        <div class="textwidget">
+                            <a href="/blog/page/2/" class="readmore">more...</a>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="block third">
+                    <div class="widget">
+                        <h2>Labels</h2>
+                        <ul>
+                            <!-- <li class="cat-item"><a href="/label/board-games/" title="View all posts filed under Board Games">Board Games</a></li> -->
+                            <li class="cat-item"><a href="/label/css/" title="View all posts filed under CSS">CSS</a></li>
+                            <!-- <li class="cat-item"><a href="/label/guitar/" title="View all posts filed under Guitar">Guitar</a></li> -->
+                            <li class="cat-item"><a href="/label/javascript/" title="View all posts filed under JavaScript">JavaScript</a></li>
+                            <!-- <li class="cat-item"><a href="/label/linux-unix/" title="View all posts filed under Linux/Unix">Linux/Unix</a></li> -->
+                            <li class="cat-item"><a href="/label/mad-coding/" title="View all posts filed under Mad Coding">Mad Coding</a></li>
+                            <li class="cat-item"><a href="/label/miscellaneous/" title="View all posts filed under Miscellaneous">Miscellaneous</a></li>
+                            <li class="cat-item"><a href="/label/productivity/" title="View all posts filed under Productivity">Productivity</a></li>
+                            <!-- <li class="cat-item"><a href="/label/security/" title="View all posts filed under Security">Security</a></li> -->
+                            <li class="cat-item"><a href="/label/vim/" title="View all posts filed under Vim">Vim</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <hr class="hide">
+        <br class="clear">
+    </body>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
+    <script src="/js/highlight.js/highlight.pack.js" type="text/javascript"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/main.js" type="text/javascript"></script>
+</html>
