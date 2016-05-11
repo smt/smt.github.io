@@ -16,6 +16,13 @@
     </url>
 
     <url>
+        <loc>https://www.smt.io/cv/index.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>https://www.smt.io/markdown/index.html</loc>
         <changefreq>weekly</changefreq>
         
