@@ -7,8 +7,85 @@
         <description><![CDATA[RSS feed for Stephen Tudor's blog]]></description>
         <atom:link href="https://smt.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Mon, 02 May 2016 23:42:18 UT</lastBuildDate>
+        <lastBuildDate>Mon, 23 May 2016 20:36:04 UT</lastBuildDate>
         <item>
+    <title>Three Things I've Learned With Haskell</title>
+    <link>https://smt.io/2016/05/23/three-things-i-learned-with-haskell/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">Three Things I've Learned With Haskell</h1>
+        <div class="opacity08"><small>
+                <i>May 23, 2016 / <a href="https://smt.io/label/haskell/">Haskell</a>, <a href="https://smt.io/label/mad-coding/">Mad Coding</a></i>
+        </small></div>
+        <br>
+        <p>This is the first of a series of posts. We’ll see how it goes if I try to keep each one limited to “three things.” That seems a nice, manageable number.</p>
+<p>While picking my way through <a href="http://haskellbook.com">Haskell Programming from First Principles</a> (hereafter referred to as <abbr title="Haskell Programming from First Principles">HPFP</abbr>), I’ve come across a number of interesting syntactic concepts that I haven’t seen much of (or at all) in my prior programming experience until recently.</p>
+<p><em>Note: I’ve been a front-end developer primarily focused on JavaScript and other dynamic languages for most of my professional life, while these things are new to <strong>me</strong>, I’m fully aware that they may not be new for <strong>you</strong>. As always, I welcome any constructive feedback.</em></p>
+<h2 id="lambdas">Lambdas</h2>
+<p>Being a functional language, Haskell features anonymous functions (or <em>lambdas</em>) rather prominently. It was exciting to learn that parts of the Haskell language are merely syntactic sugar around these lambdas. <abbr title="Haskell Programming from First Principles">HPFP</abbr> has a whole chapter dedicated solely to the lambda calculus, which underpins many major concepts of Haskell’s design.</p>
+<p>In JavaScript, a lambda looks like this:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> (x) <span class="op">{</span> <span class="cf">return</span> <span class="st">&quot;yeah &quot;</span> <span class="op">+</span> x <span class="op">+</span> <span class="st">&quot;!&quot;</span><span class="op">;</span> <span class="op">}</span></code></pre></div>
+<p>If you’re one of those people who likes their ES2015 arrow functions, you might be more at home with this:</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">x <span class="op">=&gt;</span> <span class="st">&quot;yeah &quot;</span> <span class="op">+</span> x <span class="op">+</span> <span class="st">&quot;!&quot;</span></code></pre></div>
+<p>In the following example of a Haskell lambda, you can see how the design of the ES2015 lambda might have drawn inspiration:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">\x <span class="ot">-&gt;</span> <span class="st">&quot;yeah &quot;</span> <span class="fu">++</span> x <span class="fu">++</span> <span class="st">&quot;!&quot;</span></code></pre></div>
+<p>It’s a small thing, but one of my favorite things about using Haskell lambdas is how my editor is configured to treat them. In a lambda, the \ is replaced by a λ: a lambda character! It helps me when I see that instead of a backslash:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">λx <span class="ot">-&gt;</span> <span class="st">&quot;yeah &quot;</span> <span class="fu">++</span> x <span class="fu">++</span> <span class="st">&quot;!&quot;</span></code></pre></div>
+<h2 id="pattern-matching">Pattern Matching</h2>
+<p>My exposure to <em>pattern matching</em> is totally backwards, because the first time I saw it was in some <a href="http://elixir-lang.org">Elixir</a> code. However, the Elixir examples I’ve seen tend to use pattern matching with destructuring variable binding:</p>
+<pre class="elixir"><code>{x, y} = {1, 2}  # {1, 2}
+x  # 1
+y  # 2
+
+[h | _] = [1, 2, 3]  # [1, 2, 3]
+h  # 1</code></pre>
+<p>I haven’t gotten far enough with my Haskell learning to know how it treats destructuring assignment (I’m fairly sure my brain will melt when I get to that point). For conventional assignment, it’s pretty great to be able to express functions in this clear a way:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isItTen ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+isItTen <span class="dv">10</span> <span class="fu">=</span> <span class="dt">True</span>
+isItTen _  <span class="fu">=</span> <span class="dt">False</span></code></pre></div>
+<p>As with some other languages like Go and Elixir, <code>_</code> acts like a catch-all bitbucket for unneeded values. It’s interesting to me that the patterns are matched against values rather than types. Pattern matching can help prevent some needlessly verbose logic in the function body.</p>
+<h2 id="guards">Guards</h2>
+<p>Every language has its own concept of control flow. In JavaScript and other languages in the C family, most of the burden falls on <code>if</code>/<code>else</code> statements, and occasionally a <code>switch</code>/<code>case</code>.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">goodRange</span>(temp) <span class="op">{</span>
+  <span class="kw">var</span> out<span class="op">;</span>
+  <span class="cf">switch</span> (temp) <span class="op">{</span>
+  <span class="cf">case</span> temp <span class="op">&lt;</span> <span class="dv">64</span><span class="op">:</span>
+    out <span class="op">=</span> <span class="st">&quot;too low&quot;</span><span class="op">;</span>
+    <span class="cf">break</span><span class="op">;</span>
+  <span class="cf">case</span> temp <span class="op">&gt;</span> <span class="dv">78</span><span class="op">:</span>
+    out <span class="op">=</span> <span class="st">&quot;too high&quot;</span><span class="op">;</span>
+    <span class="cf">break</span><span class="op">;</span>
+  <span class="dt">default</span><span class="op">:</span>
+    out <span class="op">=</span> <span class="st">&quot;just right&quot;</span><span class="op">;</span>
+    <span class="cf">break</span><span class="op">;</span>
+  <span class="op">}</span>
+  <span class="cf">return</span> out<span class="op">;</span>
+<span class="op">}</span></code></pre></div>
+<p>Haskell also has an <code>if-then-else</code> pattern that you can use, but it only supports two possible outcomes. When writing a function definition, especially one with more than two possible outcomes, <em>guard</em> syntax can come in handy. It resembles pattern matching.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">goodRange ::</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">String</span>
+goodRange x
+  <span class="fu">|</span> x <span class="fu">&lt;</span> <span class="dv">64</span>    <span class="fu">=</span> <span class="st">&quot;too low&quot;</span>
+  <span class="fu">|</span> x <span class="fu">&gt;</span> <span class="dv">78</span>    <span class="fu">=</span> <span class="st">&quot;too high&quot;</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="st">&quot;just right&quot;</span></code></pre></div>
+<p>The <code>goodRange</code> function is expressive and clear: for an Integer <code>x</code>, return a string depending on where <code>x</code> falls within a predetermined range.</p>
+<p>Here’s another example, taken right out of the <abbr title="Haskell Programming from First Principles">HPFP</abbr> book because it’s so great:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">avgGrade ::</span> (<span class="dt">Fractional</span> a, <span class="dt">Ord</span> a) <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Char</span>
+avgGrade x
+  <span class="fu">|</span> y <span class="fu">&gt;=</span> <span class="fl">0.9</span>  <span class="fu">=</span> <span class="ch">'A'</span>
+  <span class="fu">|</span> y <span class="fu">&gt;=</span> <span class="fl">0.8</span>  <span class="fu">=</span> <span class="ch">'B'</span>
+  <span class="fu">|</span> y <span class="fu">&gt;=</span> <span class="fl">0.7</span>  <span class="fu">=</span> <span class="ch">'C'</span>
+  <span class="fu">|</span> y <span class="fu">&gt;=</span> <span class="fl">0.59</span> <span class="fu">=</span> <span class="ch">'D'</span>
+  <span class="fu">|</span> y <span class="fu">&lt;</span> <span class="fl">0.59</span>  <span class="fu">=</span> <span class="ch">'F'</span>
+  <span class="kw">where</span> y <span class="fu">=</span> x <span class="fu">/</span> <span class="dv">100</span></code></pre></div>
+<p>For a given <code>x</code> that implements <code>Fractional</code> and <code>Ord</code> typeclasses (think of them like interfaces or mixins that provide access to certain functions), divide <code>x</code> by 100 (scoped to the variable <code>y</code> in the <code>where</code> clause) and return a “grade” character based on several ranks of comparison… ranks that most of us have come to either love or despise.</p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Mon, 23 May 2016 20:36:04 UT</pubDate>
+    <guid>https://smt.io/2016/05/23/three-things-i-learned-with-haskell/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
     <title>Putting Aside the Ranger</title>
     <link>https://smt.io/2016/05/02/putting-aside-the-ranger/</link>
     <description><![CDATA[<div id="primary">
@@ -586,201 +663,6 @@ nnoremap &lt;silent&gt; &lt;Space&gt; :nohl&lt;Bar&gt;:echo&lt;CR&gt;</code></pr
 ]]></description>
     <pubDate>Sun, 17 Jul 2011 13:55:42 UT</pubDate>
     <guid>https://smt.io/2011/07/17/oocss-for-great-justice/</guid>
-    <dc:creator>Stephen Tudor</dc:creator>
-</item>
-<item>
-    <title>Responsible Sass Authoring</title>
-    <link>https://smt.io/2011/07/09/responsible-sass-authoring/</link>
-    <description><![CDATA[<div id="primary">
-    <div class="inside">
-        <h1 class="title">Responsible Sass Authoring</h1>
-        <div class="opacity08"><small>
-                <i>July  9, 2011 / <a href="https://smt.io/label/css/">CSS</a>, <a href="https://smt.io/label/mad-coding/">Mad Coding</a>, <a href="https://smt.io/label/sass/">Sass</a></i>
-        </small></div>
-        <br>
-        <p>In capable hands, <a href="http://sass-lang.org">Sass</a> can do amazing things for your CSS. With Sass, you can use functions and variables that later get compiled into valid CSS. This can greatly reduce code repetition and the potential for mistakes.</p>
-<p>For example, not that you would, but you could write some Sass like this:</p>
-<pre class="sass"><code>// Set a couple of vars
-$titleColor: #000
-$titleSize: 24px
-
-.article
-  .title
-    color: $titleColor
-    font-size: $titleSize
-  .alt-title
-    @extend .title
-    border-bottom: 1px solid lighten($titleColor, 80%)    // #ccc
-    color: transparentize(lighten($titleColor, 20%), 0.1)
-  .sub-title
-    @extend .title
-    font-size: round($titleSize * 0.85)    // 20.4px
-    &amp;:hover
-      background-color: transparentize(change-color($titleColor, $red: 255), 0.8);</code></pre>
-<p>The resulting CSS might look something like this, depending upon how you set your Sass output style preference:</p>
-<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.article</span> <span class="fl">.title</span>,
-<span class="fl">.article</span> <span class="fl">.alt-title</span>,
-<span class="fl">.article</span> <span class="fl">.sub-title</span> <span class="kw">{</span>
-    <span class="kw">color:</span> <span class="dt">#000</span><span class="kw">;</span>
-    <span class="kw">font-size:</span> <span class="dt">24px</span><span class="kw">;</span>
-<span class="kw">}</span>
-<span class="fl">.article</span> <span class="fl">.alt-title</span> <span class="kw">{</span>
-    <span class="kw">border-bottom:</span> <span class="dt">1px</span> <span class="dt">solid</span> <span class="dt">#cccccc</span><span class="kw">;</span>
-    <span class="kw">color:</span> <span class="dt">rgba(51</span>, <span class="dt">51</span>, <span class="dt">51</span>, <span class="dt">0.9)</span><span class="kw">;</span>
-<span class="kw">}</span>
-<span class="fl">.article</span> <span class="fl">.sub-title</span> <span class="kw">{</span>
-    <span class="kw">font-size:</span> <span class="dt">20px</span><span class="kw">;</span>
-<span class="kw">}</span>
-<span class="fl">.article</span> <span class="fl">.sub-title</span><span class="dv">:hover</span> <span class="kw">{</span>
-    <span class="kw">background-color:</span> <span class="dt">rgba(255</span>, <span class="dt">0</span>, <span class="dt">0</span>, <span class="dt">0.2)</span><span class="kw">;</span>
-<span class="kw">}</span></code></pre></div>
-<p>Pretty cool, right? You can see that the <code>@extend</code> keyword can be a very powerful tool, bringing a quasi-object-oriented paradigm to our CSS. The same could be true for the nested selectors; you just have to refer to <code>.article</code> once, and let the indentation take care of the scope for you.</p>
-<h2 id="css-bloat">CSS Bloat</h2>
-<p>Over a year of using Sass every day at my day job has taught me this: Just because Sass allows you to do something, it doesn’t mean that thing should be done.</p>
-<p>Sass clearly offers many ways to make our lives easier as developers. The benefits of using it are obvious and many. <code>@import</code> is awesome; it lets us concatenate many development Sass files into one production CSS file if we wish. Variables and mixins can be amazingly handy.</p>
-<p>Selector nesting, <code>@extend</code>, and parent-selector (&amp;), while incredibly useful when care is taken, can also be prone to generate sub-optimal CSS when used carelessly, <em>especially</em> in cases where they are used in combination. Long-term, CSS that is compiled from Sass that abuses these features can quickly become extremely bloated and challenging to maintain. Let’s take a look at some examples of some really sad CSS. The examples I’m using are inspired by actual projects I’ve worked on (with some key edits to protect the innocent).</p>
-<p><em>Note that I’m not blaming Sass itself for any of these problems. It’s quite simply that using some Sass features in a certain way can inadvertently amplify poor CSS design decisions.</em></p>
-<h3 id="case-1">Case 1</h3>
-<p>Sass selectors that are nested like this:</p>
-<pre class="sass"><code>#product
-  .overview
-    .header
-      h2
-        span
-    .content
-      .promo
-        .header
-          div
-          .inner
-            a
-              span</code></pre>
-<p>will result in CSS descendant selectors that look something like this:</p>
-<pre class="sass"><code>#product {}
-#product .overview {}
-#product .overview .header {}
-#product .overview .header h2 {}
-#product .overview .header h2 span {}
-#product .overview .content {}
-#product .overview .content .promo {}
-#product .overview .content .promo .header {}
-#product .overview .content .promo .header div {}
-#product .overview .content .promo .header .inner {}
-#product .overview .content .promo .header .inner a {}
-#product .overview .content .promo .header .inner a span {}</code></pre>
-<p>Yuck. I’m not going to go into why this is bad, but you don’t have to take my word for it; simply google “<a href="https://www.google.com/search?q=css+performance+descendant+selectors">CSS performance descendant selectors</a>” and read up.</p>
-<p>With Sass, this kind of CSS bloat is extremely easy to cause if you get carried away with selector nesting. Observe the redundancy and the verbosity of the generated CSS. If the developer had taken the time to carefully construct his selectors, he could have avoided the need for this many levels of descendants in his CSS.</p>
-<p>To my great shame, that developer was yours truly.</p>
-<h3 id="case-2">Case 2</h3>
-<p>This one combines the <code>@extend</code>, nesting, and parent-selector features of Sass. <code>@extend</code> has been one of my favorite features of Sass ever since it was added. It lets you inherit the properties of one selector in another. Here’s how it can go awry, despite all the best intentions. The Sass:</p>
-<pre class="sass"><code>.clearfix
-  &amp;:after
-    clear: both
-    content: '.'
-    display: block
-    height: 0
-    line-height: 0
-    overflow: hidden
-    width: 0
-
-.thing-1
-  @extend .clearfix
-.thing-2
-  @extend .clearfix
-
-// ...
-
-.thing-99
-  @extend .clearfix
-.thing-100
-  @extend .clearfix</code></pre>
-<p>In the Sass, let’s assume I extended <code>.clearfix</code> in 100 separate selectors at various places throughout my code. This is, unfortunately, a very realistic use case for something as commonly used as a clearfix, and as my project grows, it would eventually result in the following generated CSS:</p>
-<div class="sourceCode"><pre class="sourceCode css"><code class="sourceCode css"><span class="fl">.clearfix</span>,
-<span class="fl">.thing-1</span>, <span class="fl">.thing-2</span>, <span class="fl">.thing-3</span>, <span class="fl">.thing-4</span>, <span class="fl">.thing-5</span>,
-<span class="fl">.thing-6</span>, <span class="fl">.thing-7</span>, <span class="fl">.thing-8</span>, <span class="fl">.thing-9</span>, <span class="fl">.thing-10</span>,
-<span class="fl">.thing-11</span>, <span class="fl">.thing-12</span>, <span class="fl">.thing-13</span>, <span class="fl">.thing-14</span>, <span class="fl">.thing-15</span>,
-<span class="fl">.thing-16</span>, <span class="fl">.thing-17</span>, <span class="fl">.thing-18</span>, <span class="fl">.thing-19</span>, <span class="fl">.thing-20</span>,
-<span class="fl">.thing-21</span>, <span class="fl">.thing-22</span>, <span class="fl">.thing-23</span>, <span class="fl">.thing-24</span>, <span class="fl">.thing-25</span>,
-<span class="fl">.thing-26</span>, <span class="fl">.thing-27</span>, <span class="fl">.thing-28</span>, <span class="fl">.thing-29</span>, <span class="fl">.thing-30</span>,
-<span class="fl">.thing-31</span>, <span class="fl">.thing-32</span>, <span class="fl">.thing-33</span>, <span class="fl">.thing-34</span>, <span class="fl">.thing-35</span>,
-<span class="fl">.thing-36</span>, <span class="fl">.thing-37</span>, <span class="fl">.thing-38</span>, <span class="fl">.thing-39</span>, <span class="fl">.thing-40</span>,
-<span class="fl">.thing-41</span>, <span class="fl">.thing-42</span>, <span class="fl">.thing-43</span>, <span class="fl">.thing-44</span>, <span class="fl">.thing-45</span>,
-<span class="fl">.thing-46</span>, <span class="fl">.thing-47</span>, <span class="fl">.thing-48</span>, <span class="fl">.thing-49</span>, <span class="fl">.thing-50</span>,
-<span class="fl">.thing-51</span>, <span class="fl">.thing-52</span>, <span class="fl">.thing-53</span>, <span class="fl">.thing-54</span>, <span class="fl">.thing-55</span>,
-<span class="fl">.thing-56</span>, <span class="fl">.thing-57</span>, <span class="fl">.thing-58</span>, <span class="fl">.thing-59</span>, <span class="fl">.thing-60</span>,
-<span class="fl">.thing-61</span>, <span class="fl">.thing-62</span>, <span class="fl">.thing-63</span>, <span class="fl">.thing-64</span>, <span class="fl">.thing-65</span>,
-<span class="fl">.thing-66</span>, <span class="fl">.thing-67</span>, <span class="fl">.thing-68</span>, <span class="fl">.thing-69</span>, <span class="fl">.thing-70</span>,
-<span class="fl">.thing-71</span>, <span class="fl">.thing-72</span>, <span class="fl">.thing-73</span>, <span class="fl">.thing-74</span>, <span class="fl">.thing-75</span>,
-<span class="fl">.thing-76</span>, <span class="fl">.thing-77</span>, <span class="fl">.thing-78</span>, <span class="fl">.thing-79</span>, <span class="fl">.thing-80</span>,
-<span class="fl">.thing-81</span>, <span class="fl">.thing-82</span>, <span class="fl">.thing-83</span>, <span class="fl">.thing-84</span>, <span class="fl">.thing-85</span>,
-<span class="fl">.thing-86</span>, <span class="fl">.thing-87</span>, <span class="fl">.thing-88</span>, <span class="fl">.thing-89</span>, <span class="fl">.thing-90</span>,
-<span class="fl">.thing-91</span>, <span class="fl">.thing-92</span>, <span class="fl">.thing-93</span>, <span class="fl">.thing-94</span>, <span class="fl">.thing-95</span>,
-<span class="fl">.thing-96</span>, <span class="fl">.thing-97</span>, <span class="fl">.thing-98</span>, <span class="fl">.thing-99</span>, <span class="fl">.thing-100</span> <span class="kw">{}</span>
-
-<span class="fl">.clearfix</span><span class="dv">:after</span>,
-<span class="fl">.thing-1</span><span class="dv">:after</span>, <span class="fl">.thing-2</span><span class="dv">:after</span>, <span class="fl">.thing-3</span><span class="dv">:after</span>, <span class="fl">.thing-4</span><span class="dv">:after</span>, <span class="fl">.thing-5</span><span class="dv">:after</span>,
-<span class="fl">.thing-6</span><span class="dv">:after</span>, <span class="fl">.thing-7</span><span class="dv">:after</span>, <span class="fl">.thing-8</span><span class="dv">:after</span>, <span class="fl">.thing-9</span><span class="dv">:after</span>, <span class="fl">.thing-10</span><span class="dv">:after</span>,
-<span class="fl">.thing-11</span><span class="dv">:after</span>, <span class="fl">.thing-12</span><span class="dv">:after</span>, <span class="fl">.thing-13</span><span class="dv">:after</span>, <span class="fl">.thing-14</span><span class="dv">:after</span>, <span class="fl">.thing-15</span><span class="dv">:after</span>,
-<span class="fl">.thing-16</span><span class="dv">:after</span>, <span class="fl">.thing-17</span><span class="dv">:after</span>, <span class="fl">.thing-18</span><span class="dv">:after</span>, <span class="fl">.thing-19</span><span class="dv">:after</span>, <span class="fl">.thing-20</span><span class="dv">:after</span>,
-<span class="fl">.thing-21</span><span class="dv">:after</span>, <span class="fl">.thing-22</span><span class="dv">:after</span>, <span class="fl">.thing-23</span><span class="dv">:after</span>, <span class="fl">.thing-24</span><span class="dv">:after</span>, <span class="fl">.thing-25</span><span class="dv">:after</span>,
-<span class="fl">.thing-26</span><span class="dv">:after</span>, <span class="fl">.thing-27</span><span class="dv">:after</span>, <span class="fl">.thing-28</span><span class="dv">:after</span>, <span class="fl">.thing-29</span><span class="dv">:after</span>, <span class="fl">.thing-30</span><span class="dv">:after</span>,
-<span class="fl">.thing-31</span><span class="dv">:after</span>, <span class="fl">.thing-32</span><span class="dv">:after</span>, <span class="fl">.thing-33</span><span class="dv">:after</span>, <span class="fl">.thing-34</span><span class="dv">:after</span>, <span class="fl">.thing-35</span><span class="dv">:after</span>,
-<span class="fl">.thing-36</span><span class="dv">:after</span>, <span class="fl">.thing-37</span><span class="dv">:after</span>, <span class="fl">.thing-38</span><span class="dv">:after</span>, <span class="fl">.thing-39</span><span class="dv">:after</span>, <span class="fl">.thing-40</span><span class="dv">:after</span>,
-<span class="fl">.thing-41</span><span class="dv">:after</span>, <span class="fl">.thing-42</span><span class="dv">:after</span>, <span class="fl">.thing-43</span><span class="dv">:after</span>, <span class="fl">.thing-44</span><span class="dv">:after</span>, <span class="fl">.thing-45</span><span class="dv">:after</span>,
-<span class="fl">.thing-46</span><span class="dv">:after</span>, <span class="fl">.thing-47</span><span class="dv">:after</span>, <span class="fl">.thing-48</span><span class="dv">:after</span>, <span class="fl">.thing-49</span><span class="dv">:after</span>, <span class="fl">.thing-50</span><span class="dv">:after</span>,
-<span class="fl">.thing-51</span><span class="dv">:after</span>, <span class="fl">.thing-52</span><span class="dv">:after</span>, <span class="fl">.thing-53</span><span class="dv">:after</span>, <span class="fl">.thing-54</span><span class="dv">:after</span>, <span class="fl">.thing-55</span><span class="dv">:after</span>,
-<span class="fl">.thing-56</span><span class="dv">:after</span>, <span class="fl">.thing-57</span><span class="dv">:after</span>, <span class="fl">.thing-58</span><span class="dv">:after</span>, <span class="fl">.thing-59</span><span class="dv">:after</span>, <span class="fl">.thing-60</span><span class="dv">:after</span>,
-<span class="fl">.thing-61</span><span class="dv">:after</span>, <span class="fl">.thing-62</span><span class="dv">:after</span>, <span class="fl">.thing-63</span><span class="dv">:after</span>, <span class="fl">.thing-64</span><span class="dv">:after</span>, <span class="fl">.thing-65</span><span class="dv">:after</span>,
-<span class="fl">.thing-66</span><span class="dv">:after</span>, <span class="fl">.thing-67</span><span class="dv">:after</span>, <span class="fl">.thing-68</span><span class="dv">:after</span>, <span class="fl">.thing-69</span><span class="dv">:after</span>, <span class="fl">.thing-70</span><span class="dv">:after</span>,
-<span class="fl">.thing-71</span><span class="dv">:after</span>, <span class="fl">.thing-72</span><span class="dv">:after</span>, <span class="fl">.thing-73</span><span class="dv">:after</span>, <span class="fl">.thing-74</span><span class="dv">:after</span>, <span class="fl">.thing-75</span><span class="dv">:after</span>,
-<span class="fl">.thing-76</span><span class="dv">:after</span>, <span class="fl">.thing-77</span><span class="dv">:after</span>, <span class="fl">.thing-78</span><span class="dv">:after</span>, <span class="fl">.thing-79</span><span class="dv">:after</span>, <span class="fl">.thing-80</span><span class="dv">:after</span>,
-<span class="fl">.thing-81</span><span class="dv">:after</span>, <span class="fl">.thing-82</span><span class="dv">:after</span>, <span class="fl">.thing-83</span><span class="dv">:after</span>, <span class="fl">.thing-84</span><span class="dv">:after</span>, <span class="fl">.thing-85</span><span class="dv">:after</span>,
-<span class="fl">.thing-86</span><span class="dv">:after</span>, <span class="fl">.thing-87</span><span class="dv">:after</span>, <span class="fl">.thing-88</span><span class="dv">:after</span>, <span class="fl">.thing-89</span><span class="dv">:after</span>, <span class="fl">.thing-90</span><span class="dv">:after</span>,
-<span class="fl">.thing-91</span><span class="dv">:after</span>, <span class="fl">.thing-92</span><span class="dv">:after</span>, <span class="fl">.thing-93</span><span class="dv">:after</span>, <span class="fl">.thing-94</span><span class="dv">:after</span>, <span class="fl">.thing-95</span><span class="dv">:after</span>,
-<span class="fl">.thing-96</span><span class="dv">:after</span>, <span class="fl">.thing-97</span><span class="dv">:after</span>, <span class="fl">.thing-98</span><span class="dv">:after</span>, <span class="fl">.thing-99</span><span class="dv">:after</span>, <span class="fl">.thing-100</span><span class="dv">:after</span> <span class="kw">{</span>
-    <span class="kw">clear:</span> <span class="dt">both</span><span class="kw">;</span>
-    <span class="kw">content:</span> <span class="st">'.'</span><span class="kw">;</span>
-    <span class="kw">display:</span> <span class="dt">block</span><span class="kw">;</span>
-    <span class="kw">height:</span> <span class="dt">0</span><span class="kw">;</span>
-    <span class="kw">line-height:</span> <span class="dt">0</span><span class="kw">;</span>
-    <span class="kw">overflow:</span> <span class="dt">hidden</span><span class="kw">;</span>
-    <span class="kw">width:</span> <span class="dt">0</span><span class="kw">;</span>
-<span class="kw">}</span></code></pre></div>
-<p>First, there is a nesting issue. Because I nested <code>&amp;:after</code> inside an empty parent selector, the generated CSS contains a huge list of selectors with no properties, then a second huge list with the clearfix styles. Plus, all these bogus selectors tend to clog up dev tools like Firebug, as shown in this screenshot:</p>
-<div class="figure">
-<img src="https://smt.io/images/extend-clearfix-firebug-hell.png" alt="@extend .clearfix Firebug hell" />
-<p class="caption"><span class="citation">@extend</span> .clearfix Firebug hell</p>
-</div>
-<p>Secondly, this could have all been avoided if I had been more pragmatic and simply used <code>.clearfix</code> (or another class – I commonly use <code>.group</code>) in the HTML to apply the CSS and make it semantically meaningful at the same time. Using <code>@extend</code> is not the correct choice for this particular pattern:</p>
-<pre class="sass"><code>.group:after
-  clear: both
-  content: '.'
-  display: block
-  height: 0
-  line-height: 0
-  overflow: hidden
-  width: 0
-
-// That's right, I'm not using @extend here.
-// It's almost like I'm using actual CSS \o/</code></pre>
-<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;thing-1 group&quot;</span><span class="kw">&gt;</span>
-  <span class="co">&lt;!-- stuff floated left --&gt;</span>
-  <span class="kw">&lt;section</span><span class="ot"> class=</span><span class="st">&quot;primary-content&quot;</span><span class="kw">&gt;</span>
-    <span class="co">&lt;!-- ... --&gt;</span>
-  <span class="kw">&lt;/section&gt;</span>
-
-  <span class="co">&lt;!-- stuff floated right --&gt;</span>
-  <span class="kw">&lt;aside</span><span class="ot"> class=</span><span class="st">&quot;secondary-content&quot;</span><span class="kw">&gt;</span>
-    <span class="co">&lt;!-- ... --&gt;</span>
-  <span class="kw">&lt;/aside&gt;</span>
-<span class="kw">&lt;/div&gt;</span></code></pre></div>
-<h2 id="sass-css">Sass =&gt; CSS</h2>
-<p>I, for one, side with those who seek to balance CSS performance concerns with maintainability concerns. It’s important to remember that no matter what you do in Sass, it will eventually end up as CSS. Whether it does more harm than good will be up to you.</p>
-<p>Ironically, though it might seem at first that we have veered too far towards the maintainability side of the spectrum with our CSS, it turns out that the status quo isn’t terribly well suited for either maintainability or performance.</p>
-    </div>
-</div>
-]]></description>
-    <pubDate>Sat, 09 Jul 2011 13:04:26 UT</pubDate>
-    <guid>https://smt.io/2011/07/09/responsible-sass-authoring/</guid>
     <dc:creator>Stephen Tudor</dc:creator>
 </item>
 

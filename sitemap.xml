@@ -51,6 +51,13 @@
     </url>
 
     <url>
+        <loc>https://www.smt.io/2016/05/23/three-things-i-learned-with-haskell/index.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>https://www.smt.io/2016/05/02/putting-aside-the-ranger/index.html</loc>
         <changefreq>weekly</changefreq>
         
