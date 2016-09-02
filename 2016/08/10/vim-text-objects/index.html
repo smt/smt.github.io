@@ -5,7 +5,7 @@
         <meta http-equiv="Cache-Control" content="max-age=86400, must-revalidate" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Stephen Tudor">
-        <title>JavaScript | Stephen Tudor</title>
+        <title>Words and Text Objects in Vim | Stephen Tudor</title>
         <style id="critical">*{margin:0;padding:0}li{margin-left:5%}.clear{clear:both;font-size:1px;height:1px;line-height:1px}a img{border:none}.title,h1,h2{font-weight:400}.links a{font-size:2em;line-height:45px}.toplink{color:#313131;margin-right:15px;text-decoration:none}.textwidget a.underline{text-decoration:underline}.title{color:#333;font-size:2em;margin-top:1.3em}body{align:center;color:#444;font-family:"Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Arial,sans-serif;font-size:.9375em}.inside{margin:0 auto;max-width:72em;width:86%}h1,h2{margin:1.5em 0 0}h1{color:#CCC;font-size:1.8em}h2{color:#FFF;font-size:1.6em}p{font-size:1.1em;line-height:1.75em}#primary{padding:1px 0 2em;word-break:break-word}#header .inside{padding-bottom:1em;padding-top:1em}#header h2{float:left;font-size:2.25em;margin:0 .5em 0 0;padding:0 .2em .25em 0}#header #me+.links{clear:left}#ancillary{padding:2em 0 0}#ancillary .textwidget,small{font-size:.9em}#ancillary .block h2{font-size:1.3em;margin:0 0 2em}.widget ul{border-top:1px solid #C0E0E2;list-style-type:none;margin:1.5em 0 2em}.widget ul li{border-bottom:1px solid #C0E0E2;list-style-type:none;margin:0;padding:.5em 0}.links,.widget ul a{color:#404040;font-size:1.03em;text-decoration:none}.top-search-icon{opacity:.4}#ancillary,body{background:#E5F6F7}a,.story .details a,.story .details a:hover{color:#222}h1,h2,p,ul{margin:1em0}#header.links{float:left}#header.top-search-icon{float:right}.feed{font-size:1.2em}#headerh2a{text-decoration:none}a{color:#FFF}#header#mea{display:block}h1,h2{color:#222}#header,#primary{background:#FFF}</style>
         <style id="icons">@font-face{font-family:icomoon;src:url(/fonts/icomoon.eot?klzpen);src:url(/fonts/icomoon.eot?#iefixklzpen) format('embedded-opentype'),url(/fonts/icomoon.ttf?klzpen) format('truetype'),url(/fonts/icomoon.woff?klzpen) format('woff'),url(/fonts/icomoon.svg?klzpen#icomoon) format('svg');font-weight:400;font-style:normal}[class^=icon-]{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:icomoon;font-style:normal;font-variant:normal;font-weight:400;line-height:1;speak:none;text-transform:none}.icon-search:before{content:"\e604"}.icon-mail:before{content:"\e600"}.icon-twitter:before{content:"\e601"}.icon-feed:before{content:"\e605"}.icon-github:before{content:"\e602"}.icon-linkedin:before{content:"\e603"}</style>
         <noscript id="deferred-styles">
@@ -63,20 +63,166 @@
 
         <div id="primary">
     <div class="inside">
-        <h1>Posts with label  ‘JavaScript’</h1>
+        <h1 class="title">Words and Text Objects in Vim</h1>
+        <div class="opacity08"><small>
+                <i>August 10, 2016 / <a href="/label/vim/">Vim</a>, <a href="/label/mad-coding/">Mad Coding</a></i>
+        </small></div>
+        <br>
+        <p>What are text objects in Vim? Before I can answer that question, we first need to discuss <strong>words</strong>.</p>
+<h2 id="there-are-words-and-then-there-are-words">There are words, and then there are WORDS</h2>
+<p>Not even joking, there really are two distinct types of these things. To quote Vim’s help page on the subject (see <code>:h word</code>):</p>
+<blockquote>
+<p>A word consists of a sequence of letters, digits and underscores, or a sequence of other non-blank characters, separated with white space (spaces, tabs, EOL). This can be changed with the ‘iskeyword’ option. An empty line is also considered to be a word.</p>
+<p>A WORD consists of a sequence of non-blank characters, separated with white space. An empty line is also considered to be a WORD.</p>
+</blockquote>
+<p>Under those definitions, given the following example text to operate on:</p>
+<blockquote>
+<p>what-is-up; “i can’t even”</p>
+</blockquote>
+<p>Assuming a default <code>iskeyword</code> setting, the following are words:</p>
+<p><code>what</code>, <code>-</code>, <code>is</code>, <code>-</code>, <code>up</code>, <code>;</code>, <code>&quot;</code>, <code>i</code>, <code>can</code>, <code>'</code>, <code>t</code>, <code>even</code>, and <code>&quot;</code></p>
+<p>By contrast, in the same passage, these are considered WORDS:</p>
+<p><code>what-is-up;</code>, <code>&quot;i</code>, <code>can't</code>, and <code>even&quot;</code></p>
+<p>WORDS are bounded strictly go by surrounding whitespace, whereas the delineation of words is configurable. In my Vim configuration, I actually set my personal <code>iskeyword</code> option to include <code>$</code>, <code>%</code>, <code>&amp;</code>, <code>#</code>, <code>-</code>, <code>'</code>, and <code>+</code> as “word” characters.</p>
+<p>(As an aside, I’m on the fence about setting <code>'</code> as a “word” character. For prose, it makes sense; for programming, not so much.)</p>
+<h2 id="word-motions">Word motions</h2>
+<p>We can perform <strong>motions</strong> over words in several useful ways. (Hint/foreshadowing: words are like text objects in this respect.)</p>
+<p>In each example below, the caret <code>^</code> character indicates the cursor position to illustrate where it ends up after each motion.</p>
+<ol style="list-style-type: decimal">
+<li><p>We move the cursor to the <strong>beginning</strong> of the next word using the <code>w</code> key. Likewise, we use <code>W</code> to move to the beginning of the next WORD.</p>
+<ul>
+<li><strong>w</strong>: forward to start of next <em>word</em></li>
+<li><strong>W</strong>: forward to start of next <em>WORD</em></li>
+</ul>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+         ^
 
-        <ul>
-            <li>
-    <a href="/2014/02/11/gulp-browserify/" class="label">Gulp and Browserify</a> - <small><em>February 11, 2014</em></small>
-</li>
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)         ^
 
-        </ul>
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)            ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+W(ORD)                  ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)                         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+W(ORD)                                          ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)                                                 ^</code></pre>
+<p><br></p></li>
+<li><p>To move the cursor to the <strong>end</strong> of the next word or WORD, we use the <code>e</code> or <code>E</code> key.</p>
+<ul>
+<li><strong>e</strong>: <em>end</em> of word</li>
+<li><strong>E</strong>: <em>END</em> of WORD</li>
+</ul>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)        ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)           ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+E(ND)                 ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)                         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+E(ND)                                         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)                                                 ^</code></pre>
+<p><br></p></li>
+<li><p>Finally, we use <code>b</code> and <code>B</code> to move to the start of a word or WORD.</p>
+<ul>
+<li><strong>b</strong>: <em>back</em> to start of word</li>
+<li><strong>B</strong>: <em>BACK</em> to start of WORD</li>
+</ul>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+                                                      ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+b(ack)                                          ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+b(ack)                                      ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+B(ACK)                  ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+B(ACK)            ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+b(ack)         ^</code></pre>
+<p><br></p></li>
+</ol>
+<h3 id="counting-motions">Counting motions</h3>
+<p>For each type of motion, we can tell Vim to perform the motion a number of times by typing a <strong>count</strong> ahead of the motion command.</p>
+<p>For example, <code>2w</code> would move two words ahead, and <code>4b</code> would move four words back, and so on. The implications of this are very powerful and counts play a major role in how we compose commands in Vim. More on this later.</p>
+<h2 id="operators">Operators</h2>
+<p>Now that we’ve got some basic word motions down, let’s review some basic Vim operators that use motions.</p>
+<p>One of the first things you learn about Vim is that it is modal. We’ve been focused on moving around in Normal mode, but now we’re going to look at editing some text in Insert mode.</p>
+<p>If you’ve used Vim at a novice level, you probably know about the <code>i</code> and <code>a</code> operators to activate Insert mode before/after the cursor. The two basic operators I’m about to cover go one step beyond that. They are:</p>
+<ul>
+<li><strong>d</strong>: Delete text to a point defined by a motion</li>
+<li><strong>c</strong>: Change (like delete, but also switches to Insert mode)</li>
+</ul>
+<p>These operators require a motion, and can also take an optional count. Here are some usage examples (An plus <code>+</code> indicates where we’ve switched into Insert mode as a result of a change operator).</p>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+dB     ^
+friends is easy. Waiting-for-Superman... waiting...
+^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+d4W    ^
+Making waiting...
+       ^
+
+Making  is easy. Waiting-for-Superman... waiting...
+cw     ^
+Making  is easy. Waiting-for-Superman... waiting...
+       ^
+       +
+
+Making friends is easy. Waiting-for-Superman... waiting...
+c3w    ^
+Making . Waiting-for-Superman... waiting...
+       ^
+       +</code></pre>
+<p><br></p>
     </div>
 </div>
+
 <hr class="hide">
 
 <div id="secondary">
     <div class="inside">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            // /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            // var disqus_shortname = 'stephentudor'; // required: replace example with your forum shortname
+
+            // /* * * DON'T EDIT BELOW THIS LINE * * */
+            // (function() {
+            //     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            //     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            //     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            // })();
+        </script>
+        <!-- <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
     </div>
 </div>
 <hr class="hide">

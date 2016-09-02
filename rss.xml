@@ -7,8 +7,160 @@
         <description><![CDATA[RSS feed for Stephen Tudor's blog]]></description>
         <atom:link href="https://smt.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Tue, 09 Aug 2016 21:04:50 UT</lastBuildDate>
+        <lastBuildDate>Wed, 10 Aug 2016 18:17:37 UT</lastBuildDate>
         <item>
+    <title>Words and Text Objects in Vim</title>
+    <link>https://smt.io/2016/08/10/vim-text-objects/</link>
+    <description><![CDATA[<div id="primary">
+    <div class="inside">
+        <h1 class="title">Words and Text Objects in Vim</h1>
+        <div class="opacity08"><small>
+                <i>August 10, 2016 / <a href="https://smt.io/label/vim/">Vim</a>, <a href="https://smt.io/label/mad-coding/">Mad Coding</a></i>
+        </small></div>
+        <br>
+        <p>What are text objects in Vim? Before I can answer that question, we first need to discuss <strong>words</strong>.</p>
+<h2 id="there-are-words-and-then-there-are-words">There are words, and then there are WORDS</h2>
+<p>Not even joking, there really are two distinct types of these things. To quote Vim’s help page on the subject (see <code>:h word</code>):</p>
+<blockquote>
+<p>A word consists of a sequence of letters, digits and underscores, or a sequence of other non-blank characters, separated with white space (spaces, tabs, EOL). This can be changed with the ‘iskeyword’ option. An empty line is also considered to be a word.</p>
+<p>A WORD consists of a sequence of non-blank characters, separated with white space. An empty line is also considered to be a WORD.</p>
+</blockquote>
+<p>Under those definitions, given the following example text to operate on:</p>
+<blockquote>
+<p>what-is-up; “i can’t even”</p>
+</blockquote>
+<p>Assuming a default <code>iskeyword</code> setting, the following are words:</p>
+<p><code>what</code>, <code>-</code>, <code>is</code>, <code>-</code>, <code>up</code>, <code>;</code>, <code>&quot;</code>, <code>i</code>, <code>can</code>, <code>'</code>, <code>t</code>, <code>even</code>, and <code>&quot;</code></p>
+<p>By contrast, in the same passage, these are considered WORDS:</p>
+<p><code>what-is-up;</code>, <code>&quot;i</code>, <code>can't</code>, and <code>even&quot;</code></p>
+<p>WORDS are bounded strictly go by surrounding whitespace, whereas the delineation of words is configurable. In my Vim configuration, I actually set my personal <code>iskeyword</code> option to include <code>$</code>, <code>%</code>, <code>&amp;</code>, <code>#</code>, <code>-</code>, <code>'</code>, and <code>+</code> as “word” characters.</p>
+<p>(As an aside, I’m on the fence about setting <code>'</code> as a “word” character. For prose, it makes sense; for programming, not so much.)</p>
+<h2 id="word-motions">Word motions</h2>
+<p>We can perform <strong>motions</strong> over words in several useful ways. (Hint/foreshadowing: words are like text objects in this respect.)</p>
+<p>In each example below, the caret <code>^</code> character indicates the cursor position to illustrate where it ends up after each motion.</p>
+<ol style="list-style-type: decimal">
+<li><p>We move the cursor to the <strong>beginning</strong> of the next word using the <code>w</code> key. Likewise, we use <code>W</code> to move to the beginning of the next WORD.</p>
+<ul>
+<li><strong>w</strong>: forward to start of next <em>word</em></li>
+<li><strong>W</strong>: forward to start of next <em>WORD</em></li>
+</ul>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)            ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+W(ORD)                  ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)                         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+W(ORD)                                          ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+w(ord)                                                 ^</code></pre>
+<p><br></p></li>
+<li><p>To move the cursor to the <strong>end</strong> of the next word or WORD, we use the <code>e</code> or <code>E</code> key.</p>
+<ul>
+<li><strong>e</strong>: <em>end</em> of word</li>
+<li><strong>E</strong>: <em>END</em> of WORD</li>
+</ul>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)        ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)           ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+E(ND)                 ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)                         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+E(ND)                                         ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+e(nd)                                                 ^</code></pre>
+<p><br></p></li>
+<li><p>Finally, we use <code>b</code> and <code>B</code> to move to the start of a word or WORD.</p>
+<ul>
+<li><strong>b</strong>: <em>back</em> to start of word</li>
+<li><strong>B</strong>: <em>BACK</em> to start of WORD</li>
+</ul>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+                                                      ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+b(ack)                                          ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+b(ack)                                      ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+B(ACK)                  ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+B(ACK)            ^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+b(ack)         ^</code></pre>
+<p><br></p></li>
+</ol>
+<h3 id="counting-motions">Counting motions</h3>
+<p>For each type of motion, we can tell Vim to perform the motion a number of times by typing a <strong>count</strong> ahead of the motion command.</p>
+<p>For example, <code>2w</code> would move two words ahead, and <code>4b</code> would move four words back, and so on. The implications of this are very powerful and counts play a major role in how we compose commands in Vim. More on this later.</p>
+<h2 id="operators">Operators</h2>
+<p>Now that we’ve got some basic word motions down, let’s review some basic Vim operators that use motions.</p>
+<p>One of the first things you learn about Vim is that it is modal. We’ve been focused on moving around in Normal mode, but now we’re going to look at editing some text in Insert mode.</p>
+<p>If you’ve used Vim at a novice level, you probably know about the <code>i</code> and <code>a</code> operators to activate Insert mode before/after the cursor. The two basic operators I’m about to cover go one step beyond that. They are:</p>
+<ul>
+<li><strong>d</strong>: Delete text to a point defined by a motion</li>
+<li><strong>c</strong>: Change (like delete, but also switches to Insert mode)</li>
+</ul>
+<p>These operators require a motion, and can also take an optional count. Here are some usage examples (An plus <code>+</code> indicates where we’ve switched into Insert mode as a result of a change operator).</p>
+<p><br></p>
+<pre class="text"><code>Making friends is easy. Waiting-for-Superman... waiting...
+dB     ^
+friends is easy. Waiting-for-Superman... waiting...
+^
+
+Making friends is easy. Waiting-for-Superman... waiting...
+d4W    ^
+Making waiting...
+       ^
+
+Making  is easy. Waiting-for-Superman... waiting...
+cw     ^
+Making  is easy. Waiting-for-Superman... waiting...
+       ^
+       +
+
+Making friends is easy. Waiting-for-Superman... waiting...
+c3w    ^
+Making . Waiting-for-Superman... waiting...
+       ^
+       +</code></pre>
+<p><br></p>
+    </div>
+</div>
+]]></description>
+    <pubDate>Wed, 10 Aug 2016 18:17:37 UT</pubDate>
+    <guid>https://smt.io/2016/08/10/vim-text-objects/</guid>
+    <dc:creator>Stephen Tudor</dc:creator>
+</item>
+<item>
     <title>Vim Cheat Sheet for Programmers: Dvorak Edition</title>
     <link>https://smt.io/2016/08/09/vim-cheat-sheet-dvorak/</link>
     <description><![CDATA[<div id="primary">
@@ -20,13 +172,18 @@
         <br>
         <p>I found <a href="http://michael.peopleofhonoronly.com/vim/">this intense Vim cheat sheet</a>, and noticed that the author, Michael, had made the Excel 2011 sources available. Furthermore, he was kind enough to give it a <a href="https://en.wikipedia.org/wiki/Copyleft">Copyleft</a> license.</p>
 <p>Being a user of the <a href="https://en.wikipedia.org/wiki/Dvorak_Simplified_Keyboard">Dvorak keyboard layout</a>, I took a few moments tonight to adapt the 300dpi color version to Dvorak. I’m making them available to download them for free, just like the originals. Other than the key layout changes, I bumped the version from 2.0 to 2.1, and updated the dates.</p>
-<h3 id="download-it-here-pdf-excel-source">Download it here: <a href="https://smt.io/files/vim_cheat_sheet_for_programmers_print_DV.pdf">PDF</a> (<a href="https://smt.io/files/vim_cheat_sheet_for_programmers_print_DV.xlsx">Excel source</a>)</h3>
+<h3 id="download-it-here-pdf-excel-source">Download it here: <a href="https://smt.io/files/vim_cheat_sheet_for_programmers_print_DV.pdf?v=2.2">PDF</a> (<a href="https://smt.io/files/vim_cheat_sheet_for_programmers_print_DV.xlsx?v=2.2">Excel source</a>)</h3>
 <p><br></p>
 <div class="figure">
-<img src="https://smt.io/images/vim_cheat_sheet_for_programmers_print_DV_16color.png" />
+<img src="https://smt.io/images/vim_cheat_sheet_for_programmers_print_DV_16color.png?v=2.2" />
 
 </div>
 <p>I don’t have any immediate plans to adapt the original low-res, monochrome, or accessible versions of the cheat sheet, but I’m more than happy to accept contributions from anyone, and make them available here.</p>
+<h4 id="update-v2.2">Update: v2.2</h4>
+<p>Changes:</p>
+<ul>
+<li>Replaced the hyphon/underscore key, which I missed in v2.1</li>
+</ul>
     </div>
 </div>
 ]]></description>
@@ -550,95 +707,6 @@ helpers <span class="kw">do</span>
 ]]></description>
     <pubDate>Tue, 10 Jan 2012 15:11:12 UT</pubDate>
     <guid>https://smt.io/2012/01/10/kss-middleman/</guid>
-    <dc:creator>Stephen Tudor</dc:creator>
-</item>
-<item>
-    <title>10 Vim Techniques for Novices</title>
-    <link>https://smt.io/2011/08/04/10-vim-techniques-for-novices/</link>
-    <description><![CDATA[<div id="primary">
-    <div class="inside">
-        <h1 class="title">10 Vim Techniques for Novices</h1>
-        <div class="opacity08"><small>
-                <i>August  4, 2011 / <a href="https://smt.io/label/vim/">Vim</a></i>
-        </small></div>
-        <br>
-        <p>Since I switched to Vim as my primary editor back in March of this year, I have discovered a wealth of useful tricks that help me get things done. Most of these techniques are truly indispensable, and should find a place in any Vim user’s quiver.</p>
-<p>I should also note that at this time, I’m nowhere near expert-level in my Vim abilities, so this post is intended to share some commands, patterns, and configurations with other Vim users who are still getting their feet wet with the editor.</p>
-<p><strong>Experienced Vimmers will already know all this stuff, and more power to them. This is for the Vim n00bs out there.</strong></p>
-<h2 id="open-with-cursor-at-last-edit-position">1. Open with Cursor at Last Edit Position</h2>
-<p>This one isn’t so much a technique as it is a preference. If you make a change to a file, and then re-open it later, the following snippet in your .vimrc will position the cursor at the last spot you made an edit prior to closing the buffer or Vim itself:</p>
-<pre class="vim"><code>autocmd BufReadPost *
-    \ if line(&quot;'\&quot;&quot;) &gt; 0 &amp;&amp; line(&quot;'\&quot;&quot;) &lt;= line(&quot;$&quot;) |
-    \   exe &quot;normal! g`\&quot;&quot; |
-    \ endif</code></pre>
-<h2 id="visual-block-mode">2. Visual Block Mode</h2>
-<p>You might know about Visual mode <code>v</code>, and even Visual Line mode <code>V</code>, but do you know about Visual Block mode? You can enter it with <code>&lt;C-V&gt;</code> (that’s <code>CTRL-V</code>), and then use Vim movement commands to select text in a box of columns and rows, rather than by lines. This can allow you to make some really powerful edits.</p>
-<p>Other editors, such as TextMate, can perform a similar blockwise selection using the Alt/Option key. Well, MacVim can do the same thing. Hold down Alt or Option, and click/drag with the mouse. I want to caution you against relying on this too much, though. Vim is designed to reward you for keeping your fingers <em>on the keys</em> as much as possible.</p>
-<h2 id="quick-letter-swap">3. Quick Letter Swap</h2>
-<p>If I accidentally type “teh” instead of “the”, the natural reaction would be to go back, select those two letters, and retype them, but there’s a simple way to swap any two adjacent letters:</p>
-<p>Move the cursor to the first letter of the swapped pair (in this example, the “e” of “teh”) and type <code>xp</code>. This cuts the character the cursor is on, and immediately pastes it after the next.</p>
-<h2 id="repeat-last-edit-the-magic-dot">4. Repeat Last Edit (the magic dot)</h2>
-<p>The glorious <code>.</code> is a very powerful command, and probably my most-often used in this list. Typing <code>.</code> in normal mode repeats your most recent edit. It’s dead simple to use, and just plain awesome in so many contexts.</p>
-<h2 id="move-and-edit-by-text-object">5. Move and Edit by Text Object</h2>
-<p>At the root of Vim’s idiosyncratic design is a variety of ways to easily move around a text file and edit it effortlessly:</p>
-<p><code>w</code> and <code>b</code> move the cursor forward and backward by <em>word</em>.<br />
-<code>(</code> and <code>)</code> move the cursor forward and backward by <em>sentence</em>.<br />
-<code>{</code> and <code>}</code> move the cursor forward and backward by <em>paragraph</em>.</p>
-<p>You can combine text objects with counts and actions to perform very powerful, concise edits.</p>
-<p>One of my favorite commands is <code>ciw</code>, and the pnemonic for it is Change Inside Word. If I can get my cursor <em>anywhere</em> in a word, it doesn’t matter which character it’s on, a quick <code>ciw</code> will cut the whole word and change to insert mode so I can enter new text in its place. No awkward text selection or repetitive deletion keying. Just <code>ciw</code> and type the new word.</p>
-<h2 id="delete-yank-and-paste-a-line">6. Delete, Yank, and Paste a Line</h2>
-<p><code>dd</code> will “delete” a line, which is the same as <em>cut</em>.<br />
-<code>yy</code> will “yank” a line, which is the same as <em>copy</em>.<br />
-<code>p</code> will paste at the line <em>below</em> the cursor.<br />
-<code>P</code> (<code>SHIFT-p</code>) will paste at the line <em>above</em> the cursor.</p>
-<p>Any of these commands can be preceded by a numeric count: <code>10p</code> will paste 10 times.</p>
-<h2 id="easy-repeated-characters">7. Easy Repeated Characters</h2>
-<p>Say I am working in Markdown format – which I often am; these blog posts are is written that way – and I want to use an underline-style H2:</p>
-<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">This is my heading
-==================</code></pre></div>
-<p>I would prefer not to have to type who-knows-how-many equals signs in a row. How annoying. Luckily, something like this is dead simple in Vim.</p>
-<p>After typing your header, exit to normal mode and, with your cursor still on the line, type <code>yyp</code> to duplicate the line. The text now looks like this:</p>
-<div class="sourceCode"><pre class="sourceCode markdown"><code class="sourceCode markdown">This is my heading
-This is my heading</code></pre></div>
-<p>At this point, your cursor should on the first character of the second line. Type <code>v$r=</code> to visually select the text to the end of the line, and replace all the characters with equals signs. That’s it: the full command is <code>yypv$r=</code></p>
-<hr />
-<p><strong>Update:</strong> Honza Pokorny pointed out a shorter alternative to this command: <code>YpVr=</code></p>
-<hr />
-<p><strong>Update 2:</strong> Santosh Kumar observed that <code>V</code> may not be able to replace <code>v$</code> in every situation, particularly if there is whitespace at the beginning of the line.</p>
-<p>If you ever just want 80 stars in a row, say, to section off a part of source code, you could just type <code>80i*&lt;Esc&gt;</code> – easy.</p>
-<h2 id="quick-find">8. Quick Find</h2>
-<p><code>/</code> will switch to a mode that allows you to enter a search string for the current buffer. If you have the proper settings in your .vimrc,</p>
-<p>Vim will even do an incremental search. When you have the search term you want, hit <code>&lt;Enter&gt;</code> and cycle forward through the search results <em>in the buffer</em> with <code>n</code>, and backwards with <code>N</code>.</p>
-<p><code>?</code> does the same thing as <code>/</code>, only in the reverse direction. You can also use <code>*</code> to quick-search the word your cursor is currently on.</p>
-<p>For some sane defaults, here are some of my .vimrc search settings:</p>
-<pre class="vim"><code>set hlsearch   &quot; Highlight search matches
-set incsearch  &quot; Highlight matches as you type
-set ignorecase &quot; Case-insensitive searching
-set smartcase  &quot; ...but case-sensitive if expression has caps
-set wrapscan   &quot; Set the search scan to wrap around the file
-
-&quot; Press space bar to turn off search highlighting
-&quot; and clear any message displayed
-nnoremap &lt;silent&gt; &lt;Space&gt; :nohl&lt;Bar&gt;:echo&lt;CR&gt;</code></pre>
-<h2 id="search-replace-in-a-buffer">9. Search &amp; Replace in a Buffer</h2>
-<p>Few of us can really consider ourselves experts with regular expressions, but if you have ever used them for any kind of text processing task, you realize how incredibly powerful (and yes, sometimes befuddling) they can be. Regexes are used in Vim’s native search and replace.</p>
-<p>It is necessary to specify a range when doing a search and replace, and generally, you will want the action to be global, so you would type <code>:%s/pattern/replacement/g</code> and hit <code>&lt;Enter&gt;</code>. Done. The <code>%</code> represents the entire buffer, while the <code>s///g</code> structure is the standard search and replace command syntax.</p>
-<p>To search/replace within a given selection, first select your desired range in visual mode, then hit <code>:</code>. Vim will pre-fill your range as <code>'&lt;,'&gt;</code>, which means the current selection. Use the same <code>s///g</code> syntax as before to restrict the action to the selection you specified.</p>
-<p>The trailing <code>/g</code>? That’s an option that I usually like to pass, as it tells Vim to replace all matches, not just the first one.</p>
-<h2 id="project-search-replace">10. Project Search &amp; Replace</h2>
-<p>It’s a common complaint: project search &amp; replace – an operation that spans one or more files – is one of the few glaring weaknesses of Vim. Until there is better support for this feature in Vim itself, it is possible to pull off in an unorthodox way: don’t use Vim! Try this on for size (from the command line):</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">sed</span> -i <span class="st">'s/pattern/replacement/'</span> <span class="kw">&lt;</span>files<span class="kw">&gt;</span></code></pre></div>
-<p>From within Vim, while in <code>:</code> command mode, you can use the same command, only beginning with a <code>!</code>. This pipes the command directly to a shell session and does the business. Note the relative consistency of sed’s search &amp; replace syntax with Vim’s native one.</p>
-<p>Passing commands from Vim to external programs is common, and often encouraged. Select some text and run the <code>:sort</code> command on it sometime – it actually calls the external <code>sort</code> program, which passes the sorted lines back to Vim.</p>
-<h2 id="my-dotvim">My dotvim</h2>
-<p>I wouldn’t consider <a href="http://github.com/smt/dotfiles">my Vim configuration</a> to be anything special, but it’s mine, and I am always tweaking it (you Vim people know what I’m talking about). If you are curious about what I might have in there, you can feel free have a look at it – it’s on GitHub, of course, and all the plugins are set up as Git submodules with Pathogen.</p>
-<h2 id="dive-into-vim">Dive into Vim!</h2>
-<p>The nuts and bolts of how to use Vim are, of course, outside the scope of this article. <a href="http://vimcasts.org">VimCasts</a>, <a href="http://peepcode.com/products/smash-into-vim-i">PeepCode</a>, and Vim’s built-in tutorial are at your disposal. That being said, I’m willing to attempt to answer most questions you might have about Vim, either on <a href="http://twitter.com/tagsoup">Twitter</a> or via the comments.</p>
-    </div>
-</div>
-]]></description>
-    <pubDate>Thu, 04 Aug 2011 08:37:27 UT</pubDate>
-    <guid>https://smt.io/2011/08/04/10-vim-techniques-for-novices/</guid>
     <dc:creator>Stephen Tudor</dc:creator>
 </item>
 

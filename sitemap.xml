@@ -51,6 +51,13 @@
     </url>
 
     <url>
+        <loc>https://www.smt.io/2016/08/10/vim-text-objects/index.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>https://www.smt.io/2016/08/09/vim-cheat-sheet-dvorak/index.html</loc>
         <changefreq>weekly</changefreq>
         
